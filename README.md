@@ -1,8 +1,8 @@
-# prototype-kit-template
+# SPP Self Service
 
-This is a template for a [prototype-kit](https://github.com/ONSdigital/prototype-kit) project which can be used as a starting point when creating new prototypes. This provides access to the ONS design system to render page layouts and components.
+This is a prototype site built using the [ons-prototype-kit](https://github.com/ONSdigital/prototype-kit). It uses the ONS design system to render page layouts and components.
 
-## Getting setup with this template
+## Getting setup with this prototype
 
 Install the latest version of the ONS design system:
 
@@ -19,14 +19,6 @@ This project comes with the following commands:
 - `yarn watch` - Starts a local server for previewing content changes. The command displays the URL for accessing the local server. Unlike `yarn start`, this command does not perform an initial build.
 
 - `yarn build` - Builds prototype content as a static website to a 'build' directory inside this project. The output of this command could be used by a CI process to deploy the prototype website.
-
-## Getting started
-
-1. Create a directory alongside the 'example' prototype directory and then populate with files using 'example' as a starting point.
-
-2. Create prototype by editing the prototype entry points (`index.njk`, `index.js` and `index.scss`).
-
-3. Preview the prototype by running `yarn start`.
 
 ## How do the build commands work?
 
