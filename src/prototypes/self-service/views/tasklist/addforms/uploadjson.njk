@@ -1,0 +1,36 @@
+---
+group: Self Service
+title: Upload Survey Forms
+layout: self-service/views/_main
+prevPage: views/tasklist/tasklist
+---
+{% from "components/upload/_macro.njk" import onsUpload %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    }
+] %}
+
+{% block main %}
+    <h1>Upload survey forms</h1>
+
+    {{
+        onsUpload({
+            "id": "survey-form-upload",
+            "accept": ".json",
+            "label": {
+                "text": "Select survey form schema JSON files"
+            }
+        })
+    }}
+{% endblock %}

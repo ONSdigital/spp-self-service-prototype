@@ -1,0 +1,19 @@
+---
+group: Self Service
+title: Self Service Prototype
+layout: self-service/views/_main
+---
+{% set breadcrumbs = [] %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% block main %}
+    <h1>Self Service Prototype</h1>
+    <p>This prototype demonstrates an example user journey for the ingestion and definition of survey forms.</p>
+    {{
+        onsButton({
+            "text": "Go to SPP Home",
+            "classes": "ons-u-mt-l",
+            "url": pageInfo.rootPath + "/views/home.html"
+        })
+    }}
+{% endblock %}
