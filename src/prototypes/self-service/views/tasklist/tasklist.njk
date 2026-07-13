@@ -7,6 +7,7 @@ prevPage: views/migrate
 {% from "components/status/_macro.njk" import onsStatus %}
 
 {% block main %}
+    {% set state = helpers.getState() %}
     <h1>Migrate a survey</h1>
     <p>This page displays the progress of setting up a survey on the Statistical Preparation Platform. It shows which steps have been completed, and which tasks still need to be finished before we can test the data import for the survey.</p>
 
@@ -17,64 +18,64 @@ prevPage: views/migrate
             <span class="spp-task-list__task-name">
                 <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/uploadjson.html">Add survey forms</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "To do", "variant": "info" }) }}
+            <span class="spp-task-list__status" data-task-id="add-survey-forms">
+                {{ onsStatus({ "label": state.tasks["add-survey-forms"].label, "variant": state.tasks["add-survey-forms"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
-                <a href="#0">Choose reference datasets</a>
+                <a href="{{ pageInfo.rootPath }}/views/tasklist/refdata/selectrefdata.html">Choose reference datasets</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "To do", "variant": "info" }) }}
+            <span class="spp-task-list__status" data-task-id="choose-reference-datasets">
+                {{ onsStatus({ "label": state.tasks["choose-reference-datasets"].label, "variant": state.tasks["choose-reference-datasets"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
                 <a href="#0">Add constructed questions and values</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "Cannot start yet", "variant": "dead" }) }}
+            <span class="spp-task-list__status" data-task-id="add-constructed-questions-and-values">
+                {{ onsStatus({ "label": state.tasks["add-constructed-questions-and-values"].label, "variant": state.tasks["add-constructed-questions-and-values"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
                 <a href="#0">Define validation rules</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "Cannot start yet", "variant": "dead" }) }}
+            <span class="spp-task-list__status" data-task-id="define-validation-rules">
+                {{ onsStatus({ "label": state.tasks["define-validation-rules"].label, "variant": state.tasks["define-validation-rules"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
                 <a href="#0">Choose validation methods</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "To do", "variant": "info" }) }}
+            <span class="spp-task-list__status" data-task-id="choose-validation-methods">
+                {{ onsStatus({ "label": state.tasks["choose-validation-methods"].label, "variant": state.tasks["choose-validation-methods"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
                 <a href="#0">Configure prioritisation workflow and layout</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "To do", "variant": "info" }) }}
+            <span class="spp-task-list__status" data-task-id="configure-prioritisation-workflow-and-layout">
+                {{ onsStatus({ "label": state.tasks["configure-prioritisation-workflow-and-layout"].label, "variant": state.tasks["configure-prioritisation-workflow-and-layout"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
                 <a href="#0">Test survey set up</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "Cannot start yet", "variant": "dead" }) }}
+            <span class="spp-task-list__status" data-task-id="test-survey-setup">
+                {{ onsStatus({ "label": state.tasks["test-survey-setup"].label, "variant": state.tasks["test-survey-setup"].variant }) }}
             </span>
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name">
                 <a href="#0">Get Methodology approval</a>
             </span>
-            <span class="spp-task-list__status">
-                {{ onsStatus({ "label": "Cannot start yet", "variant": "dead" }) }}
+            <span class="spp-task-list__status" data-task-id="get-methodology-approval">
+                {{ onsStatus({ "label": state.tasks["get-methodology-approval"].label, "variant": state.tasks["get-methodology-approval"].variant }) }}
             </span>
         </li>
     </ul>

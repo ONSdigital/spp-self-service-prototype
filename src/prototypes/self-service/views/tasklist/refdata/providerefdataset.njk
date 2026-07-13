@@ -1,0 +1,78 @@
+---
+group: Self Service
+title: Uploaded Reference Datasets
+layout: self-service/views/_main
+prevPage: views/tasklist/refdata/selectrefdata
+---
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/status/_macro.njk" import onsStatus %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/refdata/selectrefdata.html",
+        "text": "Choose reference datasets"
+    }
+] %}
+
+{% block main %}
+    {% set state = helpers.getState() %}
+    <h1>Uploaded reference datasets</h1>
+    <p>Upload a CSV of each reference dataset required by this survey. All reference data must be formatted as a CSV and must have been validated prior to upload to SPP.</p>
+
+    {% set surveyPeriodDatesStatus %}
+        <span data-refdata-id="survey-period-dates">
+            {{ onsStatus({ "label": state.refdata["survey-period-dates"].label, "variant": state.refdata["survey-period-dates"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set tradingDayWeightsStatus %}
+        <span data-refdata-id="trading-day-weights">
+            {{ onsStatus({ "label": state.refdata["trading-day-weights"].label, "variant": state.refdata["trading-day-weights"].variant }) }}
+        </span>
+    {% endset %}
+
+    {{
+        onsTable({
+            "id": "reference-datasets-upload-table",
+            "trs": [
+                {
+                    "tds": [
+                        { "value": "Survey period dates" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/refdata/uploadperioddates.html">Upload</a>' },
+                        { "value": surveyPeriodDatesStatus | trim | safe }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "Trading day weights" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/refdata/uploadtradingdayweights.html">Upload</a>' },
+                        { "value": tradingDayWeightsStatus | trim | safe }
+                    ]
+                }
+            ]
+        })
+    }}
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "noIcon": true,
+            "id": "btn-save-provideref"
+        })
+    }}
+{% endblock %}

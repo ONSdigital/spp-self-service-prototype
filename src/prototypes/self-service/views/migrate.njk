@@ -17,6 +17,7 @@ prevPage: views/home
 {% from "components/status/_macro.njk" import onsStatus %}
 
 {% block main %}
+    {% set state = helpers.getState() %}
     <h1>Migrate a survey onto the Statistical Preparation Platform</h1>
 
     <aside class="ons-table-of-contents-container" aria-label="Table of contents">
@@ -82,12 +83,49 @@ prevPage: views/home
         onsButton({
             "text": "Set up survey",
             "classes": "ons-u-mt-m",
-            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html"
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "noIcon": true
         })
     }}
 
     <h2 id="existing-surveys" class="ons-u-mt-l">Existing surveys</h2>
     <p>Below is a list of existing surveys that are configured or being configured on SPP.</p>
+
+    {% set status002 %}
+        <span data-survey-id="002">
+            {{ onsStatus({ "label": state.surveys["002"].label, "variant": state.surveys["002"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status009 %}
+        <span data-survey-id="009">
+            {{ onsStatus({ "label": state.surveys["009"].label, "variant": state.surveys["009"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status023 %}
+        <span data-survey-id="023">
+            {{ onsStatus({ "label": state.surveys["023"].label, "variant": state.surveys["023"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status139 %}
+        <span data-survey-id="139">
+            {{ onsStatus({ "label": state.surveys["139"].label, "variant": state.surveys["139"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status141 %}
+        <span data-survey-id="141">
+            {{ onsStatus({ "label": state.surveys["141"].label, "variant": state.surveys["141"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status228 %}
+        <span data-survey-id="228">
+            {{ onsStatus({ "label": state.surveys["228"].label, "variant": state.surveys["228"].variant }) }}
+        </span>
+    {% endset %}
 
     {{
         onsTable({
@@ -105,7 +143,7 @@ prevPage: views/home
                         { "value": "002" },
                         { "value": "BERD" },
                         { "value": "Business Enterprise Research and Development" },
-                        { "value": onsStatus({ "label": "Live", "variant": "success" }) },
+                        { "value": status002 | trim | safe },
                         { "value": '<a href="#0">Edit survey</a>' }
                     ]
                 },
@@ -114,7 +152,7 @@ prevPage: views/home
                         { "value": "009" },
                         { "value": "MBS" },
                         { "value": "Monthly Business Survey" },
-                        { "value": onsStatus({ "label": "Live", "variant": "success" }) },
+                        { "value": status009 | trim | safe },
                         { "value": '<a href="#0">Edit survey</a>' }
                     ]
                 },
@@ -123,7 +161,7 @@ prevPage: views/home
                         { "value": "023" },
                         { "value": "RSI" },
                         { "value": "Monthly Business Survey (Retail Sales Index)" },
-                        { "value": onsStatus({ "label": "Live", "variant": "success" }) },
+                        { "value": status023 | trim | safe },
                         { "value": '<a href="#0">Edit survey</a>' }
                     ]
                 },
@@ -132,7 +170,7 @@ prevPage: views/home
                         { "value": "139" },
                         { "value": "QBS" },
                         { "value": "Quarterly Business Survey" },
-                        { "value": onsStatus({ "label": "Live", "variant": "success" }) },
+                        { "value": status139 | trim | safe },
                         { "value": '<a href="#0">Edit survey</a>' }
                     ]
                 },
@@ -141,7 +179,7 @@ prevPage: views/home
                         { "value": "141" },
                         { "value": "ASHE" },
                         { "value": "Annual Survey of Hours and Earnings" },
-                        { "value": onsStatus({ "label": "In Progress", "variant": "pending" }) },
+                        { "value": status141 | trim | safe },
                         { "value": '<a href="#0">Edit survey</a>' }
                     ]
                 },
@@ -150,7 +188,7 @@ prevPage: views/home
                         { "value": "228" },
                         { "value": "CONST" },
                         { "value": "Monthly Business Survey (Construction)" },
-                        { "value": onsStatus({ "label": "Live", "variant": "success" }) },
+                        { "value": status228 | trim | safe },
                         { "value": '<a href="#0">Edit survey</a>' }
                     ]
                 }

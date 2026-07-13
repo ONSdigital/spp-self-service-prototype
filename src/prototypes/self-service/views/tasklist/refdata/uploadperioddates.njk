@@ -1,8 +1,8 @@
 ---
 group: Self Service
-title: Upload Survey Forms
+title: Upload Survey Period Dates
 layout: self-service/views/_main
-prevPage: views/tasklist/tasklist
+prevPage: views/tasklist/refdata/providerefdataset
 ---
 {% from "components/upload/_macro.njk" import onsUpload %}
 {% from "components/button/_macro.njk" import onsButton %}
@@ -19,18 +19,27 @@ prevPage: views/tasklist/tasklist
     {
         "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
         "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/refdata/selectrefdata.html",
+        "text": "Choose reference datasets"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/refdata/providerefdataset.html",
+        "text": "Uploaded reference datasets"
     }
 ] %}
 
 {% block main %}
-    <h1>Upload survey forms</h1>
+    <h1>Upload survey period dates</h1>
+    <p>Upload the finalised CSV of survey period dates. You can find a <a href="#0">template CSV</a> on SPP.</p>
 
     {{
         onsUpload({
-            "id": "survey-form-upload",
-            "accept": ".json",
+            "id": "period-dates-upload",
+            "accept": ".csv",
             "label": {
-                "text": "Select survey form schema JSON files"
+                "text": "Select survey period dates CSV file"
             }
         })
     }}
@@ -39,9 +48,9 @@ prevPage: views/tasklist/tasklist
         onsButton({
             "text": "Save and continue",
             "classes": "ons-u-mt-m",
-            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "url": pageInfo.rootPath + "/views/tasklist/refdata/providerefdataset.html",
             "noIcon": true,
-            "id": "btn-save-forms"
+            "id": "btn-save-period-dates"
         })
     }}
 {% endblock %}

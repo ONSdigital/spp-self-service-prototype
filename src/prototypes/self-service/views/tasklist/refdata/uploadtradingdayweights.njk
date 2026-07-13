@@ -1,0 +1,56 @@
+---
+group: Self Service
+title: Upload Trading Day Weights
+layout: self-service/views/_main
+prevPage: views/tasklist/refdata/providerefdataset
+---
+{% from "components/upload/_macro.njk" import onsUpload %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/refdata/selectrefdata.html",
+        "text": "Choose reference datasets"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/refdata/providerefdataset.html",
+        "text": "Uploaded reference datasets"
+    }
+] %}
+
+{% block main %}
+    <h1>Upload trading day weights</h1>
+    <p>Upload the finalised CSV of trading day weights. You can find a <a href="#0">template CSV</a> on SPP.</p>
+
+    {{
+        onsUpload({
+            "id": "trading-weights-upload",
+            "accept": ".csv",
+            "label": {
+                "text": "Select trading day weights CSV file"
+            }
+        })
+    }}
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/refdata/providerefdataset.html",
+            "noIcon": true,
+            "id": "btn-save-trading-weights"
+        })
+    }}
+{% endblock %}
