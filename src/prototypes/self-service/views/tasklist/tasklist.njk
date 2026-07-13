@@ -55,7 +55,7 @@ prevPage: views/migrate
                 {% if state.tasks["define-validation-rules"].label == "Cannot start yet" %}
                     Define validation rules
                 {% else %}
-                    <a href="#0">Define validation rules</a>
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/addrules/addvalidationrule.html">Define validation rules</a>
                 {% endif %}
             </span>
             <span class="spp-task-list__status" data-task-id="define-validation-rules">

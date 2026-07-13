@@ -66,3 +66,66 @@ Do not remove. Required for dynamic generation of survey summary page
 .ons-table {
   border-bottom: 1px solid var(--ons-color-borders);
 }
+
+.spp-col-select {
+  width: 5%;
+}
+
+.spp-col-qcode {
+  width: 10%;
+}
+
+.spp-col-question {
+  width: 40%;
+  white-space: normal !important;
+}
+
+.spp-col-answertype {
+  width: 22.5%;
+}
+
+.spp-col-rules {
+  width: 22.5%;
+}
+
+.ons-table__cell {
+  .ons-checkbox {
+    width: 22px;
+    height: 22px;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+
+    &__input {
+      left: 0;
+      top: 0;
+      margin: 0;
+      width: 22px;
+      height: 22px;
+      position: absolute;
+    }
+
+    &__label {
+      padding: 0;
+      width: 22px;
+      height: 22px;
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      &::before {
+        left: 0;
+        top: 0;
+        width: 22px;
+        height: 22px;
+        margin: 0;
+      }
+
+      &::after {
+        left: 7px;
+        top: 2px;
+      }
+    }
+  }
+}

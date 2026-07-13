@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'add-survey-forms': '/views/tasklist/addforms/uploadjson.html',
     'choose-reference-datasets': '/views/tasklist/refdata/selectrefdata.html',
     'add-constructed-questions-and-values': '#0',
-    'define-validation-rules': '#0',
+    'define-validation-rules': '/views/tasklist/addrules/addvalidationrule.html',
     'choose-validation-methods': '#0',
     'configure-prioritisation-workflow-and-layout': '#0',
     'test-survey-setup': '#0',
@@ -134,6 +134,21 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.setItem('task-choose-reference-datasets', JSON.stringify({ label: 'Done', variant: 'success' }));
       } else {
         sessionStorage.setItem('task-choose-reference-datasets', JSON.stringify({ label: 'Started', variant: 'pending' }));
+      }
+    });
+  }
+
+  // Finalise validation rules page: Save and continue
+  const btnSaveCompleteRules = document.getElementById('btn-save-completerules');
+  if (btnSaveCompleteRules) {
+    btnSaveCompleteRules.addEventListener('click', () => {
+      const checkedRadio = document.querySelector('input[name="completed-rules"]:checked');
+      const val = checkedRadio ? checkedRadio.value : 'no';
+      
+      if (val === 'yes') {
+        sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'Done', variant: 'success' }));
+      } else {
+        sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'Started', variant: 'pending' }));
       }
     });
   }

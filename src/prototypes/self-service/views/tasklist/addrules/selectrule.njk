@@ -1,0 +1,41 @@
+---
+group: Self Service
+title: Select Validation Rule
+layout: self-service/views/_main
+prevPage: views/tasklist/addrules/addvalidationrule
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/addrules/addvalidationrule.html",
+        "text": "Add a validation rule to a question"
+    }
+] %}
+
+{% block main %}
+    <h1>Select validation rule template to configure</h1>
+    <p>Choose from the list of available validation rule templates below to configure and apply to your selected questions.</p>
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/addrules/addvalidationrule.html",
+            "noIcon": true,
+            "id": "btn-save-selectrule"
+        })
+    }}
+{% endblock %}
