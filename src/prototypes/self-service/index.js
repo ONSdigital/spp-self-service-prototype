@@ -27,6 +27,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Evaluate task link wrappers (making them plain text if locked or links if active/unlocked)
+  const taskUrls = {
+    'add-survey-forms': '/views/tasklist/addforms/uploadjson.html',
+    'choose-reference-datasets': '/views/tasklist/refdata/selectrefdata.html',
+    'add-constructed-questions-and-values': '#0',
+    'define-validation-rules': '#0',
+    'choose-validation-methods': '#0',
+    'configure-prioritisation-workflow-and-layout': '#0',
+    'test-survey-setup': '#0',
+    'get-methodology-approval': '#0'
+  };
+
+  const taskNames = {
+    'add-survey-forms': 'Add survey forms',
+    'choose-reference-datasets': 'Choose reference datasets',
+    'add-constructed-questions-and-values': 'Add constructed questions and values',
+    'define-validation-rules': 'Define validation rules',
+    'choose-validation-methods': 'Choose validation methods',
+    'configure-prioritisation-workflow-and-layout': 'Configure prioritisation workflow and layout',
+    'test-survey-setup': 'Test survey set up',
+    'get-methodology-approval': 'Get Methodology approval'
+  };
+
+  document.querySelectorAll('[data-task-link]').forEach(el => {
+    const id = el.getAttribute('data-task-link');
+    const savedStatus = sessionStorage.getItem(`task-${id}`);
+    
+    let label = '';
+    if (savedStatus) {
+      label = JSON.parse(savedStatus).label;
+    } else {
+      const statusSpan = document.querySelector(`[data-task-id="${id}"] .ons-status`);
+      if (statusSpan) {
+        label = statusSpan.textContent.trim();
+      }
+    }
+
+    if (label === 'Cannot start yet') {
+      el.innerHTML = taskNames[id];
+    } else {
+      const url = taskUrls[id];
+      const rootPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/views/'));
+      const fullUrl = url.startsWith('/') ? (rootPath + url) : url;
+      el.innerHTML = `<a href="${fullUrl}">${taskNames[id]}</a>`;
+    }
+  });
+
   // Reference Data Table
   document.querySelectorAll('[data-refdata-id]').forEach(el => {
     const id = el.getAttribute('data-refdata-id');
@@ -39,11 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Attach click handlers to primary buttons to save state in sessionStorage
 
-  // Upload survey forms page: Save and continue
-  const btnSaveForms = document.getElementById('btn-save-forms');
-  if (btnSaveForms) {
-    btnSaveForms.addEventListener('click', () => {
-      sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'Completed', variant: 'success' }));
+  // Add form data page: Save and continue
+  const btnSaveFormData = document.getElementById('btn-save-form-data');
+  if (btnSaveFormData) {
+    btnSaveFormData.addEventListener('click', () => {
+      sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'Done', variant: 'success' }));
+      sessionStorage.setItem('task-add-constructed-questions-and-values', JSON.stringify({ label: 'To do', variant: 'info' }));
+      sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'To do', variant: 'info' }));
     });
   }
 

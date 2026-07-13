@@ -1,10 +1,9 @@
 ---
 group: Self Service
-title: Upload Survey Forms
+title: Add Form Data
 layout: self-service/views/_main
-prevPage: views/tasklist/tasklist
+prevPage: views/tasklist/addforms/uploadjson
 ---
-{% from "components/upload/_macro.njk" import onsUpload %}
 {% from "components/button/_macro.njk" import onsButton %}
 
 {% set breadcrumbs = [
@@ -23,25 +22,16 @@ prevPage: views/tasklist/tasklist
 ] %}
 
 {% block main %}
-    <h1>Upload survey forms</h1>
-
-    {{
-        onsUpload({
-            "id": "survey-form-upload",
-            "accept": ".json",
-            "label": {
-                "text": "Select survey form schema JSON files"
-            }
-        })
-    }}
+    <h1>Add form data</h1>
+    <p>This is a placeholder page which has not yet been designed.</p>
 
     {{
         onsButton({
             "text": "Save and continue",
             "classes": "ons-u-mt-m",
-            "url": pageInfo.rootPath + "/views/tasklist/addforms/addformdata.html",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
             "noIcon": true,
-            "id": "btn-save-forms"
+            "id": "btn-save-form-data"
         })
     }}
 {% endblock %}
