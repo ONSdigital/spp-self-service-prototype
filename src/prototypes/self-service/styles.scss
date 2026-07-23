@@ -129,3 +129,16 @@ Do not remove. Required for dynamic generation of survey summary page
     }
   }
 }
+
+#survey-forms-accordion {
+  .ons-details__title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.spp-accordion-status {
+  margin-right: 1.5rem;
+}

@@ -5,7 +5,9 @@ import '@ons/prototype-kit/src/helpers/index.js';
 
 // SPP Self Service State Management
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Render dynamic statuses from sessionStorage on page load
+  const rootPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/views/'));
+
+  // 1. Render dynamic statuses from sessionStorage on page load for general pages
   
   // Surveys Table
   document.querySelectorAll('[data-survey-id]').forEach(el => {
@@ -68,19 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
       el.innerHTML = taskNames[id];
     } else {
       const url = taskUrls[id];
-      const rootPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/views/'));
       const fullUrl = url.startsWith('/') ? (rootPath + url) : url;
       el.innerHTML = `<a href="${fullUrl}">${taskNames[id]}</a>`;
     }
   });
 
-  // Reference Data Table
+  // Reference Data Table (Fallback status restorer for standard template loads)
   document.querySelectorAll('[data-refdata-id]').forEach(el => {
     const id = el.getAttribute('data-refdata-id');
     const saved = sessionStorage.getItem(`refdata-${id}`);
     if (saved) {
       const data = JSON.parse(saved);
       el.innerHTML = `<span class="ons-status ons-status--${data.variant}">${data.label}</span>`;
+    }
+  });
+
+  // Reference Data Filenames (Fallback filename restorer for standard template loads)
+  document.querySelectorAll('[data-refdata-file]').forEach(el => {
+    const id = el.getAttribute('data-refdata-file');
+    const filename = sessionStorage.getItem(`refdata-file-${id}`);
+    if (filename) {
+      el.textContent = filename;
     }
   });
 
@@ -96,6 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Question metadata page: Save and continue
+  const btnSaveQuestionMetadata = document.getElementById('btn-save-question-metadata');
+  if (btnSaveQuestionMetadata) {
+    btnSaveQuestionMetadata.addEventListener('click', () => {
+      sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'Done', variant: 'success' }));
+      sessionStorage.setItem('task-add-constructed-questions-and-values', JSON.stringify({ label: 'To do', variant: 'info' }));
+      sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'To do', variant: 'info' }));
+    });
+  }
+
+  // Return to task list button: Save state as In progress
+  const btnReturnTaskList = document.getElementById('btn-return-task-list');
+  if (btnReturnTaskList) {
+    btnReturnTaskList.addEventListener('click', () => {
+      sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'In progress', variant: 'pending' }));
+    });
+  }
+
   // Choose reference datasets page: Save and continue
   const btnSaveRefData = document.getElementById('btn-save-refdata');
   if (btnSaveRefData) {
@@ -108,6 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSavePeriodDates = document.getElementById('btn-save-period-dates');
   if (btnSavePeriodDates) {
     btnSavePeriodDates.addEventListener('click', () => {
+      const fileInput = document.getElementById('period-dates-upload');
+      if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        sessionStorage.setItem('refdata-file-survey-period-dates', fileInput.files[0].name);
+      }
       sessionStorage.setItem('refdata-survey-period-dates', JSON.stringify({ label: 'Done', variant: 'success' }));
     });
   }
@@ -116,6 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSaveTradingWeights = document.getElementById('btn-save-trading-weights');
   if (btnSaveTradingWeights) {
     btnSaveTradingWeights.addEventListener('click', () => {
+      const fileInput = document.getElementById('trading-weights-upload');
+      if (fileInput && fileInput.files && fileInput.files.length > 0) {
+        sessionStorage.setItem('refdata-file-trading-day-weights', fileInput.files[0].name);
+      }
       sessionStorage.setItem('refdata-trading-day-weights', JSON.stringify({ label: 'Done', variant: 'success' }));
     });
   }

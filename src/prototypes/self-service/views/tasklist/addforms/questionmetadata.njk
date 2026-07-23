@@ -1,8 +1,8 @@
 ---
 group: Self Service
-title: Add Form Data
+title: Add Question Metadata
 layout: self-service/views/_main
-prevPage: views/tasklist/addforms/uploadjson
+prevPage: views/tasklist/addforms/formslist
 ---
 {% from "components/button/_macro.njk" import onsButton %}
 
@@ -22,8 +22,8 @@ prevPage: views/tasklist/addforms/uploadjson
 ] %}
 
 {% block main %}
-    <h1>Add form data</h1>
-    <p>This is a placeholder page which has not yet been designed.</p>
+    <h1>Add question metadata</h1>
+    <p>This page allows you to manage and add metadata details for questions in this survey.</p>
 
     {{
         onsButton({
@@ -31,7 +31,7 @@ prevPage: views/tasklist/addforms/uploadjson
             "classes": "ons-u-mt-m",
             "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
             "noIcon": true,
-            "id": "btn-save-form-data"
+            "id": "btn-save-question-metadata"
         })
     }}
 {% endblock %}

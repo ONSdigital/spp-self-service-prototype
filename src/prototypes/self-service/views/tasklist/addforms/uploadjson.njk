@@ -6,6 +6,7 @@ prevPage: views/tasklist/tasklist
 ---
 {% from "components/upload/_macro.njk" import onsUpload %}
 {% from "components/button/_macro.njk" import onsButton %}
+{% from "components/panel/_macro.njk" import onsPanel %}
 
 {% set breadcrumbs = [
     {
@@ -24,6 +25,8 @@ prevPage: views/tasklist/tasklist
 
 {% block main %}
     <h1>Upload survey forms</h1>
+    <p>Add JSON files for each form in the survey.</p>
+    <p>You can add multiple files.</p>
 
     {{
         onsUpload({
@@ -36,10 +39,17 @@ prevPage: views/tasklist/tasklist
     }}
 
     {{
+        onsPanel({
+            "body": "<p>Due to file processing times, there may be a delay before loading the next page.</p>",
+            "classes": "ons-u-mb-m"
+        })
+    }}
+
+    {{
         onsButton({
             "text": "Save and continue",
             "classes": "ons-u-mt-m",
-            "url": pageInfo.rootPath + "/views/tasklist/addforms/addformdata.html",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
             "noIcon": true,
             "id": "btn-save-forms"
         })

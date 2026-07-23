@@ -1,0 +1,158 @@
+---
+group: Self Service
+title: Add Form Data
+layout: self-service/views/_main
+prevPage: views/tasklist/addforms/uploadjson
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/status/_macro.njk" import onsStatus %}
+{% from "components/accordion/_macro.njk" import onsAccordion %}
+{% from "components/description-list/_macro.njk" import onsDescriptionList %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    }
+] %}
+
+{% block main %}
+    <h1>Annual Business Survey (123)</h1>
+    <p>Add JSON files for each form in the survey. You can add multiple files.</p>
+
+    <h2>Add survey form metadata</h2>
+    <p>For each form in the survey, additional information is needed to set it up on SPP.</p>
+
+    {% set abs123Title %}
+        ABS123 <span class="spp-accordion-status">
+            {{
+                onsStatus({
+                    "label": "Incomplete",
+                    "variant": "info",
+                    "size": "small"
+                })
+            }}
+        </span>
+    {% endset %}
+
+    {% set abs234Title %}
+        ABS234 <span class="spp-accordion-status">
+            {{
+                onsStatus({
+                    "label": "Incomplete",
+                    "variant": "info",
+                    "size": "small"
+                })
+            }}
+        </span>
+    {% endset %}
+
+    {% set abs345Title %}
+        ABS345 <span class="spp-accordion-status">
+            {{
+                onsStatus({
+                    "label": "Done",
+                    "variant": "success",
+                    "size": "small"
+                })
+            }}
+        </span>
+    {% endset %}
+
+    {% set accordionContent %}
+        {{
+            onsDescriptionList({
+                "itemsList": [
+                    {
+                        "term": "Description",
+                        "descriptions": [
+                            { "description": "" }
+                        ]
+                    },
+                    {
+                        "term": "Period Start",
+                        "descriptions": [
+                            { "description": "" }
+                        ]
+                    },
+                    {
+                        "term": "Period End",
+                        "descriptions": [
+                            { "description": "" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {{
+        onsAccordion({
+            "id": "survey-forms-accordion",
+            "classes": "ons-u-mb-m",
+            "itemsList": [
+                {
+                    "title": abs123Title | safe,
+                    "content": accordionContent | safe
+                },
+                {
+                    "title": abs234Title | safe,
+                    "content": accordionContent | safe
+                },
+                {
+                    "title": abs345Title | safe,
+                    "content": accordionContent | safe
+                }
+            ]
+        })
+    }}
+
+    <hr class="spp-section-divider" />
+
+    <h2>Add or replace form</h2>
+    <p>You can add more forms as they become available. You can replace existing forms so long as they have the same form ID.</p>
+
+    {{
+        onsButton({
+            "text": "Add forms",
+            "variants": "secondary",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/uploadjson.html",
+            "noIcon": true,
+            "classes": "ons-u-mb-m",
+            "id": "btn-add-forms"
+        })
+    }}
+
+    <h2>Add question metadata</h2>
+    <p>To complete the information required to set up this survey on SPP, you need to provide additional data about the questions in this survey.</p>
+
+    {{
+        onsButton({
+            "text": "Add question metadata",
+            "classes": "ons-u-mt-m ons-u-mb-m",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/questionmetadata.html",
+            "noIcon": true,
+            "id": "btn-add-question-metadata"
+        })
+    }}
+
+    <h2 class="ons-u-mt-l">Save progress and exit task</h2>
+
+    {{
+        onsButton({
+            "text": "Return to task list",
+            "variants": "secondary",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "noIcon": true,
+            "id": "btn-return-task-list"
+        })
+    }}
+{% endblock %}
