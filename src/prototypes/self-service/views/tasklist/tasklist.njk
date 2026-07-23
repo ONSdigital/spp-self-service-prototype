@@ -18,8 +18,10 @@ prevPage: views/migrate
             <span class="spp-task-list__task-name" data-task-link="add-survey-forms">
                 {% if state.tasks["add-survey-forms"].label == "Cannot start yet" %}
                     Add survey forms
-                {% else %}
+                {% elif state.tasks["add-survey-forms"].label == "To do" %}
                     <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/uploadjson.html">Add survey forms</a>
+                {% else %}
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/formslist.html">Add survey forms</a>
                 {% endif %}
             </span>
             <span class="spp-task-list__status" data-task-id="add-survey-forms">

@@ -7,7 +7,6 @@ prevPage: views/tasklist/addforms/uploadjson
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/status/_macro.njk" import onsStatus %}
 {% from "components/accordion/_macro.njk" import onsAccordion %}
-{% from "components/description-list/_macro.njk" import onsDescriptionList %}
 
 {% set breadcrumbs = [
     {
@@ -26,7 +25,6 @@ prevPage: views/tasklist/addforms/uploadjson
 
 {% block main %}
     <h1>Annual Business Survey (123)</h1>
-    <p>Add JSON files for each form in the survey. You can add multiple files.</p>
 
     <h2>Add survey form metadata</h2>
     <p>For each form in the survey, additional information is needed to set it up on SPP.</p>
@@ -67,31 +65,55 @@ prevPage: views/tasklist/addforms/uploadjson
         </span>
     {% endset %}
 
-    {% set accordionContent %}
-        {{
-            onsDescriptionList({
-                "itemsList": [
-                    {
-                        "term": "Description",
-                        "descriptions": [
-                            { "description": "" }
-                        ]
-                    },
-                    {
-                        "term": "Period Start",
-                        "descriptions": [
-                            { "description": "" }
-                        ]
-                    },
-                    {
-                        "term": "Period End",
-                        "descriptions": [
-                            { "description": "" }
-                        ]
-                    }
-                ]
-            })
-        }}
+    {% set abs123Content %}
+        <dl class="spp-description-list">
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Description</dt>
+                <dd class="spp-description-list__value"></dd>
+            </div>
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Period Start</dt>
+                <dd class="spp-description-list__value"></dd>
+            </div>
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Period End</dt>
+                <dd class="spp-description-list__value"></dd>
+            </div>
+        </dl>
+    {% endset %}
+
+    {% set abs234Content %}
+        <dl class="spp-description-list">
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Description</dt>
+                <dd class="spp-description-list__value"></dd>
+            </div>
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Period Start</dt>
+                <dd class="spp-description-list__value"></dd>
+            </div>
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Period End</dt>
+                <dd class="spp-description-list__value"></dd>
+            </div>
+        </dl>
+    {% endset %}
+
+    {% set abs345Content %}
+        <dl class="spp-description-list">
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Description</dt>
+                <dd class="spp-description-list__value">Convenience stores and supermarkets</dd>
+            </div>
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Period Start</dt>
+                <dd class="spp-description-list__value">042027</dd>
+            </div>
+            <div class="spp-description-list__item">
+                <dt class="spp-description-list__term">Period End</dt>
+                <dd class="spp-description-list__value">032028</dd>
+            </div>
+        </dl>
     {% endset %}
 
     {{
@@ -101,15 +123,15 @@ prevPage: views/tasklist/addforms/uploadjson
             "itemsList": [
                 {
                     "title": abs123Title | safe,
-                    "content": accordionContent | safe
+                    "content": abs123Content | safe
                 },
                 {
                     "title": abs234Title | safe,
-                    "content": accordionContent | safe
+                    "content": abs234Content | safe
                 },
                 {
                     "title": abs345Title | safe,
-                    "content": accordionContent | safe
+                    "content": abs345Content | safe
                 }
             ]
         })

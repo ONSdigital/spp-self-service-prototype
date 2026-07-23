@@ -69,7 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (label === 'Cannot start yet') {
       el.innerHTML = taskNames[id];
     } else {
-      const url = taskUrls[id];
+      let url = taskUrls[id];
+      if (id === 'add-survey-forms' && label !== 'To do') {
+        url = '/views/tasklist/addforms/formslist.html';
+      }
       const fullUrl = url.startsWith('/') ? (rootPath + url) : url;
       el.innerHTML = `<a href="${fullUrl}">${taskNames[id]}</a>`;
     }
@@ -121,6 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnReturnTaskList) {
     btnReturnTaskList.addEventListener('click', () => {
       sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'In progress', variant: 'pending' }));
+      sessionStorage.setItem('task-add-constructed-questions-and-values', JSON.stringify({ label: 'To do', variant: 'info' }));
+      sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'To do', variant: 'info' }));
     });
   }
 
