@@ -194,6 +194,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- ABS123 Metadata Page Persistence ---
+  
+  // 1. Pre-populate abs123 form inputs on page load
+  const abs123DescInput = document.getElementById('form-description');
+  const abs123StartInput = document.getElementById('period-start');
+  const abs123EndInput = document.getElementById('period-end');
+  
+  if (abs123DescInput) {
+    abs123DescInput.value = sessionStorage.getItem('abs123-description') || '';
+  }
+  if (abs123StartInput) {
+    abs123StartInput.value = sessionStorage.getItem('abs123-period-start') || '';
+  }
+  if (abs123EndInput) {
+    abs123EndInput.value = sessionStorage.getItem('abs123-period-end') || '';
+  }
+  
+  // 2. Save input values to sessionStorage on click of the return button
+  const btnSaveAbs123 = document.getElementById('btn-save-abs123');
+  if (btnSaveAbs123) {
+    btnSaveAbs123.addEventListener('click', () => {
+      const desc = document.getElementById('form-description');
+      const start = document.getElementById('period-start');
+      const end = document.getElementById('period-end');
+      
+      const descVal = desc ? desc.value.trim() : '';
+      const startVal = start ? start.value.trim() : '';
+      const endVal = end ? end.value.trim() : '';
+      
+      sessionStorage.setItem('abs123-description', descVal);
+      sessionStorage.setItem('abs123-period-start', startVal);
+      sessionStorage.setItem('abs123-period-end', endVal);
+      
+      if (descVal !== '' && startVal !== '' && endVal !== '') {
+        sessionStorage.setItem('abs123-status', 'Done');
+      } else {
+        sessionStorage.setItem('abs123-status', 'Incomplete');
+      }
+    });
+  }
+  
+  // 3. Recall and display the saved values in the formslist accordion
+  const abs123ValDesc = document.getElementById('abs123-val-desc');
+  const abs123ValStart = document.getElementById('abs123-val-start');
+  const abs123ValEnd = document.getElementById('abs123-val-end');
+  
+  if (abs123ValDesc) {
+    abs123ValDesc.textContent = sessionStorage.getItem('abs123-description') || '';
+  }
+  if (abs123ValStart) {
+    abs123ValStart.textContent = sessionStorage.getItem('abs123-period-start') || '';
+  }
+  if (abs123ValEnd) {
+    abs123ValEnd.textContent = sessionStorage.getItem('abs123-period-end') || '';
+  }
+
+  // 4. Update the accordion status badge for ABS123 based on form completeness
+  const abs123StatusEl = document.getElementById('abs123-status');
+  if (abs123StatusEl) {
+    const status = sessionStorage.getItem('abs123-status') || 'Incomplete';
+    if (status === 'Done') {
+      abs123StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
+    } else {
+      abs123StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
+    }
+  }
+
   // 3. Clear data footer link (targeted by text)
   const clearDataLink = Array.from(document.querySelectorAll('.ons-footer a')).find(el => el.textContent.trim() === 'Clear data');
   if (clearDataLink) {

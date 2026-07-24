@@ -30,7 +30,7 @@ prevPage: views/tasklist/addforms/uploadjson
     <p>For each form in the survey, additional information is needed to set it up on SPP.</p>
 
     {% set abs123Title %}
-        ABS123 <span class="spp-accordion-status">
+        ABS123 <span class="spp-accordion-status" id="abs123-status">
             {{
                 onsStatus({
                     "label": "Incomplete",
@@ -69,15 +69,15 @@ prevPage: views/tasklist/addforms/uploadjson
         <dl class="spp-description-list">
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Description:</dt>
-                <dd class="spp-description-list__value"></dd>
+                <dd class="spp-description-list__value" id="abs123-val-desc"></dd>
             </div>
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Period Start:</dt>
-                <dd class="spp-description-list__value"></dd>
+                <dd class="spp-description-list__value" id="abs123-val-start"></dd>
             </div>
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Period End:</dt>
-                <dd class="spp-description-list__value"></dd>
+                <dd class="spp-description-list__value" id="abs123-val-end"></dd>
             </div>
         </dl>
         <p class="ons-u-mt-m">
