@@ -17,7 +17,30 @@ prevPage: views/home
 {% from "components/status/_macro.njk" import onsStatus %}
 
 {% block main %}
-    {% set state = helpers.getState() %}
+    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+        "tasks": {
+            "add-survey-forms": { "label": "To do", "variant": "info" },
+            "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
+            "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+            "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
+            "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
+            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+            "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
+        },
+        "surveys": {
+            "002": { "label": "Live", "variant": "success" },
+            "009": { "label": "Live", "variant": "success" },
+            "023": { "label": "Live", "variant": "success" },
+            "139": { "label": "Live", "variant": "success" },
+            "141": { "label": "Live", "variant": "success" },
+            "228": { "label": "Live", "variant": "success" }
+        },
+        "refdata": {
+            "survey-period-dates": { "label": "To do", "variant": "info" },
+            "trading-day-weights": { "label": "To do", "variant": "info" }
+        }
+    } %}
     <h1>Migrate a survey onto the Statistical Preparation Platform</h1>
 
     <aside class="ons-table-of-contents-container" aria-label="Table of contents">
