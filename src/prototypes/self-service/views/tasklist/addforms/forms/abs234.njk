@@ -1,0 +1,40 @@
+---
+group: Self Service
+title: ABS234 Details
+layout: self-service/views/_main
+prevPage: views/tasklist/addforms/formslist
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
+        "text": "Forms list"
+    }
+] %}
+
+{% block main %}
+    <h1>ABS234 Details</h1>
+    <p>This is the details page for the ABS234 form schema.</p>
+
+    {{
+        onsButton({
+            "text": "Return to forms list",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
+            "noIcon": true
+        })
+    }}
+{% endblock %}
