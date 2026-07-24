@@ -194,34 +194,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- ABS123 Metadata Page Persistence ---
-  
-  // 1. Pre-populate abs123 form inputs on page load
-  const abs123DescInput = document.getElementById('form-description');
-  const abs123StartInput = document.getElementById('period-start');
-  const abs123EndInput = document.getElementById('period-end');
-  
-  if (abs123DescInput) {
-    abs123DescInput.value = sessionStorage.getItem('abs123-description') || '';
-  }
-  if (abs123StartInput) {
-    abs123StartInput.value = sessionStorage.getItem('abs123-period-start') || '';
-  }
-  if (abs123EndInput) {
-    abs123EndInput.value = sessionStorage.getItem('abs123-period-end') || '';
-  }
-  
-  // 2. Save input values to sessionStorage on click of the return button
+  // --- ABS123 Metadata Page ---
   const btnSaveAbs123 = document.getElementById('btn-save-abs123');
   if (btnSaveAbs123) {
+    const descInput = document.getElementById('form-description');
+    const startInput = document.getElementById('period-start');
+    const endInput = document.getElementById('period-end');
+    
+    if (descInput) descInput.value = sessionStorage.getItem('abs123-description') || '';
+    if (startInput) startInput.value = sessionStorage.getItem('abs123-period-start') || '';
+    if (endInput) endInput.value = sessionStorage.getItem('abs123-period-end') || '';
+    
     btnSaveAbs123.addEventListener('click', () => {
-      const desc = document.getElementById('form-description');
-      const start = document.getElementById('period-start');
-      const end = document.getElementById('period-end');
-      
-      const descVal = desc ? desc.value.trim() : '';
-      const startVal = start ? start.value.trim() : '';
-      const endVal = end ? end.value.trim() : '';
+      const descVal = descInput ? descInput.value.trim() : '';
+      const startVal = startInput ? startInput.value.trim() : '';
+      const endVal = endInput ? endInput.value.trim() : '';
       
       sessionStorage.setItem('abs123-description', descVal);
       sessionStorage.setItem('abs123-period-start', startVal);
@@ -234,23 +221,73 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // --- ABS234 Metadata Page ---
+  const btnSaveAbs234 = document.getElementById('btn-save-abs234');
+  if (btnSaveAbs234) {
+    const descInput = document.getElementById('form-description');
+    const startInput = document.getElementById('period-start');
+    const endInput = document.getElementById('period-end');
+    
+    if (descInput) descInput.value = sessionStorage.getItem('abs234-description') || '';
+    if (startInput) startInput.value = sessionStorage.getItem('abs234-period-start') || '';
+    if (endInput) endInput.value = sessionStorage.getItem('abs234-period-end') || '';
+    
+    btnSaveAbs234.addEventListener('click', () => {
+      const descVal = descInput ? descInput.value.trim() : '';
+      const startVal = startInput ? startInput.value.trim() : '';
+      const endVal = endInput ? endInput.value.trim() : '';
+      
+      sessionStorage.setItem('abs234-description', descVal);
+      sessionStorage.setItem('abs234-period-start', startVal);
+      sessionStorage.setItem('abs234-period-end', endVal);
+      
+      if (descVal !== '' && startVal !== '' && endVal !== '') {
+        sessionStorage.setItem('abs234-status', 'Done');
+      } else {
+        sessionStorage.setItem('abs234-status', 'Incomplete');
+      }
+    });
+  }
+
+  // --- ABS345 Metadata Page ---
+  const btnSaveAbs345 = document.getElementById('btn-save-abs345');
+  if (btnSaveAbs345) {
+    const descInput = document.getElementById('form-description');
+    const startInput = document.getElementById('period-start');
+    const endInput = document.getElementById('period-end');
+    
+    if (descInput) descInput.value = sessionStorage.getItem('abs345-description') !== null ? sessionStorage.getItem('abs345-description') : 'Convenience stores and supermarkets';
+    if (startInput) startInput.value = sessionStorage.getItem('abs345-period-start') !== null ? sessionStorage.getItem('abs345-period-start') : '042027';
+    if (endInput) endInput.value = sessionStorage.getItem('abs345-period-end') !== null ? sessionStorage.getItem('abs345-period-end') : '032028';
+    
+    btnSaveAbs345.addEventListener('click', () => {
+      const descVal = descInput ? descInput.value.trim() : '';
+      const startVal = startInput ? startInput.value.trim() : '';
+      const endVal = endInput ? endInput.value.trim() : '';
+      
+      sessionStorage.setItem('abs345-description', descVal);
+      sessionStorage.setItem('abs345-period-start', startVal);
+      sessionStorage.setItem('abs345-period-end', endVal);
+      
+      if (descVal !== '' && startVal !== '' && endVal !== '') {
+        sessionStorage.setItem('abs345-status', 'Done');
+      } else {
+        sessionStorage.setItem('abs345-status', 'Incomplete');
+      }
+    });
+  }
+
+  // --- Forms List Display Recall & Status Badger ---
   
-  // 3. Recall and display the saved values in the formslist accordion
+  // Recall values for ABS123
   const abs123ValDesc = document.getElementById('abs123-val-desc');
   const abs123ValStart = document.getElementById('abs123-val-start');
   const abs123ValEnd = document.getElementById('abs123-val-end');
-  
-  if (abs123ValDesc) {
-    abs123ValDesc.textContent = sessionStorage.getItem('abs123-description') || '';
-  }
-  if (abs123ValStart) {
-    abs123ValStart.textContent = sessionStorage.getItem('abs123-period-start') || '';
-  }
-  if (abs123ValEnd) {
-    abs123ValEnd.textContent = sessionStorage.getItem('abs123-period-end') || '';
-  }
+  if (abs123ValDesc) abs123ValDesc.textContent = sessionStorage.getItem('abs123-description') || '';
+  if (abs123ValStart) abs123ValStart.textContent = sessionStorage.getItem('abs123-period-start') || '';
+  if (abs123ValEnd) abs123ValEnd.textContent = sessionStorage.getItem('abs123-period-end') || '';
 
-  // 4. Update the accordion status badge for ABS123 based on form completeness
   const abs123StatusEl = document.getElementById('abs123-status');
   if (abs123StatusEl) {
     const status = sessionStorage.getItem('abs123-status') || 'Incomplete';
@@ -258,6 +295,48 @@ document.addEventListener('DOMContentLoaded', () => {
       abs123StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
     } else {
       abs123StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
+    }
+  }
+
+  // Recall values for ABS234
+  const abs234ValDesc = document.getElementById('abs234-val-desc');
+  const abs234ValStart = document.getElementById('abs234-val-start');
+  const abs234ValEnd = document.getElementById('abs234-val-end');
+  if (abs234ValDesc) abs234ValDesc.textContent = sessionStorage.getItem('abs234-description') || '';
+  if (abs234ValStart) abs234ValStart.textContent = sessionStorage.getItem('abs234-period-start') || '';
+  if (abs234ValEnd) abs234ValEnd.textContent = sessionStorage.getItem('abs234-period-end') || '';
+
+  const abs234StatusEl = document.getElementById('abs234-status');
+  if (abs234StatusEl) {
+    const status = sessionStorage.getItem('abs234-status') || 'Incomplete';
+    if (status === 'Done') {
+      abs234StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
+    } else {
+      abs234StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
+    }
+  }
+
+  // Recall values for ABS345 (with defaults if empty)
+  const abs345ValDesc = document.getElementById('abs345-val-desc');
+  const abs345ValStart = document.getElementById('abs345-val-start');
+  const abs345ValEnd = document.getElementById('abs345-val-end');
+  if (abs345ValDesc) {
+    abs345ValDesc.textContent = sessionStorage.getItem('abs345-description') !== null ? sessionStorage.getItem('abs345-description') : 'Convenience stores and supermarkets';
+  }
+  if (abs345ValStart) {
+    abs345ValStart.textContent = sessionStorage.getItem('abs345-period-start') !== null ? sessionStorage.getItem('abs345-period-start') : '042027';
+  }
+  if (abs345ValEnd) {
+    abs345ValEnd.textContent = sessionStorage.getItem('abs345-period-end') !== null ? sessionStorage.getItem('abs345-period-end') : '032028';
+  }
+
+  const abs345StatusEl = document.getElementById('abs345-status');
+  if (abs345StatusEl) {
+    const status = sessionStorage.getItem('abs345-status') !== null ? sessionStorage.getItem('abs345-status') : 'Done';
+    if (status === 'Done') {
+      abs345StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
+    } else {
+      abs345StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
     }
   }
 

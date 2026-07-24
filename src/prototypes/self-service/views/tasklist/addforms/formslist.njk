@@ -42,7 +42,7 @@ prevPage: views/tasklist/addforms/uploadjson
     {% endset %}
 
     {% set abs234Title %}
-        ABS234 <span class="spp-accordion-status">
+        ABS234 <span class="spp-accordion-status" id="abs234-status">
             {{
                 onsStatus({
                     "label": "Incomplete",
@@ -54,7 +54,7 @@ prevPage: views/tasklist/addforms/uploadjson
     {% endset %}
 
     {% set abs345Title %}
-        ABS345 <span class="spp-accordion-status">
+        ABS345 <span class="spp-accordion-status" id="abs345-status">
             {{
                 onsStatus({
                     "label": "Done",
@@ -89,15 +89,15 @@ prevPage: views/tasklist/addforms/uploadjson
         <dl class="spp-description-list">
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Description:</dt>
-                <dd class="spp-description-list__value"></dd>
+                <dd class="spp-description-list__value" id="abs234-val-desc"></dd>
             </div>
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Period Start:</dt>
-                <dd class="spp-description-list__value"></dd>
+                <dd class="spp-description-list__value" id="abs234-val-start"></dd>
             </div>
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Period End:</dt>
-                <dd class="spp-description-list__value"></dd>
+                <dd class="spp-description-list__value" id="abs234-val-end"></dd>
             </div>
         </dl>
         <p class="ons-u-mt-m">
@@ -109,15 +109,15 @@ prevPage: views/tasklist/addforms/uploadjson
         <dl class="spp-description-list">
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Description:</dt>
-                <dd class="spp-description-list__value">Convenience stores and supermarkets</dd>
+                <dd class="spp-description-list__value" id="abs345-val-desc">Convenience stores and supermarkets</dd>
             </div>
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Period Start:</dt>
-                <dd class="spp-description-list__value">042027</dd>
+                <dd class="spp-description-list__value" id="abs345-val-start">042027</dd>
             </div>
             <div class="spp-description-list__item">
                 <dt class="spp-description-list__term">Period End:</dt>
-                <dd class="spp-description-list__value">032028</dd>
+                <dd class="spp-description-list__value" id="abs345-val-end">032028</dd>
             </div>
         </dl>
         <p class="ons-u-mt-m">
