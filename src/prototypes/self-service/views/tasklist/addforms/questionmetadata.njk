@@ -5,6 +5,8 @@ layout: self-service/views/_main
 prevPage: views/tasklist/addforms/formslist
 ---
 {% from "components/button/_macro.njk" import onsButton %}
+{% from "components/accordion/_macro.njk" import onsAccordion %}
+{% from "components/table/_macro.njk" import onsTable %}
 
 {% set breadcrumbs = [
     {
@@ -21,15 +23,230 @@ prevPage: views/tasklist/addforms/formslist
     }
 ] %}
 
+{% macro renderMetadataList(qcode) %}
+    <dl class="spp-description-list" style="margin: 0; width: 100%;">
+        <div class="spp-description-list__item" style="margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <dt class="spp-description-list__term" style="font-weight: bold; margin-right: 1rem;">Read only:</dt>
+            <dd class="spp-description-list__value" style="margin: 0; display: flex; align-items: center; justify-content: flex-end;">
+                <label style="margin-right: 1.5rem; display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="readonly-{{ qcode }}" style="margin-right: 0.5rem;" value="yes" /> Yes
+                </label>
+                <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="readonly-{{ qcode }}" style="margin-right: 0.5rem;" value="no" /> No
+                </label>
+            </dd>
+        </div>
+        <div class="spp-description-list__item" style="margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <dt class="spp-description-list__term" style="font-weight: bold; margin-right: 1rem;">Has comment check:</dt>
+            <dd class="spp-description-list__value" style="margin: 0; display: flex; align-items: center; justify-content: flex-end;">
+                <label style="margin-right: 1.5rem; display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="comment-{{ qcode }}" style="margin-right: 0.5rem;" value="yes" /> Yes
+                </label>
+                <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="comment-{{ qcode }}" style="margin-right: 0.5rem;" value="no" /> No
+                </label>
+            </dd>
+        </div>
+        <div class="spp-description-list__item" style="margin: 0; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <dt class="spp-description-list__term" style="font-weight: bold; margin-right: 1rem;">Date adjustment:</dt>
+            <dd class="spp-description-list__value" style="margin: 0; display: flex; align-items: center; justify-content: flex-end;">
+                <label style="margin-right: 1.5rem; display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="date-adj-{{ qcode }}" style="margin-right: 0.5rem;" value="yes" /> Yes
+                </label>
+                <label style="display: inline-flex; align-items: center; cursor: pointer;">
+                    <input type="radio" name="date-adj-{{ qcode }}" style="margin-right: 0.5rem;" value="no" /> No
+                </label>
+            </dd>
+        </div>
+    </dl>
+{% endmacro %}
+
 {% block main %}
-    <h1>Add question metadata</h1>
-    <p>This page allows you to manage and add metadata details for questions in this survey.</p>
+    <h1>Add question metadata: ABS</h1>
+    <p>All unique questions for the Annual Business Survey are displayed below. Provide details of how to display each question in SPP.</p>
+
+    {% set firstAccordionTable %}
+        {{
+            onsTable({
+                "id": "survey-period-table",
+                "ths": [
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Metadata", "thClasses": "spp-col-metadata" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": "Q1" },
+                            { "value": "Start date" },
+                            { "value": renderMetadataList("q1") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q2" },
+                            { "value": "End date" },
+                            { "value": renderMetadataList("q2") | safe }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {% set secondAccordionTable %}
+        {{
+            onsTable({
+                "id": "employees-table",
+                "ths": [
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Metadata", "thClasses": "spp-col-metadata" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": "Q50" },
+                            { "value": "Number of employees" },
+                            { "value": renderMetadataList("q50") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q51" },
+                            { "value": "Number of male employees working more than 30 hours per week" },
+                            { "value": renderMetadataList("q51") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q52" },
+                            { "value": "Number of male employees working 30 hours or less per week" },
+                            { "value": renderMetadataList("q52" ) | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q53" },
+                            { "value": "Number of female employees working more than 30 hours per week" },
+                            { "value": renderMetadataList("q53") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q54" },
+                            { "value": "Number of female employees working 30 hours or less per week" },
+                            { "value": renderMetadataList("q54") | safe }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {% set thirdAccordionTable %}
+        {{
+            onsTable({
+                "id": "locations-table",
+                "ths": [
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Metadata", "thClasses": "spp-col-metadata" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": "Q101" },
+                            { "value": "How many sites do you have" },
+                            { "value": renderMetadataList("q101") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q102" },
+                            { "value": "How many new sites opened since the last period" },
+                            { "value": renderMetadataList("q102") | safe }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {% set fourthAccordionTable %}
+        {{
+            onsTable({
+                "id": "turnover-table",
+                "ths": [
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Metadata", "thClasses": "spp-col-metadata" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": "Q40" },
+                            { "value": "Total turnover" },
+                            { "value": renderMetadataList("q40") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q41" },
+                            { "value": "Total amount receivable in respect of invoices raised during period" },
+                            { "value": renderMetadataList("q41") | safe }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q42" },
+                            { "value": "Value of grants, donations, legacies, investments and incorporated income" },
+                            { "value": renderMetadataList("q42") | safe }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {{
+        onsAccordion({
+            "id": "validation-rules-accordion",
+            "allButton": {
+                "open": "Show all",
+                "close": "Hide all",
+                "openAriaLabel": "Show all sections",
+                "closeAriaLabel": "Hide all sections",
+                "attributes": {
+                    "data-toggle-button": "accordion-toggle-all"
+                }
+            },
+            "itemsList": [
+                {
+                    "title": "Survey period and response data",
+                    "content": firstAccordionTable | safe
+                },
+                {
+                    "title": "Employees",
+                    "content": secondAccordionTable | safe
+                },
+                {
+                    "title": "Locations",
+                    "content": thirdAccordionTable | safe
+                },
+                {
+                    "title": "Turnover",
+                    "content": fourthAccordionTable | safe
+                }
+            ]
+        })
+    }}
 
     {{
         onsButton({
             "text": "Save and continue",
             "classes": "ons-u-mt-m",
-            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
             "noIcon": true,
             "id": "btn-save-question-metadata"
         })
