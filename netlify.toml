@@ -1,0 +1,7 @@
+[build]
+  publish = "build"
+  command = "yarn build"
+
+[[edge_functions]]
+  path = "/*"
+  function = "auth"

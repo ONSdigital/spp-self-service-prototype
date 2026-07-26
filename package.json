@@ -10,7 +10,7 @@
   "scripts": {
     "start": "gulp prototype-kit:start",
     "watch": "gulp prototype-kit:watch",
-    "build": "yarn tidy-clean && NODE_ENV=production gulp prototype-kit:build && node scripts/append-auth.js",
+    "build": "yarn tidy-clean && NODE_ENV=production gulp prototype-kit:build",
     "tidy-clean": "rm -rf build"
   },
   "dependencies": {
