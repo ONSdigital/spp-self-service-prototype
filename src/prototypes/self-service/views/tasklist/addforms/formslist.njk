@@ -54,18 +54,38 @@ prevPage: views/tasklist/addforms/uploadjson
         })
     }}
 
-    <h2>Add question metadata</h2>
-    <p>To complete the information required to set up this survey on SPP, you need to provide additional data about the questions in this survey.</p>
+    <hr class="spp-section-divider" />
+
+    <h2>Apply date adjustment to questions</h2>
+    <p>You can specify which questions in the survey forms are applicable to have the 'date adjustment' method applied to them.</p>
 
     {{
         onsButton({
-            "text": "Add question metadata",
-            "classes": "ons-u-mt-m ons-u-mb-m",
-            "url": pageInfo.rootPath + "/views/tasklist/addforms/questionmetadata.html",
+            "text": "Configure date adjustment",
+            "variants": "secondary",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/dateadjustment.html",
             "noIcon": true,
             "id": "btn-add-question-metadata"
         })
     }}
+
+    <hr class="spp-section-divider" />
+
+    <h2>Configure BDOD question settings</h2>
+    <p>Comments can be turned on for specific questions to assist BDOD users with clearing.</p>
+    <p>Responses to particular questions can be made read only during clearing.</p>
+
+    {{
+        onsButton({
+            "text": "Configure BDOD settings",
+            "variants": "secondary",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/bdodsettings.html",
+            "noIcon": true,
+            "id": "btn-add-question-metadata"
+        })
+    }}
+
+    <hr class="spp-section-divider" />
 
     <h2 class="ons-u-mt-l">Save progress and exit task</h2>
 
