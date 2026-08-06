@@ -1,0 +1,176 @@
+/***********************************************************************
+Update the version in the path below to the version being used
+***********************************************************************/
+@import '../../../node_modules/@ons/design-system/scss/vars/_index.scss';
+@import '../../../node_modules/@ons/design-system/scss/helpers/_index.scss';
+@import '../../../node_modules/@ons/design-system/scss/utilities/_index.scss';
+
+/***********************************************************************
+Do not remove. Required for dynamic generation of survey summary page
+***********************************************************************/
+
+.js-summary {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+/***********************************************************************/
+/***********************************************************************/
+
+.ons-input-type__inner {
+  width: 100%;
+}
+
+.spp-section-divider {
+  border: 0;
+  border-top: 1px solid var(--ons-color-grey-15);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.spp-task-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 2rem 0;
+  border-top: 1px solid var(--ons-color-grey-15);
+
+  &__item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--ons-color-grey-15);
+  }
+
+  &__task-name {
+    font-size: 1.125rem;
+    font-weight: bold;
+    
+    a {
+      color: var(--ons-color-text-link);
+      text-decoration: underline;
+      
+      &:hover {
+        color: var(--ons-color-text-link-hover);
+      }
+    }
+  }
+
+  &__status {
+    display: inline-block;
+    margin-left: 1rem;
+  }
+}
+
+.ons-table {
+  border-bottom: 1px solid var(--ons-color-borders);
+}
+
+.spp-col-select {
+  width: 5%;
+}
+
+.spp-col-qcode {
+  width: 10%;
+}
+
+.spp-col-question {
+  width: 40%;
+  white-space: normal !important;
+}
+
+.spp-col-answertype {
+  width: 22.5%;
+}
+
+.spp-col-metadata {
+  width: 50%;
+}
+
+.spp-col-rules {
+  width: 22.5%;
+}
+
+.ons-table__cell {
+  .ons-checkbox {
+    width: 22px;
+    height: 22px;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+
+    &__input {
+      left: 0;
+      top: 0;
+      margin: 0;
+      width: 22px;
+      height: 22px;
+      position: absolute;
+    }
+
+    &__label {
+      padding: 0;
+      width: 22px;
+      height: 22px;
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      &::before {
+        left: 0;
+        top: 0;
+        width: 22px;
+        height: 22px;
+        margin: 0;
+      }
+
+      &::after {
+        left: 7px;
+        top: 2px;
+      }
+    }
+  }
+}
+
+#survey-forms-accordion {
+  .ons-details__title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .spp-description-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+      display: flex;
+      align-items: baseline;
+      width: 100%;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &__term {
+      font-weight: bold;
+      min-width: 120px;
+      flex-shrink: 0;
+      margin-right: 1rem;
+    }
+
+    &__value {
+      margin: 0;
+    }
+  }
+}
+
+.spp-accordion-status {
+  margin-right: 1.5rem;
+}

@@ -1,0 +1,221 @@
+---
+group: Self Service
+title: Migrate a Survey
+layout: self-service/views/_main
+prevPage: views/home
+---
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    }
+] %}
+{% from "components/list/_macro.njk" import onsList %}
+{% from "components/details/_macro.njk" import onsDetails %}
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/status/_macro.njk" import onsStatus %}
+
+{% block main %}
+    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+        "tasks": {
+            "add-survey-forms": { "label": "To do", "variant": "info" },
+            "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
+            "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+            "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
+            "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
+            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+            "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
+        },
+        "surveys": {
+            "002": { "label": "Live", "variant": "success" },
+            "009": { "label": "Live", "variant": "success" },
+            "023": { "label": "Live", "variant": "success" },
+            "139": { "label": "Live", "variant": "success" },
+            "141": { "label": "Live", "variant": "success" },
+            "228": { "label": "Live", "variant": "success" }
+        },
+        "refdata": {
+            "survey-period-dates": { "label": "To do", "variant": "info" },
+            "trading-day-weights": { "label": "To do", "variant": "info" }
+        }
+    } %}
+    <h1>Migrate a survey onto the Statistical Preparation Platform</h1>
+
+    <aside class="ons-table-of-contents-container" aria-label="Table of contents">
+        <nav class="ons-table-of-contents" aria-label="Table of contents">
+            {{
+                onsList({
+                    "element": "ul",
+                    "variants": "dashed",
+                    "classes": "ons-u-mb-no",
+                    "itemsList": [
+                        {
+                            "url": "#migrate-survey",
+                            "text": "Migrate a survey"
+                        },
+                        {
+                            "url": "#existing-surveys",
+                            "text": "Existing surveys"
+                        },
+                        {
+                            "url": "#get-help",
+                            "text": "Get help with configuring a survey"
+                        }
+                    ]
+                })
+            }}
+        </nav>
+    </aside>
+
+    <h2 id="migrate-survey">Migrate a survey</h2>
+    <p>To migrate a survey, use our Statistical Preparation Platform. You can create surveys using validation rule templates and by importing survey form schema files. This ensures that surveys are consistent and meet ONS standards.</p>
+
+    <h3>Before you begin</h3>
+    <p>Before migrating a survey you must have prepared the following:</p>
+
+    {{
+        onsDetails({
+            "id": "survey-forms-details",
+            "title": "Survey forms",
+            "content": "<p>Survey forms should be configured using Author and stored locally as JSON files on your computer to upload as part of survey migration.</p>"
+        })
+    }}
+
+    {{
+        onsDetails({
+            "id": "reference-data-details",
+            "title": "Reference data",
+            "content": "<p>Tested and validated reference data CSV files that comply with existing reference datasets in SPP.</p>"
+        })
+    }}
+
+    {{
+        onsDetails({
+            "id": "validation-rules-details",
+            "title": "Validation rules",
+            "content": "<p>Documented and agreed validation rules that have been approved by business survey teams.</p>"
+        })
+    }}
+
+    <h3 class="ons-u-mt-l">Set up a survey</h3>
+    <p>To set up a new survey, ensure that you have defined your survey aims and prepared the survey forms.</p>
+
+    {{
+        onsButton({
+            "text": "Set up survey",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "noIcon": true
+        })
+    }}
+
+    <h2 id="existing-surveys" class="ons-u-mt-l">Existing surveys</h2>
+    <p>Below is a list of existing surveys that are configured or being configured on SPP.</p>
+
+    {% set status002 %}
+        <span data-survey-id="002">
+            {{ onsStatus({ "label": state.surveys["002"].label, "variant": state.surveys["002"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status009 %}
+        <span data-survey-id="009">
+            {{ onsStatus({ "label": state.surveys["009"].label, "variant": state.surveys["009"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status023 %}
+        <span data-survey-id="023">
+            {{ onsStatus({ "label": state.surveys["023"].label, "variant": state.surveys["023"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status139 %}
+        <span data-survey-id="139">
+            {{ onsStatus({ "label": state.surveys["139"].label, "variant": state.surveys["139"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status141 %}
+        <span data-survey-id="141">
+            {{ onsStatus({ "label": state.surveys["141"].label, "variant": state.surveys["141"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status228 %}
+        <span data-survey-id="228">
+            {{ onsStatus({ "label": state.surveys["228"].label, "variant": state.surveys["228"].variant }) }}
+        </span>
+    {% endset %}
+
+    {{
+        onsTable({
+            "id": "existing-surveys-table",
+            "ths": [
+                { "value": "ID" },
+                { "value": "Code" },
+                { "value": "Name" },
+                { "value": "Status" },
+                { "value": "Action" }
+            ],
+            "trs": [
+                {
+                    "tds": [
+                        { "value": "002" },
+                        { "value": "BERD" },
+                        { "value": "Business Enterprise Research and Development" },
+                        { "value": status002 | trim | safe },
+                        { "value": '<a href="#0">Edit survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "009" },
+                        { "value": "MBS" },
+                        { "value": "Monthly Business Survey" },
+                        { "value": status009 | trim | safe },
+                        { "value": '<a href="#0">Edit survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "023" },
+                        { "value": "RSI" },
+                        { "value": "Monthly Business Survey (Retail Sales Index)" },
+                        { "value": status023 | trim | safe },
+                        { "value": '<a href="#0">Edit survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "139" },
+                        { "value": "QBS" },
+                        { "value": "Quarterly Business Survey" },
+                        { "value": status139 | trim | safe },
+                        { "value": '<a href="#0">Edit survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "141" },
+                        { "value": "ASHE" },
+                        { "value": "Annual Survey of Hours and Earnings" },
+                        { "value": status141 | trim | safe },
+                        { "value": '<a href="#0">Edit survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "228" },
+                        { "value": "CONST" },
+                        { "value": "Monthly Business Survey (Construction)" },
+                        { "value": status228 | trim | safe },
+                        { "value": '<a href="#0">Edit survey</a>' }
+                    ]
+                }
+            ]
+        })
+    }}
+{% endblock %}

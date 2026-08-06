@@ -1,0 +1,79 @@
+---
+group: Self Service
+title: Finalise Validation Rules
+layout: self-service/views/_main
+prevPage: views/tasklist/addrules/addvalidationrule
+---
+{% from "components/radios/_macro.njk" import onsRadios %}
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/panel/_macro.njk" import onsPanel %}
+{% from "components/question/_macro.njk" import onsQuestion %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/addrules/addvalidationrule.html",
+        "text": "Add a validation rule to a question"
+    }
+] %}
+
+{% block main %}
+    {%
+        call onsQuestion({
+            "title": "Have you added all validation rules for this survey?",
+            "legendIsQuestionTitle": true,
+            "classes": "ons-u-mt-no"
+        })
+    %}
+        {{
+            onsPanel({
+                "body": "<p>Selecting yes will mark this task as complete for all users.</p>",
+                "classes": "ons-u-mb-m"
+            })
+        }}
+
+        {{
+            onsRadios({
+                "name": "completed-rules",
+                "dontWrap": true,
+                "radios": [
+                    {
+                        "id": "yes",
+                        "label": {
+                            "text": "Yes"
+                        },
+                        "value": "yes"
+                    },
+                    {
+                        "id": "no",
+                        "label": {
+                            "text": "No"
+                        },
+                        "value": "no"
+                    }
+                ]
+            })
+        }}
+    {% endcall %}
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "noIcon": true,
+            "id": "btn-save-completerules"
+        })
+    }}
+{% endblock %}

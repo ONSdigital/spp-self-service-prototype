@@ -1,0 +1,139 @@
+---
+group: Self Service
+title: Migration Task List
+layout: self-service/views/_main
+prevPage: views/migrate
+---
+{% from "components/status/_macro.njk" import onsStatus %}
+
+{% block main %}
+    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+        "tasks": {
+            "add-survey-forms": { "label": "To do", "variant": "info" },
+            "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
+            "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+            "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
+            "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
+            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+            "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
+        },
+        "surveys": {
+            "002": { "label": "Live", "variant": "success" },
+            "009": { "label": "Live", "variant": "success" },
+            "023": { "label": "Live", "variant": "success" },
+            "139": { "label": "Live", "variant": "success" },
+            "141": { "label": "Live", "variant": "success" },
+            "228": { "label": "Live", "variant": "success" }
+        },
+        "refdata": {
+            "survey-period-dates": { "label": "To do", "variant": "info" },
+            "trading-day-weights": { "label": "To do", "variant": "info" }
+        }
+    } %}
+    <h1>Migrate a survey</h1>
+    <p>This page displays the progress of setting up a survey on the Statistical Preparation Platform. It shows which steps have been completed, and which tasks still need to be finished before we can test the data import for the survey.</p>
+
+    <h2>Migration tasks</h2>
+
+    <ul class="spp-task-list">
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="add-survey-forms">
+                {% if state.tasks["add-survey-forms"].label == "Cannot start yet" %}
+                    Add survey forms
+                {% elif state.tasks["add-survey-forms"].label == "To do" %}
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/uploadjson.html">Add survey forms</a>
+                {% else %}
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/formslist.html">Add survey forms</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="add-survey-forms">
+                {{ onsStatus({ "label": state.tasks["add-survey-forms"].label, "variant": state.tasks["add-survey-forms"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="choose-reference-datasets">
+                {% if state.tasks["choose-reference-datasets"].label == "Cannot start yet" %}
+                    Choose reference datasets
+                {% else %}
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/refdata/selectrefdata.html">Choose reference datasets</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="choose-reference-datasets">
+                {{ onsStatus({ "label": state.tasks["choose-reference-datasets"].label, "variant": state.tasks["choose-reference-datasets"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="add-constructed-questions-and-values">
+                {% if state.tasks["add-constructed-questions-and-values"].label == "Cannot start yet" %}
+                    Add constructed questions and values
+                {% else %}
+                    <a href="#0">Add constructed questions and values</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="add-constructed-questions-and-values">
+                {{ onsStatus({ "label": state.tasks["add-constructed-questions-and-values"].label, "variant": state.tasks["add-constructed-questions-and-values"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="define-validation-rules">
+                {% if state.tasks["define-validation-rules"].label == "Cannot start yet" %}
+                    Define validation rules
+                {% else %}
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/addrules/addvalidationrule.html">Define validation rules</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="define-validation-rules">
+                {{ onsStatus({ "label": state.tasks["define-validation-rules"].label, "variant": state.tasks["define-validation-rules"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="choose-validation-methods">
+                {% if state.tasks["choose-validation-methods"].label == "Cannot start yet" %}
+                    Choose validation methods
+                {% else %}
+                    <a href="#0">Choose validation methods</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="choose-validation-methods">
+                {{ onsStatus({ "label": state.tasks["choose-validation-methods"].label, "variant": state.tasks["choose-validation-methods"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="configure-prioritisation-workflow-and-layout">
+                {% if state.tasks["configure-prioritisation-workflow-and-layout"].label == "Cannot start yet" %}
+                    Configure prioritisation workflow and layout
+                {% else %}
+                    <a href="#0">Configure prioritisation workflow and layout</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="configure-prioritisation-workflow-and-layout">
+                {{ onsStatus({ "label": state.tasks["configure-prioritisation-workflow-and-layout"].label, "variant": state.tasks["configure-prioritisation-workflow-and-layout"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="test-survey-setup">
+                {% if state.tasks["test-survey-setup"].label == "Cannot start yet" %}
+                    Test survey set up
+                {% else %}
+                    <a href="#0">Test survey set up</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="test-survey-setup">
+                {{ onsStatus({ "label": state.tasks["test-survey-setup"].label, "variant": state.tasks["test-survey-setup"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="get-methodology-approval">
+                {% if state.tasks["get-methodology-approval"].label == "Cannot start yet" %}
+                    Get Methodology approval
+                {% else %}
+                    <a href="#0">Get Methodology approval</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="get-methodology-approval">
+                {{ onsStatus({ "label": state.tasks["get-methodology-approval"].label, "variant": state.tasks["get-methodology-approval"].variant }) }}
+            </span>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,262 @@
+---
+group: Self Service
+title: Add Validation Rule
+layout: self-service/views/_main
+prevPage: views/tasklist/tasklist
+---
+{% from "components/accordion/_macro.njk" import onsAccordion %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    }
+] %}
+
+{% block main %}
+    <h1>Add a validation rule to a question</h1>
+    <p>To add a validation rule, select the questions in the survey where you want to apply it. Every unique question in the survey appears on this page.</p>
+
+    {% set firstAccordionTable %}
+        {{
+            onsTable({
+                "id": "survey-period-table",
+                "ths": [
+                    { "value": "Select", "thClasses": "spp-col-select" },
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Answer type", "thClasses": "spp-col-answertype" },
+                    { "value": "Rules", "thClasses": "spp-col-rules" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": "" },
+                            { "value": "Q1" },
+                            { "value": "Start date" },
+                            { "value": "Date" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "" },
+                            { "value": "Q2" },
+                            { "value": "End date" },
+                            { "value": "Date" },
+                            { "value": "" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {% set secondAccordionTable %}
+        {{
+            onsTable({
+                "id": "employees-table",
+                "ths": [
+                    { "value": "Select", "thClasses": "spp-col-select" },
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Answer type", "thClasses": "spp-col-answertype" },
+                    { "value": "Rules", "thClasses": "spp-col-rules" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q50" class="ons-checkbox__input" value="q50" /><label class="ons-checkbox__label" for="checkbox-q50" aria-label="Select Q50"></label></span>' },
+                            { "value": "Q50" },
+                            { "value": "Number of employees" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q51" class="ons-checkbox__input" value="q51" /><label class="ons-checkbox__label" for="checkbox-q51" aria-label="Select Q51"></label></span>' },
+                            { "value": "Q51" },
+                            { "value": "Number of male employees working more than 30 hours per week" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q52" class="ons-checkbox__input" value="q52" /><label class="ons-checkbox__label" for="checkbox-q52" aria-label="Select Q52"></label></span>' },
+                            { "value": "Q52" },
+                            { "value": "Number of male employees working 30 hours or less per week" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q53" class="ons-checkbox__input" value="q53" /><label class="ons-checkbox__label" for="checkbox-q53" aria-label="Select Q53"></label></span>' },
+                            { "value": "Q53" },
+                            { "value": "Number of female employees working more than 30 hours per week" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q54" class="ons-checkbox__input" value="q54" /><label class="ons-checkbox__label" for="checkbox-q54" aria-label="Select Q54"></label></span>' },
+                            { "value": "Q54" },
+                            { "value": "Number of female employees working 30 hours or less per week" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {% set thirdAccordionTable %}
+        {{
+            onsTable({
+                "id": "locations-table",
+                "ths": [
+                    { "value": "Select", "thClasses": "spp-col-select" },
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Answer type", "thClasses": "spp-col-answertype" },
+                    { "value": "Rules", "thClasses": "spp-col-rules" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q101" class="ons-checkbox__input" value="q101" /><label class="ons-checkbox__label" for="checkbox-q101" aria-label="Select Q101"></label></span>' },
+                            { "value": "Q101" },
+                            { "value": "How many sites do you have" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q102" class="ons-checkbox__input" value="q102" /><label class="ons-checkbox__label" for="checkbox-q102" aria-label="Select Q102"></label></span>' },
+                            { "value": "Q102" },
+                            { "value": "How many new sites opened since the last period" },
+                            { "value": "Numeric" },
+                            { "value": "" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {% set fourthAccordionTable %}
+        {{
+            onsTable({
+                "id": "turnover-table",
+                "ths": [
+                    { "value": "Select", "thClasses": "spp-col-select" },
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question", "thClasses": "spp-col-question" },
+                    { "value": "Answer type", "thClasses": "spp-col-answertype" },
+                    { "value": "Rules", "thClasses": "spp-col-rules" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q40" class="ons-checkbox__input" value="q40" /><label class="ons-checkbox__label" for="checkbox-q40" aria-label="Select Q40"></label></span>' },
+                            { "value": "Q40" },
+                            { "value": "Total turnover" },
+                            { "value": "Currency" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q41" class="ons-checkbox__input" value="q41" /><label class="ons-checkbox__label" for="checkbox-q41" aria-label="Select Q41"></label></span>' },
+                            { "value": "Q41" },
+                            { "value": "Total amount receivable in respect of invoices raised during period" },
+                            { "value": "Currency" },
+                            { "value": "" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-q42" class="ons-checkbox__input" value="q42" /><label class="ons-checkbox__label" for="checkbox-q42" aria-label="Select Q42"></label></span>' },
+                            { "value": "Q42" },
+                            { "value": "Value of grants, donations, legacies, investments and incorporated income" },
+                            { "value": "Currency" },
+                            { "value": "" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    {{
+        onsAccordion({
+            "id": "validation-rules-accordion",
+            "allButton": {
+                "open": "Show all",
+                "close": "Hide all",
+                "openAriaLabel": "Show all sections",
+                "closeAriaLabel": "Hide all sections",
+                "attributes": {
+                    "data-toggle-button": "accordion-toggle-all"
+                }
+            },
+            "itemsList": [
+                {
+                    "title": "Survey period and response data",
+                    "content": firstAccordionTable | safe
+                },
+                {
+                    "title": "Employees",
+                    "content": secondAccordionTable | safe
+                },
+                {
+                    "title": "Locations",
+                    "content": thirdAccordionTable | safe
+                },
+                {
+                    "title": "Turnover",
+                    "content": fourthAccordionTable | safe
+                }
+            ]
+        })
+    }}
+
+    <div class="ons-u-mt-m ons-u-mb-m">
+        {{
+            onsButton({
+                "text": "Add rule to selected questions",
+                "variants": "secondary",
+                "url": pageInfo.rootPath + "/views/tasklist/addrules/selectrule.html",
+                "noIcon": true
+            })
+        }}
+    </div>
+
+    <h2 class="ons-u-mt-l">Finish adding validation rules</h2>
+
+    <div class="ons-u-mt-m">
+        {{
+            onsButton({
+                "text": "Finish adding rules",
+                "url": pageInfo.rootPath + "/views/tasklist/addrules/completerules.html",
+                "noIcon": true,
+                "id": "btn-finish-rules"
+            })
+        }}
+    </div>
+{% endblock %}

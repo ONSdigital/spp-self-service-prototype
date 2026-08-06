@@ -1,0 +1,103 @@
+---
+group: Self Service
+title: Uploaded Reference Datasets
+layout: self-service/views/_main
+prevPage: views/tasklist/refdata/selectrefdata
+---
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/status/_macro.njk" import onsStatus %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/refdata/selectrefdata.html",
+        "text": "Choose reference datasets"
+    }
+] %}
+
+{% block main %}
+    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+        "tasks": {
+            "add-survey-forms": { "label": "To do", "variant": "info" },
+            "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
+            "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+            "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
+            "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
+            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+            "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
+        },
+        "surveys": {
+            "002": { "label": "Live", "variant": "success" },
+            "009": { "label": "Live", "variant": "success" },
+            "023": { "label": "Live", "variant": "success" },
+            "139": { "label": "Live", "variant": "success" },
+            "141": { "label": "Live", "variant": "success" },
+            "228": { "label": "Live", "variant": "success" }
+        },
+        "refdata": {
+            "survey-period-dates": { "label": "To do", "variant": "info" },
+            "trading-day-weights": { "label": "To do", "variant": "info" }
+        }
+    } %}
+    <h1>Uploaded reference datasets</h1>
+    <p>Upload a CSV of each reference dataset required by this survey. All reference data must be formatted as a CSV and must have been validated prior to upload to SPP.</p>
+
+    {% set surveyPeriodDatesStatus %}
+        <span data-refdata-id="survey-period-dates">
+            {{ onsStatus({ "label": state.refdata["survey-period-dates"].label, "variant": state.refdata["survey-period-dates"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set tradingDayWeightsStatus %}
+        <span data-refdata-id="trading-day-weights">
+            {{ onsStatus({ "label": state.refdata["trading-day-weights"].label, "variant": state.refdata["trading-day-weights"].variant }) }}
+        </span>
+    {% endset %}
+
+    {{
+        onsTable({
+            "id": "reference-datasets-upload-table",
+            "trs": [
+                {
+                    "tds": [
+                        { "value": "Survey period dates" },
+                        { "value": '<span data-refdata-file="survey-period-dates"></span>' },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/refdata/uploadperioddates.html">Upload</a>' },
+                        { "value": surveyPeriodDatesStatus | trim | safe }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "Trading day weights" },
+                        { "value": '<span data-refdata-file="trading-day-weights"></span>' },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/refdata/uploadtradingdayweights.html">Upload</a>' },
+                        { "value": tradingDayWeightsStatus | trim | safe }
+                    ]
+                }
+            ]
+        })
+    }}
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+            "noIcon": true,
+            "id": "btn-save-provideref"
+        })
+    }}
+{% endblock %}

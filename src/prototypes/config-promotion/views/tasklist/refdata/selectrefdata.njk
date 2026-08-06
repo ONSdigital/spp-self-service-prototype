@@ -1,0 +1,96 @@
+---
+group: Self Service
+title: Choose Reference Datasets
+layout: self-service/views/_main
+prevPage: views/tasklist/tasklist
+---
+{% from "components/question/_macro.njk" import onsQuestion %}
+{% from "components/checkboxes/_macro.njk" import onsCheckboxes %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    }
+] %}
+
+{% block main %}
+    {%
+        call onsQuestion({
+            "title": "Which reference datasets does this survey use?",
+            "legendIsQuestionTitle": true,
+            "classes": "ons-u-mt-no"
+        })
+    %}
+        {{
+            onsCheckboxes({
+                "checkboxesLabel": "Select all that apply",
+                "dontWrap": true,
+                "name": "refdatasets",
+                "checkboxes": [
+                    {
+                        "id": "survey-period-dates",
+                        "label": {
+                            "text": "Survey period dates"
+                        },
+                        "value": "survey-period-dates"
+                    },
+                    {
+                        "id": "period-zero-data",
+                        "label": {
+                            "text": "Period zero data"
+                        },
+                        "value": "period-zero-data"
+                    },
+                    {
+                        "id": "calibration-groups",
+                        "label": {
+                            "text": "Callibration groups"
+                        },
+                        "value": "calibration-groups"
+                    },
+                    {
+                        "id": "cell-to-domain-group-links",
+                        "label": {
+                            "text": "Cell to domain group links"
+                        },
+                        "value": "cell-to-domain-group-links"
+                    },
+                    {
+                        "id": "sic-groups",
+                        "label": {
+                            "text": "SIC groups"
+                        },
+                        "value": "sic-groups"
+                    },
+                    {
+                        "id": "trading-day-weights",
+                        "label": {
+                            "text": "Trading day weights"
+                        },
+                        "value": "trading-day-weights"
+                    }
+                ]
+            })
+        }}
+    {% endcall %}
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/refdata/providerefdataset.html",
+            "noIcon": true,
+            "id": "btn-save-refdata"
+        })
+    }}
+{% endblock %}

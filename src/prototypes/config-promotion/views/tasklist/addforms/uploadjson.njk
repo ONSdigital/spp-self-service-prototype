@@ -7,7 +7,6 @@ prevPage: views/tasklist/tasklist
 {% from "components/upload/_macro.njk" import onsUpload %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/panel/_macro.njk" import onsPanel %}
-{% from "components/input/_macro.njk" import onsInput %}
 
 {% set breadcrumbs = [
     {
@@ -25,10 +24,9 @@ prevPage: views/tasklist/tasklist
 ] %}
 
 {% block main %}
-    <h1>Upload survey form</h1>
+    <h1>Upload survey forms</h1>
     <p>Add JSON files for each form in the survey.</p>
-    <p>You can must add forms one at a time.</p>
-    <p>Each form needs to have additional metadata added to set it up in SPP.</p>
+    <p>You can add multiple files.</p>
 
     {{
         onsUpload({
@@ -36,44 +34,6 @@ prevPage: views/tasklist/tasklist
             "accept": ".json",
             "label": {
                 "text": "Select survey form schema JSON files"
-            }
-        })
-    }}
-
-    {{
-        onsInput({
-            "id": "form-title",
-            "name": "form-title",
-            "fieldClasses": "ons-u-mt-m",
-            "label": {
-                "text": "Form title",
-                "description": "The name of the form that you're uploading"
-            }
-        })
-    }}
-
-    {{
-        onsInput({
-            "id": "starting-period",
-            "name": "starting-period",
-            "classes": "ons-input--w-6",
-            "fieldClasses": "ons-u-mt-m",
-            "label": {
-                "text": "Starting survey period",
-                "description": "MMYYYY"
-            }
-        })
-    }}
-
-    {{
-        onsInput({
-            "id": "ending-period",
-            "name": "ending-period",
-            "classes": "ons-input--w-6",
-            "fieldClasses": "ons-u-mt-m ons-u-mb-m",
-            "label": {
-                "text": "Ending survey period",
-                "description": "MMYYYY"
             }
         })
     }}

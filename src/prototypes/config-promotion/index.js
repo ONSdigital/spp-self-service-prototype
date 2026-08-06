@@ -194,172 +194,150 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Forms List Dynamic Cards Rendering ---
-  const accordionArea = document.getElementById('spp-forms-accordion-area');
-  if (accordionArea) {
-    const rawForms = sessionStorage.getItem('uploaded-forms');
-    let formsList = [];
-    if (rawForms) {
-      try {
-        formsList = JSON.parse(rawForms);
-      } catch (err) {
-        console.error("Error parsing uploaded-forms in formslist:", err);
-      }
-    }
+  // --- ABS123 Metadata Page ---
+  const btnSaveAbs123 = document.getElementById('btn-save-abs123');
+  if (btnSaveAbs123) {
+    const descInput = document.getElementById('form-description');
+    const startInput = document.getElementById('period-start');
+    const endInput = document.getElementById('period-end');
     
-    if (formsList && formsList.length > 0) {
-      let html = '<div class="ons-grid">';
-      
-      formsList.forEach((form, index) => {
-        const title = form.form_title || 'Untitled Form';
-        const filename = form.filename || '';
-        const start = form.start_period || '';
-        const end = form.end_period || '';
-        
-        html += `
-          <div class="ons-grid__col ons-col-6@m">
-            <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
-              <div class="ons-card__body">
-                <h2 class="ons-card__title ons-u-fs-m" id="card-title-${index}" style="margin: 0 0 1rem 0;">
-                  <a href="${rootPath}/views/tasklist/addforms/uploadjson.html?edit=${index}" class="ons-card__link">${title}</a>
-                </h2>
-                <div class="ons-card__content">
-                  <dl class="spp-description-list" style="margin: 0; padding: 0; list-style: none;">
-                    <div class="spp-description-list__item" style="display: flex; align-items: baseline; width: 100%; margin-bottom: 0.5rem;">
-                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">File name:</dt>
-                      <dd class="spp-description-list__value" style="margin: 0;">${filename}</dd>
-                    </div>
-                    <div class="spp-description-list__item" style="display: flex; align-items: baseline; width: 100%; margin-bottom: 0.5rem;">
-                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Starting survey period:</dt>
-                      <dd class="spp-description-list__value" style="margin: 0;">${start}</dd>
-                    </div>
-                    <div class="spp-description-list__item" style="display: flex; align-items: baseline; width: 100%; margin-bottom: 0;">
-                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Ending survey period:</dt>
-                      <dd class="spp-description-list__value" style="margin: 0;">${end}</dd>
-                    </div>
-                  </dl>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-      
-      html += '</div>';
-      
-      // Inject the dynamic HTML!
-      accordionArea.innerHTML = html;
-    }
-  }
-
-  // --- Upload JSON Page Multi-form Persistence & In-place Editing ---
-  const btnSaveForms = document.getElementById('btn-save-forms');
-  
-  // Parse edit parameter if present in the URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const editIndexParam = urlParams.get('edit');
-  const isEditMode = editIndexParam !== null;
-  const editIndex = isEditMode ? parseInt(editIndexParam, 10) : -1;
-  
-  // 1. Pre-populate the fields and show associated file if we are in Edit Mode
-  if (isEditMode && editIndex >= 0) {
-    const rawForms = sessionStorage.getItem('uploaded-forms');
-    let formsList = [];
-    if (rawForms) {
-      try {
-        formsList = JSON.parse(rawForms);
-      } catch (err) {
-        console.error("Error parsing uploaded-forms for pre-population:", err);
-      }
-    }
+    if (descInput) descInput.value = sessionStorage.getItem('abs123-description') || '';
+    if (startInput) startInput.value = sessionStorage.getItem('abs123-period-start') || '';
+    if (endInput) endInput.value = sessionStorage.getItem('abs123-period-end') || '';
     
-    const editingForm = formsList[editIndex];
-    if (editingForm) {
-      const titleInput = document.getElementById('form-title');
-      const startInput = document.getElementById('starting-period');
-      const endInput = document.getElementById('ending-period');
+    btnSaveAbs123.addEventListener('click', () => {
+      const descVal = descInput ? descInput.value.trim() : '';
+      const startVal = startInput ? startInput.value.trim() : '';
+      const endVal = endInput ? endInput.value.trim() : '';
       
-      if (titleInput) titleInput.value = editingForm.form_title || '';
-      if (startInput) startInput.value = editingForm.start_period || '';
-      if (endInput) endInput.value = editingForm.end_period || '';
+      sessionStorage.setItem('abs123-description', descVal);
+      sessionStorage.setItem('abs123-period-start', startVal);
+      sessionStorage.setItem('abs123-period-end', endVal);
       
-      // Dynamically display the currently associated filename next to the file uploader
-      const fileInput = document.getElementById('survey-form-upload');
-      if (fileInput) {
-        const uploaderWrapper = fileInput.closest('.ons-field');
-        if (uploaderWrapper) {
-          const infoPara = document.createElement('p');
-          infoPara.className = 'ons-u-mt-xs';
-          infoPara.style.fontWeight = 'bold';
-          infoPara.innerHTML = `Associated file: <code style="background: var(--ons-color-grey-15); padding: 0.2rem 0.4rem; border-radius: 3px; font-family: monospace;">${editingForm.filename}</code>`;
-          uploaderWrapper.appendChild(infoPara);
-        }
-      }
-    }
-  }
-
-  // 2. Handle button click (Save & continue)
-  if (btnSaveForms) {
-    btnSaveForms.addEventListener('click', () => {
-      const fileInput = document.getElementById('survey-form-upload');
-      const titleInput = document.getElementById('form-title');
-      const startInput = document.getElementById('starting-period');
-      const endInput = document.getElementById('ending-period');
-      
-      const formTitle = titleInput ? titleInput.value.trim() : '';
-      const startPeriod = startInput ? startInput.value.trim() : '';
-      const endPeriod = endInput ? endInput.value.trim() : '';
-      
-      // Retrieve the existing array of forms from sessionStorage
-      let formsList = [];
-      const existingList = sessionStorage.getItem('uploaded-forms');
-      if (existingList) {
-        try {
-          formsList = JSON.parse(existingList);
-        } catch (err) {
-          console.error("Error parsing uploaded-forms from sessionStorage:", err);
-        }
-      }
-      
-      let filename = '';
-      let shouldSave = false;
-      
-      if (isEditMode && editIndex >= 0 && formsList[editIndex]) {
-        // Edit Mode: check if a new file is uploaded, otherwise fall back to the existing filename
-        if (fileInput && fileInput.files && fileInput.files.length > 0) {
-          filename = fileInput.files[0].name;
-        } else {
-          filename = formsList[editIndex].filename; // Fall back to existing file name
-        }
-        shouldSave = true; // Always save in edit mode since we already have at least the previous filename!
+      if (descVal !== '' && startVal !== '' && endVal !== '') {
+        sessionStorage.setItem('abs123-status', 'Done');
       } else {
-        // Create Mode: we must select a file to save
-        if (fileInput && fileInput.files && fileInput.files.length > 0) {
-          filename = fileInput.files[0].name;
-          shouldSave = true;
-        }
-      }
-      
-      if (shouldSave) {
-        const formEntity = {
-          filename: filename,
-          form_title: formTitle,
-          start_period: startPeriod,
-          end_period: endPeriod
-        };
-        
-        if (isEditMode && editIndex >= 0) {
-          // Update in-place
-          formsList[editIndex] = formEntity;
-        } else {
-          // Create / Append new form
-          formsList.push(formEntity);
-        }
-        
-        // Save the updated array back to sessionStorage
-        sessionStorage.setItem('uploaded-forms', JSON.stringify(formsList));
+        sessionStorage.setItem('abs123-status', 'Incomplete');
       }
     });
+  }
+
+  // --- ABS234 Metadata Page ---
+  const btnSaveAbs234 = document.getElementById('btn-save-abs234');
+  if (btnSaveAbs234) {
+    const descInput = document.getElementById('form-description');
+    const startInput = document.getElementById('period-start');
+    const endInput = document.getElementById('period-end');
+    
+    if (descInput) descInput.value = sessionStorage.getItem('abs234-description') || '';
+    if (startInput) startInput.value = sessionStorage.getItem('abs234-period-start') || '';
+    if (endInput) endInput.value = sessionStorage.getItem('abs234-period-end') || '';
+    
+    btnSaveAbs234.addEventListener('click', () => {
+      const descVal = descInput ? descInput.value.trim() : '';
+      const startVal = startInput ? startInput.value.trim() : '';
+      const endVal = endInput ? endInput.value.trim() : '';
+      
+      sessionStorage.setItem('abs234-description', descVal);
+      sessionStorage.setItem('abs234-period-start', startVal);
+      sessionStorage.setItem('abs234-period-end', endVal);
+      
+      if (descVal !== '' && startVal !== '' && endVal !== '') {
+        sessionStorage.setItem('abs234-status', 'Done');
+      } else {
+        sessionStorage.setItem('abs234-status', 'Incomplete');
+      }
+    });
+  }
+
+  // --- ABS345 Metadata Page ---
+  const btnSaveAbs345 = document.getElementById('btn-save-abs345');
+  if (btnSaveAbs345) {
+    const descInput = document.getElementById('form-description');
+    const startInput = document.getElementById('period-start');
+    const endInput = document.getElementById('period-end');
+    
+    if (descInput) descInput.value = sessionStorage.getItem('abs345-description') !== null ? sessionStorage.getItem('abs345-description') : 'Convenience stores and supermarkets';
+    if (startInput) startInput.value = sessionStorage.getItem('abs345-period-start') !== null ? sessionStorage.getItem('abs345-period-start') : '042027';
+    if (endInput) endInput.value = sessionStorage.getItem('abs345-period-end') !== null ? sessionStorage.getItem('abs345-period-end') : '032028';
+    
+    btnSaveAbs345.addEventListener('click', () => {
+      const descVal = descInput ? descInput.value.trim() : '';
+      const startVal = startInput ? startInput.value.trim() : '';
+      const endVal = endInput ? endInput.value.trim() : '';
+      
+      sessionStorage.setItem('abs345-description', descVal);
+      sessionStorage.setItem('abs345-period-start', startVal);
+      sessionStorage.setItem('abs345-period-end', endVal);
+      
+      if (descVal !== '' && startVal !== '' && endVal !== '') {
+        sessionStorage.setItem('abs345-status', 'Done');
+      } else {
+        sessionStorage.setItem('abs345-status', 'Incomplete');
+      }
+    });
+  }
+
+  // --- Forms List Display Recall & Status Badger ---
+  
+  // Recall values for ABS123
+  const abs123ValDesc = document.getElementById('abs123-val-desc');
+  const abs123ValStart = document.getElementById('abs123-val-start');
+  const abs123ValEnd = document.getElementById('abs123-val-end');
+  if (abs123ValDesc) abs123ValDesc.textContent = sessionStorage.getItem('abs123-description') || '';
+  if (abs123ValStart) abs123ValStart.textContent = sessionStorage.getItem('abs123-period-start') || '';
+  if (abs123ValEnd) abs123ValEnd.textContent = sessionStorage.getItem('abs123-period-end') || '';
+
+  const abs123StatusEl = document.getElementById('abs123-status');
+  if (abs123StatusEl) {
+    const status = sessionStorage.getItem('abs123-status') || 'Incomplete';
+    if (status === 'Done') {
+      abs123StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
+    } else {
+      abs123StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
+    }
+  }
+
+  // Recall values for ABS234
+  const abs234ValDesc = document.getElementById('abs234-val-desc');
+  const abs234ValStart = document.getElementById('abs234-val-start');
+  const abs234ValEnd = document.getElementById('abs234-val-end');
+  if (abs234ValDesc) abs234ValDesc.textContent = sessionStorage.getItem('abs234-description') || '';
+  if (abs234ValStart) abs234ValStart.textContent = sessionStorage.getItem('abs234-period-start') || '';
+  if (abs234ValEnd) abs234ValEnd.textContent = sessionStorage.getItem('abs234-period-end') || '';
+
+  const abs234StatusEl = document.getElementById('abs234-status');
+  if (abs234StatusEl) {
+    const status = sessionStorage.getItem('abs234-status') || 'Incomplete';
+    if (status === 'Done') {
+      abs234StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
+    } else {
+      abs234StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
+    }
+  }
+
+  // Recall values for ABS345 (with defaults if empty)
+  const abs345ValDesc = document.getElementById('abs345-val-desc');
+  const abs345ValStart = document.getElementById('abs345-val-start');
+  const abs345ValEnd = document.getElementById('abs345-val-end');
+  if (abs345ValDesc) {
+    abs345ValDesc.textContent = sessionStorage.getItem('abs345-description') !== null ? sessionStorage.getItem('abs345-description') : 'Convenience stores and supermarkets';
+  }
+  if (abs345ValStart) {
+    abs345ValStart.textContent = sessionStorage.getItem('abs345-period-start') !== null ? sessionStorage.getItem('abs345-period-start') : '042027';
+  }
+  if (abs345ValEnd) {
+    abs345ValEnd.textContent = sessionStorage.getItem('abs345-period-end') !== null ? sessionStorage.getItem('abs345-period-end') : '032028';
+  }
+
+  const abs345StatusEl = document.getElementById('abs345-status');
+  if (abs345StatusEl) {
+    const status = sessionStorage.getItem('abs345-status') !== null ? sessionStorage.getItem('abs345-status') : 'Done';
+    if (status === 'Done') {
+      abs345StatusEl.innerHTML = '<span class="ons-status ons-status--success">Done</span>';
+    } else {
+      abs345StatusEl.innerHTML = '<span class="ons-status ons-status--info">Incomplete</span>';
+    }
   }
 
   // 3. Clear data footer link (targeted by text)

@@ -5,8 +5,6 @@ layout: self-service/views/_main
 prevPage: views/tasklist/addforms/uploadjson
 ---
 {% from "components/button/_macro.njk" import onsButton %}
-{% from "components/status/_macro.njk" import onsStatus %}
-{% from "components/accordion/_macro.njk" import onsAccordion %}
 
 {% set breadcrumbs = [
     {
@@ -24,127 +22,21 @@ prevPage: views/tasklist/addforms/uploadjson
 ] %}
 
 {% block main %}
-    <h1>Annual Business Survey (123)</h1>
+    <h1>Fortnightly Business Survey (123)</h1>
 
-    <h2>Add survey form metadata</h2>
-    <p>For each form in the survey, additional information is needed to set it up on SPP.</p>
+    <h2>Survey forms</h2>
+    <p>All forms uploaded to SPP so far appear in the list below.</p>
 
-    {% set abs123Title %}
-        ABS123 <span class="spp-accordion-status" id="abs123-status">
-            {{
-                onsStatus({
-                    "label": "Incomplete",
-                    "variant": "info",
-                    "size": "small"
-                })
-            }}
-        </span>
-    {% endset %}
-
-    {% set abs234Title %}
-        ABS234 <span class="spp-accordion-status" id="abs234-status">
-            {{
-                onsStatus({
-                    "label": "Incomplete",
-                    "variant": "info",
-                    "size": "small"
-                })
-            }}
-        </span>
-    {% endset %}
-
-    {% set abs345Title %}
-        ABS345 <span class="spp-accordion-status" id="abs345-status">
-            {{
-                onsStatus({
-                    "label": "Done",
-                    "variant": "success",
-                    "size": "small"
-                })
-            }}
-        </span>
-    {% endset %}
-
-    {% set abs123Content %}
-        <dl class="spp-description-list">
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Description:</dt>
-                <dd class="spp-description-list__value" id="abs123-val-desc"></dd>
+    <!-- This container will be populated dynamically by index.js -->
+    <div id="spp-forms-accordion-area" class="ons-u-mb-m">
+        <!-- Default Empty State -->
+        <div class="ons-panel ons-panel--info ons-panel--no-title ons-u-mb-m">
+            <span class="ons-panel__assistive-text">Information</span>
+            <div class="ons-panel__body">
+                <p>No forms uploaded yet.</p>
             </div>
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Period Start:</dt>
-                <dd class="spp-description-list__value" id="abs123-val-start"></dd>
-            </div>
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Period End:</dt>
-                <dd class="spp-description-list__value" id="abs123-val-end"></dd>
-            </div>
-        </dl>
-        <p class="ons-u-mt-m">
-            <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/forms/abs123.html">Edit form metadata</a>
-        </p>
-    {% endset %}
-
-    {% set abs234Content %}
-        <dl class="spp-description-list">
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Description:</dt>
-                <dd class="spp-description-list__value" id="abs234-val-desc"></dd>
-            </div>
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Period Start:</dt>
-                <dd class="spp-description-list__value" id="abs234-val-start"></dd>
-            </div>
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Period End:</dt>
-                <dd class="spp-description-list__value" id="abs234-val-end"></dd>
-            </div>
-        </dl>
-        <p class="ons-u-mt-m">
-            <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/forms/abs234.html">Edit form metadata</a>
-        </p>
-    {% endset %}
-
-    {% set abs345Content %}
-        <dl class="spp-description-list">
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Description:</dt>
-                <dd class="spp-description-list__value" id="abs345-val-desc">Convenience stores and supermarkets</dd>
-            </div>
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Period Start:</dt>
-                <dd class="spp-description-list__value" id="abs345-val-start">042027</dd>
-            </div>
-            <div class="spp-description-list__item">
-                <dt class="spp-description-list__term">Period End:</dt>
-                <dd class="spp-description-list__value" id="abs345-val-end">032028</dd>
-            </div>
-        </dl>
-        <p class="ons-u-mt-m">
-            <a href="{{ pageInfo.rootPath }}/views/tasklist/addforms/forms/abs345.html">Edit form metadata</a>
-        </p>
-    {% endset %}
-
-    {{
-        onsAccordion({
-            "id": "survey-forms-accordion",
-            "classes": "ons-u-mb-m",
-            "itemsList": [
-                {
-                    "title": abs123Title | safe,
-                    "content": abs123Content | safe
-                },
-                {
-                    "title": abs234Title | safe,
-                    "content": abs234Content | safe
-                },
-                {
-                    "title": abs345Title | safe,
-                    "content": abs345Content | safe
-                }
-            ]
-        })
-    }}
+        </div>
+    </div>
 
     <hr class="spp-section-divider" />
 
