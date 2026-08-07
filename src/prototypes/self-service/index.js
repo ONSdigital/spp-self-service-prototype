@@ -339,7 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 2. Handle button click (Save & continue)
   if (btnSaveForms) {
-    btnSaveForms.addEventListener('click', () => {
+    btnSaveForms.addEventListener('click', async (e) => {
+      e.preventDefault(); // Intercept browser's instant navigation
+      
       const fileInput = document.getElementById('survey-form-upload');
       const titleInput = document.getElementById('form-title');
       
@@ -361,17 +363,48 @@ document.addEventListener('DOMContentLoaded', () => {
       let formId = '';
       let version = '0.0.1';
       
+      // Helper function to extract schema_version from the uploaded file asynchronously
+      const getUploadedSchemaVersion = (file) => {
+        return new Promise((resolve) => {
+          if (!file) {
+            resolve('0.0.1');
+            return;
+          }
+          
+          const reader = new FileReader();
+          reader.onload = (evt) => {
+            try {
+              const json = JSON.parse(evt.target.result);
+              if (json && json.schema_version) {
+                resolve(String(json.schema_version));
+              } else {
+                resolve('0.0.1');
+              }
+            } catch (err) {
+              console.warn("Unable to parse schema_version from JSON, falling back to '0.0.1':", err);
+              resolve('0.0.1');
+            }
+          };
+          reader.onerror = () => {
+            resolve('0.0.1');
+          };
+          reader.readAsText(file);
+        });
+      };
+      
       if (isEditMode && editIndex >= 0 && formsList[editIndex]) {
         // Edit Mode: check if a new file is uploaded, otherwise fall back to the existing filename
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
           filename = fileInput.files[0].name;
+          // Extract version from newly uploaded schema file
+          version = await getUploadedSchemaVersion(fileInput.files[0]);
         } else {
           filename = formsList[editIndex].filename; // Fall back to existing file name
+          version = formsList[editIndex].version;   // Keep existing version unchanged
         }
         
-        // Preserve original Form ID and Version exactly
+        // Preserve original Form ID exactly
         formId = formsList[editIndex].form_id;
-        version = formsList[editIndex].version;
         shouldSave = true; // Always save in edit mode
       } else {
         // Create Mode: we must select a file to save
@@ -379,9 +412,11 @@ document.addEventListener('DOMContentLoaded', () => {
           filename = fileInput.files[0].name;
           shouldSave = true;
           
-          // Generate a new random 3-digit Form ID and set the default Version
+          // Generate a new random 3-digit Form ID
           formId = Math.floor(100 + Math.random() * 900);
-          version = '0.0.1';
+          
+          // Extract version from uploaded schema file
+          version = await getUploadedSchemaVersion(fileInput.files[0]);
         }
       }
       
@@ -404,6 +439,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Save the updated array back to sessionStorage
         sessionStorage.setItem('uploaded-forms', JSON.stringify(formsList));
       }
+      
+      // Perform navigation programmatically once the async operations have finished
+      window.location.href = btnSaveForms.getAttribute('href') || (rootPath + "/views/tasklist/addforms/formslist.html");
     });
   }
 
