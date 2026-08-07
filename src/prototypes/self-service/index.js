@@ -7,6 +7,49 @@ import '@ons/prototype-kit/src/helpers/index.js';
 document.addEventListener('DOMContentLoaded', () => {
   const rootPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/views/'));
 
+  // --- Survey Select & Header Replacement State Management ---
+  
+  // 1. Capture select clicks on migrate.html
+  const selectLinks = document.querySelectorAll('.spp-survey-select-link');
+  selectLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const surveyId = link.getAttribute('data-survey-id');
+      const surveyCode = link.getAttribute('data-survey-code');
+      const surveyName = link.getAttribute('data-survey-name');
+      
+      const surveyObj = {
+        id: surveyId,
+        code: surveyCode,
+        name: surveyName
+      };
+      
+      sessionStorage.setItem('current-survey', JSON.stringify(surveyObj));
+    });
+  });
+
+  // 2. Dynamic H1 Header Replacement on formslist.html
+  if (window.location.pathname.includes('formslist.html')) {
+    const formslistH1 = document.querySelector('h1');
+    if (formslistH1) {
+      const rawSurvey = sessionStorage.getItem('current-survey');
+      if (rawSurvey) {
+        try {
+          const survey = JSON.parse(rawSurvey);
+          if (survey && survey.name && survey.id) {
+            formslistH1.textContent = `${survey.name} - ${survey.id}`;
+          } else {
+            formslistH1.textContent = 'Forms list - No survey selected';
+          }
+        } catch (err) {
+          console.error("Error parsing current-survey on formslist page:", err);
+          formslistH1.textContent = 'Forms list - No survey selected';
+        }
+      } else {
+        formslistH1.textContent = 'Forms list - No survey selected';
+      }
+    }
+  }
+
   // 1. Render dynamic statuses from sessionStorage on page load for general pages
   
   // Surveys Table
@@ -361,6 +404,97 @@ document.addEventListener('DOMContentLoaded', () => {
         // Save the updated array back to sessionStorage
         sessionStorage.setItem('uploaded-forms', JSON.stringify(formsList));
       }
+    });
+  }
+
+  // --- Existing Surveys Table Client-side Pagination ---
+  const paginationContainer = document.getElementById('spp-survey-pagination');
+  const surveysTable = document.getElementById('existing-surveys-table');
+  
+  if (paginationContainer && surveysTable) {
+    function navigatePage(pageNumber) {
+      if (pageNumber < 1 || pageNumber > 2) return;
+      
+      // 1. Show/Hide table rows (10 per page)
+      const rows = surveysTable.querySelectorAll('tbody tr');
+      rows.forEach((row, index) => {
+        if (pageNumber === 1) {
+          if (index < 10) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        } else {
+          if (index >= 10) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+      
+      // 2. Update active states on the pagination component
+      const items = Array.from(paginationContainer.querySelectorAll('.ons-pagination__item'));
+      
+      const previousItem = items.find(el => el.classList.contains('ons-pagination__item--previous'));
+      const nextItem = items.find(el => el.classList.contains('ons-pagination__item--next'));
+      
+      const pageItems = items.filter(el => 
+        !el.classList.contains('ons-pagination__item--previous') && 
+        !el.classList.contains('ons-pagination__item--next')
+      );
+      
+      // Reset all page items
+      pageItems.forEach(item => {
+        item.classList.remove('ons-pagination__item--current');
+        const anchor = item.querySelector('a');
+        if (anchor) anchor.removeAttribute('aria-current');
+      });
+      
+      // Set current active item
+      const activeItem = pageItems[pageNumber - 1];
+      if (activeItem) {
+        activeItem.classList.add('ons-pagination__item--current');
+        const anchor = activeItem.querySelector('a');
+        if (anchor) anchor.setAttribute('aria-current', 'true');
+      }
+      
+      // Manage visibility of Prev/Next items
+      if (previousItem) {
+        previousItem.style.display = pageNumber === 1 ? 'none' : '';
+      }
+      if (nextItem) {
+        nextItem.style.display = pageNumber === 2 ? 'none' : '';
+      }
+      
+      // Set internal state tracker
+      paginationContainer.setAttribute('data-current-page', pageNumber);
+    }
+    
+    // Initialise on page load to Page 1
+    navigatePage(1);
+    
+    // Attach click event listeners to pagination links
+    const links = paginationContainer.querySelectorAll('.ons-pagination__link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const currentPage = parseInt(paginationContainer.getAttribute('data-current-page') || '1', 10);
+        
+        const parent = link.closest('.ons-pagination__item');
+        if (parent) {
+          if (parent.classList.contains('ons-pagination__item--previous')) {
+            navigatePage(currentPage - 1);
+          } else if (parent.classList.contains('ons-pagination__item--next')) {
+            navigatePage(currentPage + 1);
+          } else {
+            const pageNum = parseInt(link.textContent.trim(), 10);
+            if (!isNaN(pageNum)) {
+              navigatePage(pageNum);
+            }
+          }
+        }
+      });
     });
   }
 

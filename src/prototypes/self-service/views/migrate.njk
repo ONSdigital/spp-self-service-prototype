@@ -15,12 +15,13 @@ prevPage: views/home
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/table/_macro.njk" import onsTable %}
 {% from "components/status/_macro.njk" import onsStatus %}
+{% from "components/pagination/_macro.njk" import onsPagination %}
 
 {% block main %}
     {% set state = helpers.getState() if (helpers and helpers.getState) else {
         "tasks": {
             "add-survey-forms": { "label": "To do", "variant": "info" },
-            "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-reference-datasets": { "label": "To do", "variant": "info" },
             "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
             "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
             "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
@@ -29,12 +30,21 @@ prevPage: views/home
             "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
         },
         "surveys": {
+            "001": { "label": "To be migrated", "variant": "dead" },
             "002": { "label": "Live", "variant": "success" },
+            "007": { "label": "To be migrated", "variant": "dead" },
             "009": { "label": "Live", "variant": "success" },
+            "010": { "label": "To be migrated", "variant": "dead" },
+            "017": { "label": "To be migrated", "variant": "dead" },
             "023": { "label": "Live", "variant": "success" },
+            "024": { "label": "To be migrated", "variant": "dead" },
+            "093": { "label": "To be migrated", "variant": "dead" },
+            "134": { "label": "To be migrated", "variant": "dead" },
             "139": { "label": "Live", "variant": "success" },
             "141": { "label": "Live", "variant": "success" },
-            "228": { "label": "Live", "variant": "success" }
+            "144": { "label": "To be migrated", "variant": "dead" },
+            "228": { "label": "Live", "variant": "success" },
+            "266": { "label": "To be migrated", "variant": "dead" }
         },
         "refdata": {
             "survey-period-dates": { "label": "To do", "variant": "info" },
@@ -114,9 +124,21 @@ prevPage: views/home
     <h2 id="existing-surveys" class="ons-u-mt-l">Existing surveys</h2>
     <p>Below is a list of existing surveys that are configured or being configured on SPP.</p>
 
+    {% set status001 %}
+        <span data-survey-id="001">
+            {{ onsStatus({ "label": state.surveys["001"].label, "variant": state.surveys["001"].variant }) }}
+        </span>
+    {% endset %}
+
     {% set status002 %}
         <span data-survey-id="002">
             {{ onsStatus({ "label": state.surveys["002"].label, "variant": state.surveys["002"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status007 %}
+        <span data-survey-id="007">
+            {{ onsStatus({ "label": state.surveys["007"].label, "variant": state.surveys["007"].variant }) }}
         </span>
     {% endset %}
 
@@ -126,9 +148,39 @@ prevPage: views/home
         </span>
     {% endset %}
 
+    {% set status010 %}
+        <span data-survey-id="010">
+            {{ onsStatus({ "label": state.surveys["010"].label, "variant": state.surveys["010"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status017 %}
+        <span data-survey-id="017">
+            {{ onsStatus({ "label": state.surveys["017"].label, "variant": state.surveys["017"].variant }) }}
+        </span>
+    {% endset %}
+
     {% set status023 %}
         <span data-survey-id="023">
             {{ onsStatus({ "label": state.surveys["023"].label, "variant": state.surveys["023"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status024 %}
+        <span data-survey-id="024">
+            {{ onsStatus({ "label": state.surveys["024"].label, "variant": state.surveys["024"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status093 %}
+        <span data-survey-id="093">
+            {{ onsStatus({ "label": state.surveys["093"].label, "variant": state.surveys["093"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status134 %}
+        <span data-survey-id="134">
+            {{ onsStatus({ "label": state.surveys["134"].label, "variant": state.surveys["134"].variant }) }}
         </span>
     {% endset %}
 
@@ -144,9 +196,21 @@ prevPage: views/home
         </span>
     {% endset %}
 
+    {% set status144 %}
+        <span data-survey-id="144">
+            {{ onsStatus({ "label": state.surveys["144"].label, "variant": state.surveys["144"].variant }) }}
+        </span>
+    {% endset %}
+
     {% set status228 %}
         <span data-survey-id="228">
             {{ onsStatus({ "label": state.surveys["228"].label, "variant": state.surveys["228"].variant }) }}
+        </span>
+    {% endset %}
+
+    {% set status266 %}
+        <span data-survey-id="266">
+            {{ onsStatus({ "label": state.surveys["266"].label, "variant": state.surveys["266"].variant }) }}
         </span>
     {% endset %}
 
@@ -163,59 +227,153 @@ prevPage: views/home
             "trs": [
                 {
                     "tds": [
+                        { "value": "001" },
+                        { "value": "NBS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="001" data-survey-code="NBS" data-survey-name="New Business Survey">New Business Survey</a>' },
+                        { "value": status001 | trim | safe },
+                        { "value": "" }
+                    ]
+                },
+                {
+                    "tds": [
                         { "value": "002" },
                         { "value": "BERD" },
-                        { "value": "Business Enterprise Research and Development" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="002" data-survey-code="BERD" data-survey-name="Business Enterprise Research and Development">Business Enterprise Research and Development</a>' },
                         { "value": status002 | trim | safe },
-                        { "value": '<a href="#0">Edit survey</a>' }
+                        { "value": '<a href="#0">Deploy</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "007" },
+                        { "value": "LCRE" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="007" data-survey-code="LCRE" data-survey-name="Low Carbon & Renewable Energy Economy Survey">Low Carbon & Renewable Energy Economy Survey</a>' },
+                        { "value": status007 | trim | safe },
+                        { "value": "" }
                     ]
                 },
                 {
                     "tds": [
                         { "value": "009" },
                         { "value": "MBS" },
-                        { "value": "Monthly Business Survey" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="009" data-survey-code="MBS" data-survey-name="Monthly Business Survey">Monthly Business Survey</a>' },
                         { "value": status009 | trim | safe },
-                        { "value": '<a href="#0">Edit survey</a>' }
+                        { "value": '<a href="#0">Deploy</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "010" },
+                        { "value": "PI" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="010" data-survey-code="PI" data-survey-name="Purchases Inquiry">Purchases Inquiry</a>' },
+                        { "value": status010 | trim | safe },
+                        { "value": "" }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "017" },
+                        { "value": "QSS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="017" data-survey-code="QSS" data-survey-name="Quarterly Stocks Survey">Quarterly Stocks Survey</a>' },
+                        { "value": status017 | trim | safe },
+                        { "value": "" }
                     ]
                 },
                 {
                     "tds": [
                         { "value": "023" },
                         { "value": "RSI" },
-                        { "value": "Monthly Business Survey (Retail Sales Index)" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="023" data-survey-code="RSI" data-survey-name="Monthly Business Survey (Retail Sales Index)">Monthly Business Survey (Retail Sales Index)</a>' },
                         { "value": status023 | trim | safe },
-                        { "value": '<a href="#0">Edit survey</a>' }
+                        { "value": '<a href="#0">Deploy</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "024" },
+                        { "value": "QFS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="024" data-survey-code="QFS" data-survey-name="Quarterly Fuels Survey">Quarterly Fuels Survey</a>' },
+                        { "value": status024 | trim | safe },
+                        { "value": "" }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "093" },
+                        { "value": "FSPS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="093" data-survey-code="FSPS" data-survey-name="Financial Survey of Pension Schemes">Financial Survey of Pension Schemes</a>' },
+                        { "value": status093 | trim | safe },
+                        { "value": "" }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "134" },
+                        { "value": "MWSS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="134" data-survey-code="MWSS" data-survey-name="Monthly Wages & Salaries Survey">Monthly Wages & Salaries Survey</a>' },
+                        { "value": status134 | trim | safe },
+                        { "value": "" }
                     ]
                 },
                 {
                     "tds": [
                         { "value": "139" },
                         { "value": "QBS" },
-                        { "value": "Quarterly Business Survey" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="139" data-survey-code="QBS" data-survey-name="Quarterly Business Survey">Quarterly Business Survey</a>' },
                         { "value": status139 | trim | safe },
-                        { "value": '<a href="#0">Edit survey</a>' }
+                        { "value": '<a href="#0">Deploy</a>' }
                     ]
                 },
                 {
                     "tds": [
                         { "value": "141" },
                         { "value": "ASHE" },
-                        { "value": "Annual Survey of Hours and Earnings" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="141" data-survey-code="ASHE" data-survey-name="Annual Survey of Hours and Earnings">Annual Survey of Hours and Earnings</a>' },
                         { "value": status141 | trim | safe },
-                        { "value": '<a href="#0">Edit survey</a>' }
+                        { "value": '<a href="#0">Deploy</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "144" },
+                        { "value": "UKIS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="144" data-survey-code="UKIS" data-survey-name="UK Innovation Survey">UK Innovation Survey</a>' },
+                        { "value": status144 | trim | safe },
+                        { "value": "" }
                     ]
                 },
                 {
                     "tds": [
                         { "value": "228" },
                         { "value": "CONST" },
-                        { "value": "Monthly Business Survey (Construction)" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="228" data-survey-code="CONST" data-survey-name="Monthly Business Survey (Construction)">Monthly Business Survey (Construction)</a>' },
                         { "value": status228 | trim | safe },
-                        { "value": '<a href="#0">Edit survey</a>' }
+                        { "value": '<a href="#0">Deploy</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "266" },
+                        { "value": "QFS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/tasklist/tasklist.html" class="spp-survey-select-link" data-survey-id="266" data-survey-code="QFS" data-survey-name="Financial Services Survey">Financial Services Survey</a>' },
+                        { "value": status266 | trim | safe },
+                        { "value": "" }
                     ]
                 }
             ]
         })
     }}
+
+    <div id="spp-survey-pagination" class="ons-u-mt-m">
+        {{
+            onsPagination({
+                "currentPageNumber": 1,
+                "totalNumberOfPages": 2,
+                "pages": [
+                    { "url": "#1" },
+                    { "url": "#2" }
+                ]
+            })
+        }}
+    </div>
 {% endblock %}

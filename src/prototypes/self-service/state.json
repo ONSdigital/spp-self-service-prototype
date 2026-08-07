@@ -1,11 +1,20 @@
 {
   "surveys": {
+    "001": { "label": "To be migrated", "variant": "dead" },
     "002": { "label": "Live", "variant": "success" },
+    "007": { "label": "To be migrated", "variant": "dead" },
     "009": { "label": "Live", "variant": "success" },
+    "010": { "label": "To be migrated", "variant": "dead" },
+    "017": { "label": "To be migrated", "variant": "dead" },
     "023": { "label": "Live", "variant": "success" },
+    "024": { "label": "To be migrated", "variant": "dead" },
+    "093": { "label": "To be migrated", "variant": "dead" },
+    "134": { "label": "To be migrated", "variant": "dead" },
     "139": { "label": "Live", "variant": "success" },
     "141": { "label": "In Progress", "variant": "pending" },
-    "228": { "label": "Live", "variant": "success" }
+    "144": { "label": "To be migrated", "variant": "dead" },
+    "228": { "label": "Live", "variant": "success" },
+    "266": { "label": "To be migrated", "variant": "dead" }
   },
   "tasks": {
     "add-survey-forms": { "label": "To do", "variant": "info" },
