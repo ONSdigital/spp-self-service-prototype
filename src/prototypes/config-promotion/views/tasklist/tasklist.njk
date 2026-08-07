@@ -4,6 +4,12 @@ title: Migration Task List
 layout: self-service/views/_main
 prevPage: views/migrate
 ---
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Previous"
+    }
+] %}
 {% from "components/status/_macro.njk" import onsStatus %}
 
 {% block main %}
@@ -15,8 +21,7 @@ prevPage: views/migrate
             "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
             "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
             "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
-            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
-            "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
+            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" }
         },
         "surveys": {
             "002": { "label": "Live", "variant": "success" },
@@ -114,25 +119,13 @@ prevPage: views/migrate
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name" data-task-link="test-survey-setup">
                 {% if state.tasks["test-survey-setup"].label == "Cannot start yet" %}
-                    Test survey set up
+                    Deploy survey configuration
                 {% else %}
-                    <a href="#0">Test survey set up</a>
+                    <a href="#0">Deploy survey configuration</a>
                 {% endif %}
             </span>
             <span class="spp-task-list__status" data-task-id="test-survey-setup">
                 {{ onsStatus({ "label": state.tasks["test-survey-setup"].label, "variant": state.tasks["test-survey-setup"].variant }) }}
-            </span>
-        </li>
-        <li class="spp-task-list__item">
-            <span class="spp-task-list__task-name" data-task-link="get-methodology-approval">
-                {% if state.tasks["get-methodology-approval"].label == "Cannot start yet" %}
-                    Get Methodology approval
-                {% else %}
-                    <a href="#0">Get Methodology approval</a>
-                {% endif %}
-            </span>
-            <span class="spp-task-list__status" data-task-id="get-methodology-approval">
-                {{ onsStatus({ "label": state.tasks["get-methodology-approval"].label, "variant": state.tasks["get-methodology-approval"].variant }) }}
             </span>
         </li>
     </ul>

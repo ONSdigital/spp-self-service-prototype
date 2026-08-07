@@ -1,0 +1,171 @@
+---
+group: Self Service
+title: Configure Date Adjustment
+layout: self-service/views/_main
+prevPage: views/tasklist/addforms/formslist
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/table/_macro.njk" import onsTable %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
+        "text": "Forms list"
+    }
+] %}
+
+{% block main %}
+    <h1>Configure BDOD question settings</h1>
+    <p>Select which questions in the survey forms can have comments turned on, and which responses should be read only.</p>
+
+    {% set bdodSettingsTable %}
+        {{
+            onsTable({
+                "id": "bdod-settings-table",
+                "ths": [
+                    { "value": "Comments on", "thClasses": "spp-col-comments" },
+                    { "value": "Read only", "thClasses": "spp-col-readonly" },
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question Label", "thClasses": "spp-col-question" },
+                    { "value": "Response type", "thClasses": "spp-col-responsetype" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q1" class="ons-checkbox__input" value="q1" /><label class="ons-checkbox__label" for="checkbox-comments-q1" aria-label="Select Comments on Q1"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q1" class="ons-checkbox__input" value="q1" /><label class="ons-checkbox__label" for="checkbox-readonly-q1" aria-label="Select Read only Q1"></label></span>' },
+                            { "value": "Q1" },
+                            { "value": "Start date" },
+                            { "value": "Date" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q2" class="ons-checkbox__input" value="q2" /><label class="ons-checkbox__label" for="checkbox-comments-q2" aria-label="Select Comments on Q2"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q2" class="ons-checkbox__input" value="q2" /><label class="ons-checkbox__label" for="checkbox-readonly-q2" aria-label="Select Read only Q2"></label></span>' },
+                            { "value": "Q2" },
+                            { "value": "End date" },
+                            { "value": "Date" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q40" class="ons-checkbox__input" value="q40" /><label class="ons-checkbox__label" for="checkbox-comments-q40" aria-label="Select Comments on Q40"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q40" class="ons-checkbox__input" value="q40" /><label class="ons-checkbox__label" for="checkbox-readonly-q40" aria-label="Select Read only Q40"></label></span>' },
+                            { "value": "Q40" },
+                            { "value": "Total turnover" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q41" class="ons-checkbox__input" value="q41" /><label class="ons-checkbox__label" for="checkbox-comments-q41" aria-label="Select Comments on Q41"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q41" class="ons-checkbox__input" value="q41" /><label class="ons-checkbox__label" for="checkbox-readonly-q41" aria-label="Select Read only Q41"></label></span>' },
+                            { "value": "Q41" },
+                            { "value": "Total amount receivable in respect of invoices raised during period" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q42" class="ons-checkbox__input" value="q42" /><label class="ons-checkbox__label" for="checkbox-comments-q42" aria-label="Select Comments on Q42"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q42" class="ons-checkbox__input" value="q42" /><label class="ons-checkbox__label" for="checkbox-readonly-q42" aria-label="Select Read only Q42"></label></span>' },
+                            { "value": "Q42" },
+                            { "value": "Value of grants, donations, legacies, investments and incorporated income" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q50" class="ons-checkbox__input" value="q50" /><label class="ons-checkbox__label" for="checkbox-comments-q50" aria-label="Select Comments on Q50"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q50" class="ons-checkbox__input" value="q50" /><label class="ons-checkbox__label" for="checkbox-readonly-q50" aria-label="Select Read only Q50"></label></span>' },
+                            { "value": "Q50" },
+                            { "value": "Number of employees" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q51" class="ons-checkbox__input" value="q51" /><label class="ons-checkbox__label" for="checkbox-comments-q51" aria-label="Select Comments on Q51"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q51" class="ons-checkbox__input" value="q51" /><label class="ons-checkbox__label" for="checkbox-readonly-q51" aria-label="Select Read only Q51"></label></span>' },
+                            { "value": "Q51" },
+                            { "value": "Number of male employees working more than 30 hours per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q52" class="ons-checkbox__input" value="q52" /><label class="ons-checkbox__label" for="checkbox-comments-q52" aria-label="Select Comments on Q52"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q52" class="ons-checkbox__input" value="q52" /><label class="ons-checkbox__label" for="checkbox-readonly-q52" aria-label="Select Read only Q52"></label></span>' },
+                            { "value": "Q52" },
+                            { "value": "Number of male employees working 30 hours or less per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q53" class="ons-checkbox__input" value="q53" /><label class="ons-checkbox__label" for="checkbox-comments-q53" aria-label="Select Comments on Q53"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q53" class="ons-checkbox__input" value="q53" /><label class="ons-checkbox__label" for="checkbox-readonly-q53" aria-label="Select Read only Q53"></label></span>' },
+                            { "value": "Q53" },
+                            { "value": "Number of female employees working more than 30 hours per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q54" class="ons-checkbox__input" value="q54" /><label class="ons-checkbox__label" for="checkbox-comments-q54" aria-label="Select Comments on Q54"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q54" class="ons-checkbox__input" value="q54" /><label class="ons-checkbox__label" for="checkbox-readonly-q54" aria-label="Select Read only Q54"></label></span>' },
+                            { "value": "Q54" },
+                            { "value": "Number of female employees working 30 hours or less per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q101" class="ons-checkbox__input" value="q101" /><label class="ons-checkbox__label" for="checkbox-comments-q101" aria-label="Select Comments on Q101"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q101" class="ons-checkbox__input" value="q101" /><label class="ons-checkbox__label" for="checkbox-readonly-q101" aria-label="Select Read only Q101"></label></span>' },
+                            { "value": "Q101" },
+                            { "value": "How many sites do you have" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q102" class="ons-checkbox__input" value="q102" /><label class="ons-checkbox__label" for="checkbox-comments-q102" aria-label="Select Comments on Q102"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q102" class="ons-checkbox__input" value="q102" /><label class="ons-checkbox__label" for="checkbox-readonly-q102" aria-label="Select Read only Q102"></label></span>' },
+                            { "value": "Q102" },
+                            { "value": "How many new sites opened since the last period" },
+                            { "value": "Numeric" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    <div class="ons-u-mb-l">
+        {{ bdodSettingsTable | safe }}
+    </div>
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
+            "noIcon": true,
+            "id": "btn-save-bdod-settings"
+        })
+    }}
+{% endblock %}

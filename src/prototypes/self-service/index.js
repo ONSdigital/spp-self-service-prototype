@@ -80,8 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'define-validation-rules': '/views/tasklist/addrules/addvalidationrule.html',
     'choose-validation-methods': '#0',
     'configure-prioritisation-workflow-and-layout': '#0',
-    'test-survey-setup': '#0',
-    'get-methodology-approval': '#0'
+    'test-survey-setup': '#0'
   };
 
   const taskNames = {
@@ -91,8 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'define-validation-rules': 'Define validation rules',
     'choose-validation-methods': 'Choose validation methods',
     'configure-prioritisation-workflow-and-layout': 'Configure prioritisation workflow and layout',
-    'test-survey-setup': 'Test survey set up',
-    'get-methodology-approval': 'Get Methodology approval'
+    'test-survey-setup': 'Deploy survey configuration'
   };
 
   document.querySelectorAll('[data-task-link]').forEach(el => {

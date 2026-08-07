@@ -7,6 +7,7 @@ prevPage: views/tasklist/tasklist
 {% from "components/upload/_macro.njk" import onsUpload %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/panel/_macro.njk" import onsPanel %}
+{% from "components/input/_macro.njk" import onsInput %}
 
 {% set breadcrumbs = [
     {
@@ -24,9 +25,10 @@ prevPage: views/tasklist/tasklist
 ] %}
 
 {% block main %}
-    <h1>Upload survey forms</h1>
+    <h1>Upload survey form</h1>
     <p>Add JSON files for each form in the survey.</p>
-    <p>You can add multiple files.</p>
+    <p>You can must add forms one at a time.</p>
+    <p>Each form needs to have additional metadata added to set it up in SPP.</p>
 
     {{
         onsUpload({
@@ -39,8 +41,20 @@ prevPage: views/tasklist/tasklist
     }}
 
     {{
+        onsInput({
+            "id": "form-title",
+            "name": "form-title",
+            "fieldClasses": "ons-u-mt-m",
+            "label": {
+                "text": "Form title",
+                "description": "A meaningful name for the form that distinguishes it from others in the survey."
+            }
+        })
+    }}
+
+    {{
         onsPanel({
-            "body": "<p>Due to file processing times, there may be a delay before loading the next page.</p>",
+            "body": "<p>Period start and end dates will be specified as part of deploying a survey's configuration to UAT, Pre-Production and Production environments.</p>",
             "classes": "ons-u-mb-m"
         })
     }}
