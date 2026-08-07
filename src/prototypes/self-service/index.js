@@ -213,8 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
       formsList.forEach((form, index) => {
         const title = form.form_title || 'Untitled Form';
         const filename = form.filename || '';
-        const start = form.start_period || '';
-        const end = form.end_period || '';
+        const formId = form.form_id || '';
+        const version = form.version || '0.0.1';
         
         html += `
           <div class="ons-grid__col ons-col-6@m">
@@ -230,12 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
                       <dd class="spp-description-list__value" style="margin: 0;">${filename}</dd>
                     </div>
                     <div class="spp-description-list__item" style="display: flex; align-items: baseline; width: 100%; margin-bottom: 0.5rem;">
-                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Starting survey period:</dt>
-                      <dd class="spp-description-list__value" style="margin: 0;">${start}</dd>
+                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Form ID:</dt>
+                      <dd class="spp-description-list__value" style="margin: 0;">${formId}</dd>
                     </div>
                     <div class="spp-description-list__item" style="display: flex; align-items: baseline; width: 100%; margin-bottom: 0;">
-                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Ending survey period:</dt>
-                      <dd class="spp-description-list__value" style="margin: 0;">${end}</dd>
+                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Version:</dt>
+                      <dd class="spp-description-list__value" style="margin: 0;">${version}</dd>
                     </div>
                   </dl>
                 </div>
@@ -276,12 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const editingForm = formsList[editIndex];
     if (editingForm) {
       const titleInput = document.getElementById('form-title');
-      const startInput = document.getElementById('starting-period');
-      const endInput = document.getElementById('ending-period');
       
       if (titleInput) titleInput.value = editingForm.form_title || '';
-      if (startInput) startInput.value = editingForm.start_period || '';
-      if (endInput) endInput.value = editingForm.end_period || '';
       
       // Dynamically display the currently associated filename next to the file uploader
       const fileInput = document.getElementById('survey-form-upload');
@@ -303,12 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSaveForms.addEventListener('click', () => {
       const fileInput = document.getElementById('survey-form-upload');
       const titleInput = document.getElementById('form-title');
-      const startInput = document.getElementById('starting-period');
-      const endInput = document.getElementById('ending-period');
       
       const formTitle = titleInput ? titleInput.value.trim() : '';
-      const startPeriod = startInput ? startInput.value.trim() : '';
-      const endPeriod = endInput ? endInput.value.trim() : '';
       
       // Retrieve the existing array of forms from sessionStorage
       let formsList = [];
@@ -323,6 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
       
       let filename = '';
       let shouldSave = false;
+      let formId = '';
+      let version = '0.0.1';
       
       if (isEditMode && editIndex >= 0 && formsList[editIndex]) {
         // Edit Mode: check if a new file is uploaded, otherwise fall back to the existing filename
@@ -331,12 +325,20 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           filename = formsList[editIndex].filename; // Fall back to existing file name
         }
-        shouldSave = true; // Always save in edit mode since we already have at least the previous filename!
+        
+        // Preserve original Form ID and Version exactly
+        formId = formsList[editIndex].form_id;
+        version = formsList[editIndex].version;
+        shouldSave = true; // Always save in edit mode
       } else {
         // Create Mode: we must select a file to save
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
           filename = fileInput.files[0].name;
           shouldSave = true;
+          
+          // Generate a new random 3-digit Form ID and set the default Version
+          formId = Math.floor(100 + Math.random() * 900);
+          version = '0.0.1';
         }
       }
       
@@ -344,8 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const formEntity = {
           filename: filename,
           form_title: formTitle,
-          start_period: startPeriod,
-          end_period: endPeriod
+          form_id: formId,
+          version: version
         };
         
         if (isEditMode && editIndex >= 0) {

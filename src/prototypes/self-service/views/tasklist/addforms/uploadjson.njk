@@ -47,40 +47,14 @@ prevPage: views/tasklist/tasklist
             "fieldClasses": "ons-u-mt-m",
             "label": {
                 "text": "Form title",
-                "description": "The name of the form that you're uploading"
-            }
-        })
-    }}
-
-    {{
-        onsInput({
-            "id": "starting-period",
-            "name": "starting-period",
-            "classes": "ons-input--w-6",
-            "fieldClasses": "ons-u-mt-m",
-            "label": {
-                "text": "Starting survey period",
-                "description": "MMYYYY"
-            }
-        })
-    }}
-
-    {{
-        onsInput({
-            "id": "ending-period",
-            "name": "ending-period",
-            "classes": "ons-input--w-6",
-            "fieldClasses": "ons-u-mt-m ons-u-mb-m",
-            "label": {
-                "text": "Ending survey period",
-                "description": "MMYYYY"
+                "description": "A meaningful name for the form that distinguishes it from others in the survey."
             }
         })
     }}
 
     {{
         onsPanel({
-            "body": "<p>Due to file processing times, there may be a delay before loading the next page.</p>",
+            "body": "<p>Period start and end dates will be specified as part of deploying a survey's configuration to SPP Core.</p>",
             "classes": "ons-u-mb-m"
         })
     }}

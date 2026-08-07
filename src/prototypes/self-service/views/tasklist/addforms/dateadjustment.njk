@@ -5,7 +5,6 @@ layout: self-service/views/_main
 prevPage: views/tasklist/addforms/formslist
 ---
 {% from "components/button/_macro.njk" import onsButton %}
-{% from "components/accordion/_macro.njk" import onsAccordion %}
 {% from "components/table/_macro.njk" import onsTable %}
 
 {% set breadcrumbs = [
@@ -31,10 +30,10 @@ prevPage: views/tasklist/addforms/formslist
     <h1>Configure date adjustment</h1>
     <p>Select which questions in the survey forms can have date adjustment applied, and verify their response types.</p>
 
-    {% set firstAccordionTable %}
+    {% set dateAdjustmentTable %}
         {{
             onsTable({
-                "id": "survey-period-table",
+                "id": "date-adjustment-table",
                 "ths": [
                     { "value": "Enable date adjustment", "thClasses": "spp-col-date-adj" },
                     { "value": "Q Code", "thClasses": "spp-col-qcode" },
@@ -57,23 +56,31 @@ prevPage: views/tasklist/addforms/formslist
                             { "value": "End date" },
                             { "value": "Date" }
                         ]
-                    }
-                ]
-            })
-        }}
-    {% endset %}
-
-    {% set secondAccordionTable %}
-        {{
-            onsTable({
-                "id": "employees-table",
-                "ths": [
-                    { "value": "Enable date adjustment", "thClasses": "spp-col-date-adj" },
-                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
-                    { "value": "Question", "thClasses": "spp-col-question" },
-                    { "value": "Response type", "thClasses": "spp-col-answertype" }
-                ],
-                "trs": [
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q40" class="ons-checkbox__input" value="q40" /><label class="ons-checkbox__label" for="checkbox-date-adj-q40" aria-label="Select Q40"></label></span>' },
+                            { "value": "Q40" },
+                            { "value": "Total turnover" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q41" class="ons-checkbox__input" value="q41" /><label class="ons-checkbox__label" for="checkbox-date-adj-q41" aria-label="Select Q41"></label></span>' },
+                            { "value": "Q41" },
+                            { "value": "Total amount receivable in respect of invoices raised during period" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q42" class="ons-checkbox__input" value="q42" /><label class="ons-checkbox__label" for="checkbox-date-adj-q42" aria-label="Select Q42"></label></span>' },
+                            { "value": "Q42" },
+                            { "value": "Value of grants, donations, legacies, investments and incorporated income" },
+                            { "value": "Currency" }
+                        ]
+                    },
                     {
                         "tds": [
                             { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q50" class="ons-checkbox__input" value="q50" /><label class="ons-checkbox__label" for="checkbox-date-adj-q50" aria-label="Select Q50"></label></span>' },
@@ -113,23 +120,7 @@ prevPage: views/tasklist/addforms/formslist
                             { "value": "Number of female employees working 30 hours or less per week" },
                             { "value": "Numeric" }
                         ]
-                    }
-                ]
-            })
-        }}
-    {% endset %}
-
-    {% set thirdAccordionTable %}
-        {{
-            onsTable({
-                "id": "locations-table",
-                "ths": [
-                    { "value": "Enable date adjustment", "thClasses": "spp-col-date-adj" },
-                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
-                    { "value": "Question", "thClasses": "spp-col-question" },
-                    { "value": "Response type", "thClasses": "spp-col-answertype" }
-                ],
-                "trs": [
+                    },
                     {
                         "tds": [
                             { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q101" class="ons-checkbox__input" value="q101" /><label class="ons-checkbox__label" for="checkbox-date-adj-q101" aria-label="Select Q101"></label></span>' },
@@ -151,82 +142,9 @@ prevPage: views/tasklist/addforms/formslist
         }}
     {% endset %}
 
-    {% set fourthAccordionTable %}
-        {{
-            onsTable({
-                "id": "turnover-table",
-                "ths": [
-                    { "value": "Enable date adjustment", "thClasses": "spp-col-date-adj" },
-                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
-                    { "value": "Question", "thClasses": "spp-col-question" },
-                    { "value": "Response type", "thClasses": "spp-col-answertype" }
-                ],
-                "trs": [
-                    {
-                        "tds": [
-                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q40" class="ons-checkbox__input" value="q40" /><label class="ons-checkbox__label" for="checkbox-date-adj-q40" aria-label="Select Q40"></label></span>' },
-                            { "value": "Q40" },
-                            { "value": "Total turnover" },
-                            { "value": "Currency" }
-                        ]
-                    },
-                    {
-                        "tds": [
-                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q41" class="ons-checkbox__input" value="q41" /><label class="ons-checkbox__label" for="checkbox-date-adj-q41" aria-label="Select Q41"></label></span>' },
-                            { "value": "Q41" },
-                            { "value": "Total amount receivable in respect of invoices raised during period" },
-                            { "value": "Currency" }
-                        ]
-                    },
-                    {
-                        "tds": [
-                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-date-adj-q42" class="ons-checkbox__input" value="q42" /><label class="ons-checkbox__label" for="checkbox-date-adj-q42" aria-label="Select Q42"></label></span>' },
-                            { "value": "Q42" },
-                            { "value": "Value of grants, donations, legacies, investments and incorporated income" },
-                            { "value": "Currency" }
-                        ]
-                    }
-                ]
-            })
-        }}
-    {% endset %}
-
-    {{
-        onsAccordion({
-            "id": "validation-rules-accordion",
-            "allButton": {
-                "open": "Show all",
-                "close": "Hide all",
-                "openAriaLabel": "Show all sections",
-                "closeAriaLabel": "Hide all sections",
-                "attributes": {
-                    "data-toggle-button": "accordion-toggle-all"
-                }
-            },
-            "itemsList": [
-                {
-                    "title": "Section 1: Survey period and response data",
-                    "open": true,
-                    "content": firstAccordionTable | safe
-                },
-                {
-                    "title": "Section 2: Employees",
-                    "open": true,
-                    "content": secondAccordionTable | safe
-                },
-                {
-                    "title": "Section 3: Locations",
-                    "open": true,
-                    "content": thirdAccordionTable | safe
-                },
-                {
-                    "title": "Section 4: Turnover",
-                    "open": true,
-                    "content": fourthAccordionTable | safe
-                }
-            ]
-        })
-    }}
+    <div class="ons-u-mb-l">
+        {{ dateAdjustmentTable | safe }}
+    </div>
 
     {{
         onsButton({
