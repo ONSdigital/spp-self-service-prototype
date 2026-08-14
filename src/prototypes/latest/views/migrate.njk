@@ -51,7 +51,7 @@ prevPage: views/home
             "trading-day-weights": { "label": "To do", "variant": "info" }
         }
     } %}
-    <h1>Migrate a survey onto the Statistical Preparation Platform</h1>
+    <h1>Manage a survey on the Statistical Preparation Platform</h1>
 
     <aside class="ons-table-of-contents-container" aria-label="Table of contents">
         <nav class="ons-table-of-contents" aria-label="Table of contents">
@@ -66,8 +66,8 @@ prevPage: views/home
                             "text": "Migrate a survey"
                         },
                         {
-                            "url": "#existing-surveys",
-                            "text": "Existing surveys"
+                            "url": "#manage-surveys",
+                            "text": "Manage a survey"
                         },
                         {
                             "url": "#get-help",
@@ -109,20 +109,8 @@ prevPage: views/home
         })
     }}
 
-    <h3 class="ons-u-mt-l">Set up a survey</h3>
-    <p>To set up a new survey, ensure that you have defined your survey aims and prepared the survey forms.</p>
-
-    {{
-        onsButton({
-            "text": "Set up survey",
-            "classes": "ons-u-mt-m",
-            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
-            "noIcon": true
-        })
-    }}
-
-    <h2 id="existing-surveys" class="ons-u-mt-l">Existing surveys</h2>
-    <p>Below is a list of existing surveys that are configured or being configured on SPP.</p>
+    <h2 id="manage-surveys" class="ons-u-mt-l">Manage a survey</h2>
+    <p>Choose the survey that you want to set up or manage. The table contains all ONS surveys that are available to be configured on SPP.</p>
 
     {% set status001 %}
         <span data-survey-id="001">
