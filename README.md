@@ -2,6 +2,16 @@
 
 This is a prototype site built using the [ons-prototype-kit](https://github.com/ONSdigital/prototype-kit). It uses the ONS design system to render page layouts and components.
 
+## Survey data and configuration
+
+The ONS business survey information held within this prototype and associated code base are illustrative. There is no personal data held within it, be that anonymised or not. There are no responses to surveys held within the prototype either.
+
+Survey names and associated metadata largely reflect existing surveys, but may not be accurate and align exactly with surveys carried out by ONS.
+
+All surveys questions are styled after questions asked by ONS in surveys, but may not be accurate nor align exactly to the survey in which they are asked.
+
+All validation rule templates are styled after validation rules used by ONS methodologists. They are templates, and have not been implmented/configured as validation rules themselves. No methodologist sign off has been gained for validation rule templates added to the prototype codebase.
+
 ## Getting setup with this prototype
 
 Install the latest version of the ONS design system:
