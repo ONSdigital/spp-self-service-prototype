@@ -1,10 +1,12 @@
 ---
 group: Self Service
-title: Create a Survey Version
+title: Create version of NBS
 layout: latest/views/_main
 prevPage: views/tasklist/tasklist
 ---
 {% from "components/button/_macro.njk" import onsButton %}
+{% from "components/input/_macro.njk" import onsInput %}
+{% from "components/summary/_macro.njk" import onsSummary %}
 
 {% set breadcrumbs = [
     {
@@ -22,14 +24,91 @@ prevPage: views/tasklist/tasklist
 ] %}
 
 {% block main %}
-    <h1>Create a survey version</h1>
-    <p>Create a new version of the survey metadata and settings to deploy to UAT.</p>
+    <h1>Create version of NBS</h1>
 
     {{
-        onsButton({
-            "text": "Create version",
-            "id": "btn-create-version",
-            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html"
+        onsInput({
+            "id": "version-name",
+            "name": "version-name",
+            "fieldClasses": "ons-u-mt-m ons-u-mb-m",
+            "label": {
+                "text": "Version name",
+                "description": "Provide a unique name for this version of the survey for deployment"
+            }
         })
     }}
+
+    {{
+        onsInput({
+            "id": "start-period",
+            "name": "start-period",
+            "fieldClasses": "ons-u-mt-m ons-u-mb-m",
+            "label": {
+                "text": "Survey starting period",
+                "description": "Provide which survey period will be the first one that this configuration should be available for in UAT testing."
+            }
+        })
+    }}
+
+    {{
+        onsSummary({
+            "summaries": [
+                {
+                    "groups": [
+                        {
+                            "title": "Version configuration",
+                            "rows": [
+                                {
+                                    "title": "Forms",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                {
+                                                    "text": "<ul id='summary-forms-list' class='ons-u-mb-no'><li><span class='ons-summary__text'>No forms added</span></li></ul>"
+                                                }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "url": pageInfo.rootPath + "/views/tasklist/addforms/formslist.html",
+                                                    "text": "Change"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "title": "Validation Rules",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                {
+                                                    "text": "30 rules added"
+                                                }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "url": "#0",
+                                                    "text": "Change"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        })
+    }}
+
+    <div class="ons-u-mt-l">
+        {{
+            onsButton({
+                "text": "Create version",
+                "id": "btn-create-version",
+                "url": pageInfo.rootPath + "/views/tasklist/surveyversion/confirmdeployment.html"
+            })
+        }}
+    </div>
 {% endblock %}

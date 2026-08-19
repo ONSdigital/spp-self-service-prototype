@@ -227,6 +227,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Confirm version page: Confirm
+  const btnConfirmVersion = document.getElementById('btn-confirm-version');
+  if (btnConfirmVersion) {
+    btnConfirmVersion.addEventListener('click', () => {
+      sessionStorage.setItem('task-create-survey-version', JSON.stringify({ label: 'Done', variant: 'success' }));
+      sessionStorage.setItem('task-test-survey-setup', JSON.stringify({ label: 'To do', variant: 'info' }));
+    });
+  }
+
+  // Populate Forms in Create Version summary page
+  const summaryFormsList = document.getElementById('summary-forms-list');
+  if (summaryFormsList) {
+    const rawForms = sessionStorage.getItem('uploaded-forms');
+    let formsList = [];
+    if (rawForms) {
+      try {
+        formsList = JSON.parse(rawForms);
+      } catch (err) {
+        console.error("Error parsing uploaded-forms for summary:", err);
+      }
+    }
+    if (formsList && formsList.length > 0) {
+      let liHtml = '';
+      formsList.forEach(form => {
+        const title = form.form_title || 'Untitled Form';
+        const version = form.version || '0.0.1';
+        const formattedVersion = version.startsWith('v') ? version : `v${version}`;
+        liHtml += `<li><span class="ons-summary__text">${title} - ${formattedVersion}</span></li>`;
+      });
+      summaryFormsList.innerHTML = liHtml;
+    } else {
+      summaryFormsList.innerHTML = '<li><span class="ons-summary__text">No forms added</span></li>';
+    }
+  }
+
   // Finalise validation rules page: Save and continue
   const btnSaveCompleteRules = document.getElementById('btn-save-completerules');
   if (btnSaveCompleteRules) {

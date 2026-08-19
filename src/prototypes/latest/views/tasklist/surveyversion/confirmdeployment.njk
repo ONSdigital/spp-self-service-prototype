@@ -1,0 +1,35 @@
+---
+group: Self Service
+title: Confirm version
+layout: latest/views/_main
+prevPage: views/tasklist/surveyversion/createversion
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    }
+] %}
+
+{% block main %}
+    <h1>Confirm version</h1>
+    <p>Please confirm that you want to finalize this version of the survey for UAT deployment.</p>
+
+    {{
+        onsButton({
+            "text": "Confirm",
+            "id": "btn-confirm-version",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html"
+        })
+    }}
+{% endblock %}
