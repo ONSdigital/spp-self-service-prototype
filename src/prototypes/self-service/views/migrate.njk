@@ -18,7 +18,7 @@ prevPage: views/home
 {% from "components/pagination/_macro.njk" import onsPagination %}
 
 {% block main %}
-    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+    {% set state = helpers.getState(pageInfo) if (helpers and helpers.getState) else {
         "tasks": {
             "add-survey-forms": { "label": "To do", "variant": "info" },
             "choose-reference-datasets": { "label": "To do", "variant": "info" },

@@ -1,7 +1,7 @@
 ---
 group: Self Service
 title: Migration Task List
-layout: self-service/views/_main
+layout: latest/views/_main
 prevPage: views/migrate
 ---
 {% set breadcrumbs = [
@@ -13,15 +13,18 @@ prevPage: views/migrate
 {% from "components/status/_macro.njk" import onsStatus %}
 
 {% block main %}
-    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+    {% set state = helpers.getState(pageInfo) if (helpers and helpers.getState) else {
         "tasks": {
             "add-survey-forms": { "label": "To do", "variant": "info" },
-            "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
-            "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-reference-datasets": { "label": "Speak to Digital Services", "variant": "dead" },
+            "add-constructed-questions-and-values": { "label": "Speak to Digital Services", "variant": "dead" },
             "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
-            "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
-            "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
-            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" }
+            "choose-validation-methods": { "label": "Speak to Digital Services", "variant": "dead" },
+            "configure-prioritisation-workflow-and-layout": { "label": "Speak to Digital Services", "variant": "dead" },
+            "create-survey-version": { "label": "Cannot start yet", "variant": "dead" },
+            "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+            "obtain-uat-approval": { "label": "Cannot start yet", "variant": "dead" },
+            "deploy-to-production": { "label": "Cannot start yet", "variant": "dead" }
         },
         "surveys": {
             "002": { "label": "Live", "variant": "success" },
@@ -58,7 +61,7 @@ prevPage: views/migrate
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name" data-task-link="choose-reference-datasets">
-                {% if state.tasks["choose-reference-datasets"].label == "Cannot start yet" %}
+                {% if state.tasks["choose-reference-datasets"].label == "Cannot start yet" or state.tasks["choose-reference-datasets"].label == "Speak to Digital Services" %}
                     Choose reference datasets
                 {% else %}
                     <a href="{{ pageInfo.rootPath }}/views/tasklist/refdata/selectrefdata.html">Choose reference datasets</a>
@@ -70,7 +73,7 @@ prevPage: views/migrate
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name" data-task-link="add-constructed-questions-and-values">
-                {% if state.tasks["add-constructed-questions-and-values"].label == "Cannot start yet" %}
+                {% if state.tasks["add-constructed-questions-and-values"].label == "Cannot start yet" or state.tasks["add-constructed-questions-and-values"].label == "Speak to Digital Services" %}
                     Add derived questions and values
                 {% else %}
                     <a href="#0">Add derived questions and values</a>
@@ -94,7 +97,7 @@ prevPage: views/migrate
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name" data-task-link="choose-validation-methods">
-                {% if state.tasks["choose-validation-methods"].label == "Cannot start yet" %}
+                {% if state.tasks["choose-validation-methods"].label == "Cannot start yet" or state.tasks["choose-validation-methods"].label == "Speak to Digital Services" %}
                     Choose validation methods
                 {% else %}
                     <a href="#0">Choose validation methods</a>
@@ -106,7 +109,7 @@ prevPage: views/migrate
         </li>
         <li class="spp-task-list__item">
             <span class="spp-task-list__task-name" data-task-link="configure-prioritisation-workflow-and-layout">
-                {% if state.tasks["configure-prioritisation-workflow-and-layout"].label == "Cannot start yet" %}
+                {% if state.tasks["configure-prioritisation-workflow-and-layout"].label == "Cannot start yet" or state.tasks["configure-prioritisation-workflow-and-layout"].label == "Speak to Digital Services" %}
                     Configure prioritisation workflow and layout
                 {% else %}
                     <a href="#0">Configure prioritisation workflow and layout</a>
@@ -117,15 +120,51 @@ prevPage: views/migrate
             </span>
         </li>
         <li class="spp-task-list__item">
-            <span class="spp-task-list__task-name" data-task-link="test-survey-setup">
-                {% if state.tasks["test-survey-setup"].label == "Cannot start yet" %}
-                    Deploy survey configuration
+            <span class="spp-task-list__task-name" data-task-link="create-survey-version">
+                {% if state.tasks["create-survey-version"].label == "Cannot start yet" or state.tasks["create-survey-version"].label == "Speak to Digital Services" %}
+                    Create a survey version
                 {% else %}
-                    <a href="#0">Deploy survey configuration</a>
+                    <a href="{{ pageInfo.rootPath }}/views/tasklist/surveyversion/createversion.html">Create a survey version</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="create-survey-version">
+                {{ onsStatus({ "label": state.tasks["create-survey-version"].label, "variant": state.tasks["create-survey-version"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="test-survey-setup">
+                {% if state.tasks["test-survey-setup"].label == "Cannot start yet" or state.tasks["test-survey-setup"].label == "Speak to Digital Services" %}
+                    Deploy version to UAT
+                {% else %}
+                    <a href="#0">Deploy version to UAT</a>
                 {% endif %}
             </span>
             <span class="spp-task-list__status" data-task-id="test-survey-setup">
                 {{ onsStatus({ "label": state.tasks["test-survey-setup"].label, "variant": state.tasks["test-survey-setup"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="obtain-uat-approval">
+                {% if state.tasks["obtain-uat-approval"].label == "Cannot start yet" or state.tasks["obtain-uat-approval"].label == "Speak to Digital Services" %}
+                    Obtain UAT survey version approval
+                {% else %}
+                    <a href="#0">Obtain UAT survey version approval</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="obtain-uat-approval">
+                {{ onsStatus({ "label": state.tasks["obtain-uat-approval"].label, "variant": state.tasks["obtain-uat-approval"].variant }) }}
+            </span>
+        </li>
+        <li class="spp-task-list__item">
+            <span class="spp-task-list__task-name" data-task-link="deploy-to-production">
+                {% if state.tasks["deploy-to-production"].label == "Cannot start yet" or state.tasks["deploy-to-production"].label == "Speak to Digital Services" %}
+                    Deploy version to Production
+                {% else %}
+                    <a href="#0">Deploy version to Production</a>
+                {% endif %}
+            </span>
+            <span class="spp-task-list__status" data-task-id="deploy-to-production">
+                {{ onsStatus({ "label": state.tasks["deploy-to-production"].label, "variant": state.tasks["deploy-to-production"].variant }) }}
             </span>
         </li>
     </ul>

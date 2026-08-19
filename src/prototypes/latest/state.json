@@ -18,12 +18,15 @@
   },
   "tasks": {
     "add-survey-forms": { "label": "To do", "variant": "info" },
-    "choose-reference-datasets": { "label": "To do", "variant": "info" },
-    "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+    "choose-reference-datasets": { "label": "Speak to Digital Services", "variant": "dead" },
+    "add-constructed-questions-and-values": { "label": "Speak to Digital Services", "variant": "dead" },
     "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
-    "choose-validation-methods": { "label": "To do", "variant": "info" },
-    "configure-prioritisation-workflow-and-layout": { "label": "To do", "variant": "info" },
-    "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" }
+    "choose-validation-methods": { "label": "Speak to Digital Services", "variant": "dead" },
+    "configure-prioritisation-workflow-and-layout": { "label": "Speak to Digital Services", "variant": "dead" },
+    "create-survey-version": { "label": "Cannot start yet", "variant": "dead" },
+    "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+    "obtain-uat-approval": { "label": "Cannot start yet", "variant": "dead" },
+    "deploy-to-production": { "label": "Cannot start yet", "variant": "dead" }
   },
   "refdata": {
     "survey-period-dates": { "label": "To do", "variant": "info" },

@@ -1,3 +1,32 @@
+import fs from 'fs';
+import path from 'path';
+
+// Auto-patch install-render-helpers.js to support dynamic relative state resolution
+const helperFilePath = path.resolve('node_modules/@ons/prototype-kit/lib/rendering/install-render-helpers.js');
+if (fs.existsSync(helperFilePath)) {
+  let content = fs.readFileSync(helperFilePath, 'utf8');
+  if (!content.includes('pageInfo')) {
+    content = content.replace(
+      /function getState\(\) \{[\s\S]*?return \{\};[\s\S]*?\}/,
+      `function getState(pageInfo) {
+  let prototypeFolder = 'self-service';
+  if (pageInfo && pageInfo.templatePath) {
+    const match = pageInfo.templatePath.match(/src\\/prototypes\\/([^/]+)/);
+    if (match) {
+      prototypeFolder = match[1];
+    }
+  }
+  const statePath = path.resolve(\`src/prototypes/\${prototypeFolder}/state.json\`);
+  if (fs.existsSync(statePath)) {
+    return JSON.parse(fs.readFileSync(statePath, 'utf8'));
+  }
+  return {};
+}`
+    );
+    fs.writeFileSync(helperFilePath, content, 'utf8');
+  }
+}
+
 import gulp from 'gulp';
 import definePrototypeKitGulpTasks from '@ons/prototype-kit/defineGulpTasks.js';
 

@@ -7,6 +7,17 @@ import '@ons/prototype-kit/src/helpers/index.js';
 document.addEventListener('DOMContentLoaded', () => {
   const rootPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/views/'));
 
+  // Force status for specific dead tasks (Speak to Digital Services)
+  const deadTasks = [
+    'choose-reference-datasets',
+    'add-constructed-questions-and-values',
+    'choose-validation-methods',
+    'configure-prioritisation-workflow-and-layout'
+  ];
+  deadTasks.forEach(id => {
+    sessionStorage.removeItem(`task-${id}`);
+  });
+
   // --- Survey Select & Header Replacement State Management ---
   
   // 1. Capture select clicks on migrate.html
@@ -80,7 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     'define-validation-rules': '/views/tasklist/addrules/addvalidationrule.html',
     'choose-validation-methods': '#0',
     'configure-prioritisation-workflow-and-layout': '#0',
-    'test-survey-setup': '#0'
+    'create-survey-version': '/views/tasklist/surveyversion/createversion.html',
+    'test-survey-setup': '#0',
+    'obtain-uat-approval': '#0',
+    'deploy-to-production': '#0'
   };
 
   const taskNames = {
@@ -90,7 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
     'define-validation-rules': 'Define validation rules',
     'choose-validation-methods': 'Choose validation methods',
     'configure-prioritisation-workflow-and-layout': 'Configure prioritisation workflow and layout',
-    'test-survey-setup': 'Deploy survey configuration'
+    'create-survey-version': 'Create a survey version',
+    'test-survey-setup': 'Deploy version to UAT',
+    'obtain-uat-approval': 'Obtain UAT survey version approval',
+    'deploy-to-production': 'Deploy version to Production'
   };
 
   document.querySelectorAll('[data-task-link]').forEach(el => {
@@ -107,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    if (label === 'Cannot start yet') {
+    if (label === 'Cannot start yet' || label === 'Speak to Digital Services') {
       el.innerHTML = taskNames[id];
     } else {
       let url = taskUrls[id];
@@ -145,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnSaveFormData) {
     btnSaveFormData.addEventListener('click', () => {
       sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'Done', variant: 'success' }));
-      sessionStorage.setItem('task-add-constructed-questions-and-values', JSON.stringify({ label: 'To do', variant: 'info' }));
       sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'To do', variant: 'info' }));
+      sessionStorage.setItem('task-create-survey-version', JSON.stringify({ label: 'To do', variant: 'info' }));
     });
   }
 
@@ -155,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnSaveQuestionMetadata) {
     btnSaveQuestionMetadata.addEventListener('click', () => {
       sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'Done', variant: 'success' }));
-      sessionStorage.setItem('task-add-constructed-questions-and-values', JSON.stringify({ label: 'To do', variant: 'info' }));
       sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'To do', variant: 'info' }));
+      sessionStorage.setItem('task-create-survey-version', JSON.stringify({ label: 'To do', variant: 'info' }));
     });
   }
 
@@ -165,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnReturnTaskList) {
     btnReturnTaskList.addEventListener('click', () => {
       sessionStorage.setItem('task-add-survey-forms', JSON.stringify({ label: 'In progress', variant: 'pending' }));
-      sessionStorage.setItem('task-add-constructed-questions-and-values', JSON.stringify({ label: 'To do', variant: 'info' }));
       sessionStorage.setItem('task-define-validation-rules', JSON.stringify({ label: 'To do', variant: 'info' }));
+      sessionStorage.setItem('task-create-survey-version', JSON.stringify({ label: 'To do', variant: 'info' }));
     });
   }
 
@@ -174,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSaveRefData = document.getElementById('btn-save-refdata');
   if (btnSaveRefData) {
     btnSaveRefData.addEventListener('click', () => {
-      sessionStorage.setItem('task-choose-reference-datasets', JSON.stringify({ label: 'Completed', variant: 'success' }));
+      // Status remains 'Speak to Digital Services'
     });
   }
 
@@ -206,17 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSaveProvideRef = document.getElementById('btn-save-provideref');
   if (btnSaveProvideRef) {
     btnSaveProvideRef.addEventListener('click', () => {
-      const datesSaved = sessionStorage.getItem('refdata-survey-period-dates');
-      const weightsSaved = sessionStorage.getItem('refdata-trading-day-weights');
-      
-      const datesDone = datesSaved && JSON.parse(datesSaved).label === 'Done';
-      const weightsDone = weightsSaved && JSON.parse(weightsSaved).label === 'Done';
-      
-      if (datesDone && weightsDone) {
-        sessionStorage.setItem('task-choose-reference-datasets', JSON.stringify({ label: 'Done', variant: 'success' }));
-      } else {
-        sessionStorage.setItem('task-choose-reference-datasets', JSON.stringify({ label: 'Started', variant: 'pending' }));
-      }
+      // Status remains 'Speak to Digital Services'
     });
   }
 

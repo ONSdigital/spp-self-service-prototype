@@ -1,7 +1,7 @@
 ---
 group: Self Service
 title: Migrate a Survey
-layout: self-service/views/_main
+layout: latest/views/_main
 prevPage: views/home
 ---
 {% set breadcrumbs = [
@@ -11,22 +11,24 @@ prevPage: views/home
     }
 ] %}
 {% from "components/list/_macro.njk" import onsList %}
-{% from "components/details/_macro.njk" import onsDetails %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/table/_macro.njk" import onsTable %}
 {% from "components/status/_macro.njk" import onsStatus %}
 {% from "components/pagination/_macro.njk" import onsPagination %}
 
 {% block main %}
-    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+    {% set state = helpers.getState(pageInfo) if (helpers and helpers.getState) else {
         "tasks": {
             "add-survey-forms": { "label": "To do", "variant": "info" },
-            "choose-reference-datasets": { "label": "To do", "variant": "info" },
-            "add-constructed-questions-and-values": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-reference-datasets": { "label": "Speak to Digital Services", "variant": "dead" },
+            "add-constructed-questions-and-values": { "label": "Speak to Digital Services", "variant": "dead" },
             "define-validation-rules": { "label": "Cannot start yet", "variant": "dead" },
-            "choose-validation-methods": { "label": "Cannot start yet", "variant": "dead" },
-            "configure-prioritisation-workflow-and-layout": { "label": "Cannot start yet", "variant": "dead" },
+            "choose-validation-methods": { "label": "Speak to Digital Services", "variant": "dead" },
+            "configure-prioritisation-workflow-and-layout": { "label": "Speak to Digital Services", "variant": "dead" },
+            "create-survey-version": { "label": "Cannot start yet", "variant": "dead" },
             "test-survey-setup": { "label": "Cannot start yet", "variant": "dead" },
+            "obtain-uat-approval": { "label": "Cannot start yet", "variant": "dead" },
+            "deploy-to-production": { "label": "Cannot start yet", "variant": "dead" },
             "get-methodology-approval": { "label": "Cannot start yet", "variant": "dead" }
         },
         "surveys": {
@@ -85,29 +87,14 @@ prevPage: views/home
     <h3>Before you begin</h3>
     <p>Before migrating a survey you must have prepared the following:</p>
 
-    {{
-        onsDetails({
-            "id": "survey-forms-details",
-            "title": "Survey forms",
-            "content": "<p>Survey forms should be configured using Author and stored locally as JSON files on your computer to upload as part of survey migration.</p>"
-        })
-    }}
+    <h4 class="ons-u-mt-m">Survey forms</h4>
+    <p>Survey forms should be configured using Author and stored locally as JSON files on your computer to upload as part of survey migration.</p>
 
-    {{
-        onsDetails({
-            "id": "reference-data-details",
-            "title": "Reference data",
-            "content": "<p>Tested and validated reference data CSV files that comply with existing reference datasets in SPP.</p>"
-        })
-    }}
+    <h4 class="ons-u-mt-m">Reference data</h4>
+    <p>Tested and validated reference data CSV files that comply with existing reference datasets in SPP.</p>
 
-    {{
-        onsDetails({
-            "id": "validation-rules-details",
-            "title": "Validation rules",
-            "content": "<p>Documented and agreed validation rules that have been approved by business survey teams.</p>"
-        })
-    }}
+    <h4 class="ons-u-mt-m">Validation rules</h4>
+    <p>Documented and agreed validation rules that have been approved by business survey teams.</p>
 
     <h2 id="manage-surveys" class="ons-u-mt-l">Manage a survey</h2>
     <p>Choose the survey that you want to set up or manage. The table contains all ONS surveys that are available to be configured on SPP.</p>

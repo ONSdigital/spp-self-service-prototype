@@ -1,0 +1,35 @@
+---
+group: Self Service
+title: Create a Survey Version
+layout: latest/views/_main
+prevPage: views/tasklist/tasklist
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/tasklist/tasklist.html",
+        "text": "Migration tasks"
+    }
+] %}
+
+{% block main %}
+    <h1>Create a survey version</h1>
+    <p>Create a new version of the survey metadata and settings to deploy to UAT.</p>
+
+    {{
+        onsButton({
+            "text": "Create version",
+            "id": "btn-create-version",
+            "url": pageInfo.rootPath + "/views/tasklist/tasklist.html"
+        })
+    }}
+{% endblock %}

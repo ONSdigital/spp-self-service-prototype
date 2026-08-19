@@ -28,7 +28,7 @@ prevPage: views/tasklist/refdata/selectrefdata
 ] %}
 
 {% block main %}
-    {% set state = helpers.getState() if (helpers and helpers.getState) else {
+    {% set state = helpers.getState(pageInfo) if (helpers and helpers.getState) else {
         "tasks": {
             "add-survey-forms": { "label": "To do", "variant": "info" },
             "choose-reference-datasets": { "label": "Cannot start yet", "variant": "dead" },
