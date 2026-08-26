@@ -1,0 +1,17 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/home
+---
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    }
+] %}
+
+{% block main %}
+    <h1>Search for a contributor</h1>
+    <p>Use this tool to search for contributors and view their response details and status.</p>
+{% endblock %}
