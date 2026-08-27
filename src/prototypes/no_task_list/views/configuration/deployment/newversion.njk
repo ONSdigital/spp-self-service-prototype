@@ -1,0 +1,188 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/configuration/deployments/versions
+---
+{% from "components/radios/_macro.njk" import onsRadios %}
+{% from "components/question/_macro.njk" import onsQuestion %}
+{% from "components/input/_macro.njk" import onsInput %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/select/_macro.njk" import onsSelect %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versions.html",
+        "text": "Releases"
+    }
+] %}
+
+{% block main %}
+
+{% set selectRow1 %}
+    {{ onsSelect({
+        "id": "select-version-1",
+        "name": "select-version-1",
+        "label": {
+            "text": "Select version",
+            "classes": "ons-u-vh"
+        },
+        "options": [
+            { "value": "v0.0.1", "text": "v0.0.1", "selected": true }
+        ]
+    }) }}
+{% endset %}
+
+{% set selectRow2 %}
+    {{ onsSelect({
+        "id": "select-version-2",
+        "name": "select-version-2",
+        "label": {
+            "text": "Select version",
+            "classes": "ons-u-vh"
+        },
+        "options": [
+            { "value": "v0.0.1", "text": "v0.0.1", "selected": true }
+        ]
+    }) }}
+{% endset %}
+
+{% set selectRow3 %}
+    {{ onsSelect({
+        "id": "select-version-3",
+        "name": "select-version-3",
+        "label": {
+            "text": "Select version",
+            "classes": "ons-u-vh"
+        },
+        "options": [
+            { "value": "v0.1.2", "text": "v0.1.2", "selected": true },
+            { "value": "v0.1.1", "text": "v0.1.1" },
+            { "value": "v0.1.0", "text": "v0.1.0" },
+            { "value": "v0.0.2", "text": "v0.0.2" },
+            { "value": "v0.0.1", "text": "v0.0.1" }
+        ]
+    }) }}
+{% endset %}
+
+<h1>Create a new release</h1>
+<p>Newly created releases will be numbered to the next logical value in the release history.</p>
+{%
+    call onsQuestion({
+        "title": "Select release type",
+        "legendIsQuestionTitle": true,
+        "legendTitleClasses": "ons-u-fs-r--b"
+    })
+%}
+{{
+    onsRadios({
+        "dontWrap": true,
+        "name": "release",
+        "radios": [
+            {
+                "id": "minor-version",
+                "label": {
+                    "text": "Minor release",
+                    "description": "Increments the release number by 0.1"
+                },
+                "name": "minor"
+            },
+            {
+                "id": "major-version",
+                "label": {
+                    "text": "Major release",
+                    "description": "Increments the release number by 1.0"
+                },
+                "name": "major"
+            }
+        ]
+    })
+}}
+
+{% endcall %}
+
+    {{
+        onsInput({
+            "id": "version-name",
+            "name": "version-name",
+            "fieldClasses": "ons-u-mt-l",
+            "label": {
+                "text": "Release name",
+                "description": "A title by which this release is referred"
+            }
+        })
+    }}
+
+    <h2 class="ons-u-mt-l">Forms</h2>
+    <p>Select which versions of forms to include in the release.</p>
+
+    {{ onsTable({
+        "id": "new-version-forms-table",
+        "ths": [
+            { "value": "Include?", "classes": "spp-col-select" },
+            { "value": "Form", "classes": "spp-col-metadata" },
+            { "value": "Version", "classes": "spp-col-rules" }
+        ],
+        "trs": [
+            {
+                "tds": [
+                    { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-include-1" class="ons-checkbox__input" value="1" /><label class="ons-checkbox__label" for="checkbox-include-1" aria-label="Include General form (123)"></label></span>' | safe },
+                    { "value": "General form (123)" },
+                    { "value": selectRow1 | trim | safe }
+                ]
+            },
+            {
+                "tds": [
+                    { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-include-2" class="ons-checkbox__input" value="2" /><label class="ons-checkbox__label" for="checkbox-include-2" aria-label="Include Shop form (234)"></label></span>' | safe },
+                    { "value": "Shop form (234)" },
+                    { "value": selectRow2 | trim | safe }
+                ]
+            },
+            {
+                "tds": [
+                    { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-include-3" class="ons-checkbox__input" value="3" /><label class="ons-checkbox__label" for="checkbox-include-3" aria-label="Include Petrol Station form (345)"></label></span>' | safe },
+                    { "value": "Petrol Station form (345)" },
+                    { "value": selectRow3 | trim | safe }
+                ]
+            }
+        ]
+    }) 
+}}
+
+<h2 class="ons-u-mt-l">Validation rules</h2>
+<p>All validation rules for the selected forms will be deployed. A list of these can be exported to check with stakeholders.</p>
+{{
+    onsButton({
+        "text": "Export rules",
+        "variants": "secondary",
+        "noIcon": true,
+        "classes": "ons-u-mb-m",
+        "id": "btn-export"
+    })
+}}
+
+<h2 class="ons-u-mt-l">Create release</h2>
+<p>This will add the above configured release to the table of available survey releases.</p>
+{{
+    onsButton({
+        "text": "Create survey release",
+        "id": "btn-create-version",
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versionadded.html",
+        "noIcon": true
+    })
+}}
+
+{% endblock %}

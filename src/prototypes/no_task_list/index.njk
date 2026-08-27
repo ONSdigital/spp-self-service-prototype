@@ -1,0 +1,18 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% block main %}
+    <h1>Start example prototype</h1>
+    <p>This is the version of the prototype where we are trialling not having a central task list page for managing survey configurations.</p>
+    {{
+        onsButton({
+            "text": "Start",
+            "classes": "ons-u-mt-l",
+            "url": pageInfo.rootPath + "/views/home.html"
+        })
+    }}
+{% endblock %}

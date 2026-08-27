@@ -1,0 +1,17 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/home
+---
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    }
+] %}
+
+{% block main %}
+    <h1>Create results snapshot</h1>
+    <p>Create and export results snapshots for processing and statistical analysis.</p>
+{% endblock %}

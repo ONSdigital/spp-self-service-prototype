@@ -1,0 +1,134 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/configuration/survey
+---
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    }
+] %}
+
+{% block main %}
+    <h1>Manage survey releases and deployments</h1>
+    <h2>Available releases for New Business Survey</h2>
+    {{
+        onsTable({
+            "ths": [
+                {
+                    "value": "Release"
+                },
+                {
+                    "value": "Status"
+                }
+            ],
+            "trs": [
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="3.2 Rhino">3.2 Rhino</a>'
+                        },
+                        {
+                            "value": "Draft"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="3.1 Quokka">3.1 Quokka</a>'
+                        },
+                        {
+                            "value": "Deployed to UAT on 01/09/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="3.0 Puma">3.0 Puma</a>'
+                        },
+                        {
+                            "value": "Deployed to UAT on 25/08/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="2.3 Ocelot">2.3 Ocelot</a>'
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/07/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="2.2 Narwhal">2.2 Narwhal</a>'
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/06/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="2.1 Manatee">2.1 Manatee</a>'
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/05/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="2.0 Llama">2.0 Llama</a>'
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/05/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="1.0 Gecko">1.0 Gecko</a>'
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/01/2026"
+                        }
+                    ]
+                }
+            ]
+        })
+    }}
+    <h2 class="ons-u-mt-l">Create a new release</h2>
+    <p>Use the latest forms and rules configured to create a new deployable release of the survey.<p>
+    {{
+    onsButton({
+        "type": 'button',
+        "text": 'Create a release',
+        "variants": 'secondary',
+        "url": pageInfo.rootPath + "/views/configuration/deployment/newversion.html",
+        "noIcon": true,
+        "id": "btn-create-version"
+    })
+}}
+{% endblock %}
