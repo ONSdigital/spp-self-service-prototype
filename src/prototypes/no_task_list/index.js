@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
               <div class="ons-card__body">
                 <h2 class="ons-card__title ons-u-fs-m" id="card-title-${index}" style="margin: 0 0 1rem 0;">
-                  <a href="${rootPath}/views/configuration/forms/uploadjson.html?edit=${index}" class="ons-card__link">${title}</a>
+                  <a href="${rootPath}/views/configuration/forms/manageform.html?formIndex=${index}" class="ons-card__link">${title}</a>
                 </h2>
                 <div class="ons-card__content">
                   <dl class="spp-description-list" style="margin: 0; padding: 0; list-style: none;">
@@ -364,5 +364,43 @@ document.addEventListener('DOMContentLoaded', () => {
       // Perform navigation programmatically once the async operations have finished
       window.location.href = btnSaveForms.getAttribute('href') || (rootPath + "/views/configuration/forms/formslist.html");
     });
+  }
+
+  // Handle manageform.html logic
+  if (window.location.pathname.includes('manageform.html')) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const formIndexParam = urlParams.get('formIndex');
+    if (formIndexParam !== null) {
+      const formIndex = parseInt(formIndexParam, 10);
+      const rawForms = sessionStorage.getItem('uploaded-forms');
+      if (rawForms) {
+        try {
+          const formsList = JSON.parse(rawForms);
+          const form = formsList[formIndex];
+          if (form) {
+            // Populate the summary values using row IDs and ONS span classes
+            const titleEl = document.querySelector('#form-title-row .ons-summary__text');
+            const idEl = document.querySelector('#form-id-row .ons-summary__text');
+            const versionEl = document.querySelector('#form-version-row .ons-summary__text');
+            const fileEl = document.querySelector('#uploaded-file-row .ons-summary__text');
+
+            if (titleEl) titleEl.textContent = form.form_title || 'Untitled Form';
+            if (idEl) idEl.textContent = form.form_id || '';
+            if (versionEl) versionEl.textContent = form.version || '0.0.1';
+            if (fileEl) fileEl.textContent = form.filename || '';
+
+            // Update change links
+            const changeTitleBtn = document.querySelector('#form-title-row a.ons-summary__button') || document.querySelector('#form-title-row a');
+            const changeFileBtn = document.querySelector('#uploaded-file-row a.ons-summary__button') || document.querySelector('#uploaded-file-row a');
+
+            const editUrl = `${rootPath}/views/configuration/forms/uploadjson.html?edit=${formIndex}`;
+            if (changeTitleBtn) changeTitleBtn.setAttribute('href', editUrl);
+            if (changeFileBtn) changeFileBtn.setAttribute('href', editUrl);
+          }
+        } catch (err) {
+          console.error("Error loading form details on manageform page:", err);
+        }
+      }
+    }
   }
 });
