@@ -39,13 +39,13 @@ prevPage: views/configuration/survey
     <p>Speak to DS to tell them to commence configuring the data in the UAT environment.</p>
 {% endcall %}
 
-    <h1>Manage survey versions and deployments</h1>
-    <h2>Available versions for New Business Survey</h2>
+    <h1>Manage survey releases and deployments</h1>
+    <h2>Available releases for New Business Survey</h2>
     {{
         onsTable({
             "ths": [
                 {
-                    "value": "Version"
+                    "value": "Release"
                 },
                 {
                     "value": "Status"
@@ -135,12 +135,12 @@ prevPage: views/configuration/survey
             ]
         })
     }}
-    <h2 class="ons-u-mt-l">Create a new version</h2>
-    <p>Use the latest forms and rules configured to create a new deployable version of the survey.<p>
+    <h2 class="ons-u-mt-l">Create a new release</h2>
+    <p>Use the latest forms and rules configured to create a new deployable release of the survey.<p>
     {{
     onsButton({
         "type": 'button',
-        "text": 'Create a version',
+        "text": 'Create a release',
         "variants": 'secondary',
         "url": pageInfo.rootPath + "/views/configuration/deployment/newversion.html",
         "noIcon": true,

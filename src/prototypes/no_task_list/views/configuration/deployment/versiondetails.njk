@@ -24,12 +24,12 @@ prevPage: views/configuration/deployment/versionadded
     },
     {
         "url": pageInfo.rootPath + "/views/configuration/deployment/versions.html",
-        "text": "Versions"
+        "text": "Releases"
     }
 ] %}
 
 {% block main %}
-    <h1 id="version-details-h1">Version Details</h1>
+    <h1 id="version-details-h1">Release Details</h1>
     
 {{
     onsSummary({
@@ -41,7 +41,7 @@ prevPage: views/configuration/deployment/versionadded
                         "rows": [
                             {
                                 "id": "version-number-row",
-                                "title": "Version number",
+                                "title": "Release number",
                                 "itemsList": [
                                     {
                                         "id": "version-number",
@@ -54,7 +54,7 @@ prevPage: views/configuration/deployment/versionadded
                                 ]
                             },
                             {
-                                "title": "Version name",
+                                "title": "Release name",
                                 "id": "version-name-row",
                                 "itemsList": [
                                     {
