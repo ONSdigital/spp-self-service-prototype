@@ -1,0 +1,124 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/configuration/survey
+---
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    }
+] %}
+
+{% block main %}
+    <h1>Manage survey versions and deployments</h1>
+    <h2>Available versions for New Business Survey</h2>
+    {{
+        onsTable({
+            "ths": [
+                {
+                    "value": "Version"
+                },
+                {
+                    "value": "Status"
+                }
+            ],
+            "trs": [
+                {
+                    "tds": [
+                        {
+                            "value": "3.1 Quokka"
+                        },
+                        {
+                            "value": "Draft"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": "3.0 Puma"
+                        },
+                        {
+                            "value": "Deployed to UAT on 25/08/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": "2.3 Ocelot"
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/07/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": "2.2 Narwhal"
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/06/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": "2.1 Manatee"
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/05/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": "2.0 Llama"
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/05/2026"
+                        }
+                    ]
+                },
+                {
+                    "tds": [
+                        {
+                            "value": "1.0 Gecko"
+                        },
+                        {
+                            "value": "Deployed to PROD on 01/01/2026"
+                        }
+                    ]
+                }
+            ]
+        })
+    }}
+    <h2 class="ons-u-mt-l">Create a new version</h2>
+    <p>Use the latest forms and rules configured to create a new deployable version of the survey.<p>
+    {{
+    onsButton({
+        "type": 'button',
+        "text": 'Create a version',
+        "variants": 'secondary',
+        "url": pageInfo.rootPath + "/views/configuration/deployment/newversion.html",
+        "noIcon": true,
+        "id": "btn-create-version"
+    })
+}}
+{% endblock %}

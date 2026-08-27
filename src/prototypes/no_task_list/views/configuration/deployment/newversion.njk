@@ -1,0 +1,83 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/configuration/deployments/versions
+---
+{% from "components/radios/_macro.njk" import onsRadios %}
+{% from "components/question/_macro.njk" import onsQuestion %}
+{% from "components/input/_macro.njk" import onsInput %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versions.html",
+        "text": "Versions"
+    }
+] %}
+
+{% block main %}
+
+<h1>Create a new version</h1>
+<p>Newly created versions will be numbered to the next logical value in the release history.</p>
+{%
+    call onsQuestion({
+        "title": "Select release type",
+        "legendIsQuestionTitle": true,
+        "legendTitleClasses": "ons-u-fs-r--b"
+    })
+%}
+{{
+    onsRadios({
+        "dontWrap": true,
+        "name": "release",
+        "radios": [
+            {
+                "id": "minor-version",
+                "label": {
+                    "text": "Minor release",
+                    "description": "Increments the release number by 0.1"
+                },
+                "name": "minor"
+            },
+            {
+                "id": "major-version",
+                "label": {
+                    "text": "Major release",
+                    "description": "Increments the release number by 1.0"
+                },
+                "name": "major"
+            }
+        ]
+    })
+}}
+
+{% endcall %}
+
+    {{
+        onsInput({
+            "id": "version-name",
+            "name": "version-name",
+            "fieldClasses": "ons-u-mt-l",
+            "label": {
+                "text": "Version name",
+                "description": "A title by which this release is referred"
+            }
+        })
+    }}
+
+    <h2 class="ons-u-mt-l">Forms</h2>
+    <p>Select which versions of forms to include in the release.</p>
+
+{% endblock %}
