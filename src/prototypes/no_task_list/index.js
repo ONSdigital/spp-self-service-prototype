@@ -403,4 +403,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  // Handle version link selection and store details in sessionStorage
+  const versionLinks = document.querySelectorAll('.spp-version-select-link');
+  versionLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const versionName = link.getAttribute('data-version-name');
+      sessionStorage.setItem('current-version-name', versionName || '');
+    });
+  });
+
+  // Handle dynamic H1 replacement on versiondetails.html
+  if (window.location.pathname.includes('versiondetails.html')) {
+    const versionH1 = document.getElementById('version-details-h1') || document.querySelector('h1');
+    if (versionH1) {
+      const versionName = sessionStorage.getItem('current-version-name');
+      if (versionName) {
+        versionH1.textContent = `${versionName} - Details`;
+      } else {
+        versionH1.textContent = 'Version Details';
+      }
+    }
+  }
 });

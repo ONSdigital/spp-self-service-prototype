@@ -1,0 +1,188 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/configuration/deployment/versionadded
+---
+
+{% from "components/summary/_macro.njk" import onsSummary %}
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/panel/_macro.njk" import onsPanel %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versions.html",
+        "text": "Versions"
+    }
+] %}
+
+{% block main %}
+    <h1 id="version-details-h1">Version Details</h1>
+    
+{{
+    onsSummary({
+        "summaries": [
+            {
+                "groups": [
+                    {
+                        "id": "release-details",
+                        "rows": [
+                            {
+                                "id": "version-number-row",
+                                "title": "Version number",
+                                "itemsList": [
+                                    {
+                                        "id": "version-number",
+                                        "valueList": [
+                                            {
+                                                "text": "3.2"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "Version name",
+                                "id": "version-name-row",
+                                "itemsList": [
+                                    {
+                                        "id": "version-name",
+                                        "valueList": [
+                                            {
+                                                "text": "Rhino"
+                                            }
+                                        ],
+                                        "actions": [
+                                            {
+                                                "text": "Change",
+                                                "visuallyHiddenText": "Change answer",
+                                                "url": pageInfo.rootPath + "/views/configuration/deployment/newversion.html"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "forms-row",
+                                "title": "Forms included",
+                                "itemsList": [
+                                    {
+                                        "id": "forms",
+                                        "valueList": [
+                                            {
+                                                "text": "General form (123) - v0.0.1"
+                                            },
+                                            {
+                                                "text": "Shop form (234) - v0.0.1"
+                                            },
+                                            {
+                                                "text": "Petrol station form (345) - v0.2.1"
+                                            }
+                                        ],
+                                        "actions": [
+                                            {
+                                                "text": "Change",
+                                                "visuallyHiddenText": "Change answer",
+                                                "url": pageInfo.rootPath + "/views/configuration/deployment/newversion.html"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "rules-row",
+                                "title": "Validation rules",
+                                "itemsList": [
+                                    {
+                                        "id": "rules",
+                                        "valueList": [
+                                            {
+                                                "text": "rules_export.csv"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "bat-row",
+                                "title": "BAT approval",
+                                "itemsList": [
+                                    {
+                                        "id": "rules",
+                                        "valueList": [
+                                            {
+                                                "text": "BAT Approved"
+                                            }
+                                        ],
+                                        "actions": [
+                                            {
+                                                "text": "Update",
+                                                "visuallyHiddenText": "Update approval",
+                                                "url": "#0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "mqd-row",
+                                "title": "Methodology approval",
+                                "itemsList": [
+                                    {
+                                        "id": "",
+                                        "valueList": [
+                                            {
+                                                "text": "Not yet approved"
+                                            }
+                                        ],
+                                        "actions": [
+                                            {
+                                                "text": "Update",
+                                                "visuallyHiddenText": "Update approval",
+                                                "url": "#0"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    })
+}}
+
+<h2 class="ons-u-mt-l">Deployments</h2>
+<p>If appropriate approval has been obtained, this survey release can be deployed to UAT or Production.</p>
+<p>Ensure you have coordinated any deployments with users, the SPP team, and project teams.</p>
+{{
+    onsButton({
+        "text": "Deploy to UAT",
+        "id": "btn-uat",
+        "url": pageInfo.rootPath + "/views/configuration/deployment/uatdeploy.html",
+        "noIcon": true
+    })
+}}
+<div class="ons-u-mt-l">
+{%
+    call onsPanel({
+        "variant": 'warn'
+    })
+%}
+    It is not currently possible to deploy to production. Further approval is required.
+{% endcall %}
+</div>
+{% endblock %}
