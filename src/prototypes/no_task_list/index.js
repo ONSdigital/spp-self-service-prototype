@@ -197,11 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
                       <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Form ID:</dt>
                       <dd class="spp-description-list__value" style="margin: 0;">${formId}</dd>
                     </div>
-                    <div class="spp-description-list__item" style="display: flex; align-items: baseline; width: 100%; margin-bottom: 0;">
-                      <dt class="spp-description-list__term" style="font-weight: bold; min-width: 140px; flex-shrink: 0; margin-right: 1rem;">Version:</dt>
-                      <dd class="spp-description-list__value" style="margin: 0;">${version}</dd>
-                    </div>
                   </dl>
+                  <p style="margin: 0.5rem 0 0 0;"><a href="${rootPath}/views/configuration/forms/formpreview.html?formIndex=${index}&formTitle=${encodeURIComponent(title)}">Preview form</a></p>
                 </div>
               </div>
             </div>
@@ -422,6 +419,45 @@ document.addEventListener('DOMContentLoaded', () => {
         versionH1.textContent = `${versionName} - Details`;
       } else {
         versionH1.textContent = 'Version Details';
+      }
+    }
+  }
+
+  // Handle dynamic H1 replacement on formpreview.html
+  if (window.location.pathname.includes('formpreview.html')) {
+    const previewH1 = document.getElementById('form-preview-h1');
+    if (previewH1) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const formIndexParam = urlParams.get('formIndex');
+      if (formIndexParam !== null) {
+        const formIndex = parseInt(formIndexParam, 10);
+        const rawForms = sessionStorage.getItem('uploaded-forms');
+        if (rawForms) {
+          try {
+            const formsList = JSON.parse(rawForms);
+            const form = formsList[formIndex];
+            if (form) {
+              const title = form.form_title || 'Untitled Form';
+              const formId = form.form_id || 'Unknown ID';
+              previewH1.textContent = `${title} - ${formId}`;
+            } else {
+              previewH1.textContent = 'Form preview';
+            }
+          } catch (err) {
+            console.error("Error loading form details on formpreview page:", err);
+            previewH1.textContent = 'Form preview';
+          }
+        } else {
+          previewH1.textContent = 'Form preview';
+        }
+      } else {
+        const formTitle = urlParams.get('formTitle');
+        const formId = urlParams.get('formId');
+        if (formTitle && formId) {
+          previewH1.textContent = `${formTitle} - ${formId}`;
+        } else {
+          previewH1.textContent = 'Form preview';
+        }
       }
     }
   }

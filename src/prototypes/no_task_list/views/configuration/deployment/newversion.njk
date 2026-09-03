@@ -32,52 +32,6 @@ prevPage: views/configuration/deployments/versions
 
 {% block main %}
 
-{% set selectRow1 %}
-    {{ onsSelect({
-        "id": "select-version-1",
-        "name": "select-version-1",
-        "label": {
-            "text": "Select version",
-            "classes": "ons-u-vh"
-        },
-        "options": [
-            { "value": "v0.0.1", "text": "v0.0.1", "selected": true }
-        ]
-    }) }}
-{% endset %}
-
-{% set selectRow2 %}
-    {{ onsSelect({
-        "id": "select-version-2",
-        "name": "select-version-2",
-        "label": {
-            "text": "Select version",
-            "classes": "ons-u-vh"
-        },
-        "options": [
-            { "value": "v0.0.1", "text": "v0.0.1", "selected": true }
-        ]
-    }) }}
-{% endset %}
-
-{% set selectRow3 %}
-    {{ onsSelect({
-        "id": "select-version-3",
-        "name": "select-version-3",
-        "label": {
-            "text": "Select version",
-            "classes": "ons-u-vh"
-        },
-        "options": [
-            { "value": "v0.1.2", "text": "v0.1.2", "selected": true },
-            { "value": "v0.1.1", "text": "v0.1.1" },
-            { "value": "v0.1.0", "text": "v0.1.0" },
-            { "value": "v0.0.2", "text": "v0.0.2" },
-            { "value": "v0.0.1", "text": "v0.0.1" }
-        ]
-    }) }}
-{% endset %}
-
 <h1>Create a new release</h1>
 <p>Newly created releases will be numbered to the next logical value in the release history.</p>
 {%
@@ -121,41 +75,61 @@ prevPage: views/configuration/deployments/versions
             "fieldClasses": "ons-u-mt-l",
             "label": {
                 "text": "Release name",
-                "description": "A title by which this release is referred"
+                "description": "A title or name by which this release is referred"
+            }
+        })
+    }}
+
+    {{
+        onsInput({
+            "id": "start-period",
+            "label": {
+                "text": "Survey start period in release environment",
+                "description": "Format YYYYMM"
+            }
+        })
+    }}
+
+    {{
+        onsInput({
+            "id": "end-period",
+            "label": {
+                "text": "Survey end period in release environment",
+                "description": "Format YYYYMM"
             }
         })
     }}
 
     <h2 class="ons-u-mt-l">Forms</h2>
-    <p>Select which versions of forms to include in the release.</p>
+    <p>Select which forms to include in the release.</p>
 
     {{ onsTable({
         "id": "new-version-forms-table",
         "ths": [
             { "value": "Include?", "classes": "spp-col-select" },
             { "value": "Form", "classes": "spp-col-metadata" },
-            { "value": "Version", "classes": "spp-col-rules" }
+            { "value": "Uploaded date", "classes": "spp-col-rules" }
         ],
         "trs": [
             {
                 "tds": [
                     { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-include-1" class="ons-checkbox__input" value="1" /><label class="ons-checkbox__label" for="checkbox-include-1" aria-label="Include General form (123)"></label></span>' | safe },
-                    { "value": "General form (123)" },
-                    { "value": selectRow1 | trim | safe }
+                    { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/forms/formpreview.html?formTitle=General%20form&formId=123" target="_blank">General form (123)</a>' | safe },
+                    { "value": "10/09/2026" }
                 ]
             },
             {
                 "tds": [
                     { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-include-2" class="ons-checkbox__input" value="2" /><label class="ons-checkbox__label" for="checkbox-include-2" aria-label="Include Shop form (234)"></label></span>' | safe },
-                    { "value": "Shop form (234)" },
-                    { "value": selectRow2 | trim | safe }
+                    { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/forms/formpreview.html?formTitle=Shop%20form&formId=234" target="_blank">Shop form (234)</a>' | safe },
+                    { "value": "10/09/2026" }
                 ]
             },
             {
                 "tds": [
                     { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-include-3" class="ons-checkbox__input" value="3" /><label class="ons-checkbox__label" for="checkbox-include-3" aria-label="Include Petrol Station form (345)"></label></span>' | safe },
-                    { "value": "Petrol Station form (345)" },
-                    { "value": selectRow3 | trim | safe }
+                    { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/forms/formpreview.html?formTitle=Petrol%20Station%20form&formId=345" target="_blank">Petrol Station form (345)</a>' | safe },
+                    { "value": "10/09/2026" }
                 ]
             }
         ]
