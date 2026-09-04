@@ -26,16 +26,15 @@ prevPage: views/configuration/survey
 
 {% block main %}
     <h1>Upload survey form</h1>
-    <p>Add JSON files for each form in the survey.</p>
+    <p>Add a JSON file for each form in the survey.</p>
     <p>You must add forms one at a time.</p>
-    <p>Each form needs to have additional metadata added to set it up in SPP.</p>
 
     {{
         onsUpload({
             "id": "survey-form-upload",
             "accept": ".json",
             "label": {
-                "text": "Select survey form schema JSON files"
+                "text": "Select survey form schema JSON file"
             }
         })
     }}
@@ -47,14 +46,14 @@ prevPage: views/configuration/survey
             "fieldClasses": "ons-u-mt-m",
             "label": {
                 "text": "Form title",
-                "description": "A meaningful name for the form that distinguishes it from others in the survey."
+                "description": "A meaningful name for the form type that distinguishes it from others in the survey."
             }
         })
     }}
 
     {{
         onsPanel({
-            "body": "<p>Period start and end dates will be specified as part of deploying a survey's configuration to UAT, Pre-Production and Production environments.</p>",
+            "body": "<p>Period start and end dates will be specified as part of deploying a survey's configuration to test and production environments.</p>",
             "classes": "ons-u-mb-m"
         })
     }}
