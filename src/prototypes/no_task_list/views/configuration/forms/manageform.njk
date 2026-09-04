@@ -66,17 +66,6 @@ prevPage: views/configuration/forms/formslist
                                     ]
                                 },
                                 {
-                                    "id": "form-version-row",
-                                    "title": "Version",
-                                    "itemsList": [
-                                        {
-                                            "valueList": [
-                                                { "text": "" }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
                                     "id": "uploaded-file-row",
                                     "title": "Uploaded file",
                                     "itemsList": [
@@ -102,91 +91,7 @@ prevPage: views/configuration/forms/formslist
         })
     }}
     <h2 class="ons-u-mt-l">Update form</h2>
-    <p>To update the form schema, ID or version; upload a new json schema file. Any form changes should be made in Author and then exported as a new JSON file.</p>
-    <h2>Previous versions</h2>
-    <p>The following previous versions of this survey form are available:</p>
-    {{
-        onsTable({
-            "ths": [
-                {
-                    "value": "Version"
-                },
-                {
-                    "value": "Title"
-                },
-                {
-                    "value": "File"
-                }
-            ],
-            "trs": [
-                {
-                    "tds": [
-                        {
-                            "value": "1.0.0"
-                        },
-                        {
-                            "value": "Shop Form"
-                        },
-                        {
-                            "value": "xyz.json"
-                        }
-                    ]
-                },
-                {
-                    "tds": [
-                        {
-                            "value": "0.1.2"
-                        },
-                        {
-                            "value": "Shop Form"
-                        },
-                        {
-                            "value": "abc.json"
-                        }
-                    ]
-                },
-                {
-                    "tds": [
-                        {
-                            "value": "0.1.1"
-                        },
-                        {
-                            "value": "Shop Form"
-                        },
-                        {
-                            "value": "bcd.json"
-                        }
-                    ]
-                },
-                {
-                    "tds": [
-                        {
-                            "value": "0.0.2"
-                        },
-                        {
-                            "value": "Supermarket Form"
-                        },
-                        {
-                            "value": "cde.json"
-                        }
-                    ]
-                },
-                {
-                    "tds": [
-                        {
-                            "value": "0.0.1"
-                        },
-                        {
-                            "value": "Supermarket Form"
-                        },
-                        {
-                            "value": "def.json"
-                        }
-                    ]
-                }
-            ]
-        })
-    }}
+    <p>To update the form schema or ID; upload a new json schema file. If any changes are required to the contents of the form itself they should be made in Author and then exported as a new JSON file.</p>
     <h2 class="ons-u-mt-l">Remove form from survey</h2>
     <p>You can archive this form from the survey so that it not longer shows on the list of forms for the survey.</p>
     <p>An archive of all obsolete forms is available to view from the main forms list page.</p>
