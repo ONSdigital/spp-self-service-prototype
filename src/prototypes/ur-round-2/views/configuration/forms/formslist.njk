@@ -1,0 +1,72 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/configuration/survey
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    }
+] %}
+
+{% block main %}
+    <h1>New Business Survey (123)</h1>
+
+    <h2>Survey forms</h2>
+    <p>All forms uploaded to SPP so far appear in the list below.</p>
+
+    <!-- This container will be populated dynamically by index.js -->
+    <div id="spp-forms-accordion-area" class="ons-u-mb-m">
+        <!-- Default Empty State -->
+        <div class="ons-panel ons-panel--info ons-panel--no-title ons-u-mb-m">
+            <span class="ons-panel__assistive-text">Information</span>
+            <div class="ons-panel__body">
+                <p>No forms uploaded yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="spp-section-divider" />
+
+    <h2 class="ons-u-mt-l">Add more forms</h2>
+    <p>You can add additional forms as they become available. To replace an existing form with a new version, click on the form above.</p>
+
+    {{
+        onsButton({
+            "text": "Add forms",
+            "variants": "secondary",
+            "url": pageInfo.rootPath + "/views/configuration/forms/uploadjson.html",
+            "noIcon": true,
+            "classes": "ons-u-mb-m",
+            "id": "btn-add-forms"
+        })
+    }}
+
+    <hr class="spp-section-divider" />
+
+    <h2 class="ons-u-mt-l">Configure BDOD question settings</h2>
+    <p>Users can apply 'Check comment' to any question that is used as a comment field to ensure that the response is checked by the BDOD team.</p>
+    <p>These questions can also be flagged as 'Read only' to ensure BDOD reviewers are unable to change the response.</p>
+
+    {{
+        onsButton({
+            "text": "Configure BDOD settings",
+            "variants": "secondary",
+            "url": pageInfo.rootPath + "/views/configuration/forms/bdodsettings.html",
+            "noIcon": true,
+            "id": "btn-add-question-metadata"
+        })
+    }}
+{% endblock %}

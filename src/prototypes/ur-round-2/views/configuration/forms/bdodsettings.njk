@@ -1,0 +1,95 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/configuration/survey
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/table/_macro.njk" import onsTable %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
+        "text": "Forms list"
+    }
+] %}
+
+{% block main %}
+    <h1>Configure BDOD question settings</h1>
+    <h2>Check comment</h2>
+    <p>Toggle this setting to ensure that the question's response is flagged to BDOD survey team members for review. This is used only for text responses where the question is asking for the respondent to comment.</p> 
+    <h2>Read only</h2>
+    <p>Set a question to 'read only' so that the respondent's answer cannot be changed.</p>
+    <h2>Survey questions</h2>
+    <p>Only questions with a text response type are shown below, because they are the only ones eligible for these settings.</p>
+
+    {% set bdodSettingsTable %}
+        {{
+            onsTable({
+                "id": "bdod-settings-table",
+                "ths": [
+                    { "value": "Check comment", "thClasses": "spp-col-comments" },
+                    { "value": "Read only", "thClasses": "spp-col-readonly" },
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question Label", "thClasses": "spp-col-question" },
+                    { "value": "Response type", "thClasses": "spp-col-responsetype" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q55" class="ons-checkbox__input" value="q55" /><label class="ons-checkbox__label" for="checkbox-comments-q55" aria-label="Select Comments on Q55"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q55" class="ons-checkbox__input" value="q55" /><label class="ons-checkbox__label" for="checkbox-readonly-q55" aria-label="Select Read only Q55"></label></span>' },
+                            { "value": "Q55" },
+                            { "value": "Any further comment about your employee headcount" },
+                            { "value": "Text" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q103" class="ons-checkbox__input" value="q103" /><label class="ons-checkbox__label" for="checkbox-comments-q103" aria-label="Select Comments on Q103"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q103" class="ons-checkbox__input" value="q103" /><label class="ons-checkbox__label" for="checkbox-readonly-q103" aria-label="Select Read only Q103"></label></span>' },
+                            { "value": "Q103" },
+                            { "value": "Any other information about your sites" },
+                            { "value": "Text" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-comments-q200" class="ons-checkbox__input" value="q200" /><label class="ons-checkbox__label" for="checkbox-comments-q200" aria-label="Select Comments on Q200"></label></span>' },
+                            { "value": '<span class="ons-checkbox"><input type="checkbox" id="checkbox-readonly-q200" class="ons-checkbox__input" value="q200" /><label class="ons-checkbox__label" for="checkbox-readonly-q200" aria-label="Select Read only Q200"></label></span>' },
+                            { "value": "Q200" },
+                            { "value": "Any other information you would like to provide in response to this survey" },
+                            { "value": "Text" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+
+    <div class="ons-u-mb-l">
+        {{ bdodSettingsTable | safe }}
+    </div>
+
+    {{
+        onsButton({
+            "text": "Save and continue",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
+            "noIcon": true,
+            "id": "btn-save-bdod-settings"
+        })
+    }}
+{% endblock %}
