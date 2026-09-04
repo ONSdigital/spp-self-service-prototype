@@ -410,19 +410,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Handle dynamic H1 replacement on versiondetails.html
-  if (window.location.pathname.includes('versiondetails.html')) {
-    const versionH1 = document.getElementById('version-details-h1') || document.querySelector('h1');
-    if (versionH1) {
-      const versionName = sessionStorage.getItem('current-version-name');
-      if (versionName) {
-        versionH1.textContent = `${versionName} - Details`;
-      } else {
-        versionH1.textContent = 'Version Details';
-      }
-    }
-  }
-
   // Handle dynamic H1 replacement on formpreview.html
   if (window.location.pathname.includes('formpreview.html')) {
     const previewH1 = document.getElementById('form-preview-h1');
