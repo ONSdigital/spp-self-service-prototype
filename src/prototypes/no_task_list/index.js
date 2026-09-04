@@ -281,11 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
       let formId = '';
       let version = '0.0.1';
       
-      // Helper function to extract schema_version from the uploaded file asynchronously
-      const getUploadedSchemaVersion = (file) => {
+      // Helper function to extract metadata from the uploaded file asynchronously
+      const getUploadedFormMetadata = (file) => {
         return new Promise((resolve) => {
           if (!file) {
-            resolve('0.0.1');
+            resolve({ version: '0.0.1', formId: 'Unknown ID' });
             return;
           }
           
@@ -293,18 +293,16 @@ document.addEventListener('DOMContentLoaded', () => {
           reader.onload = (evt) => {
             try {
               const json = JSON.parse(evt.target.result);
-              if (json && json.schema_version) {
-                resolve(String(json.schema_version));
-              } else {
-                resolve('0.0.1');
-              }
+              const ver = (json && json.schema_version) ? String(json.schema_version) : '0.0.1';
+              const fid = (json && json.form_type) ? String(json.form_type) : 'Unknown ID';
+              resolve({ version: ver, formId: fid });
             } catch (err) {
-              console.warn("Unable to parse schema_version from JSON, falling back to '0.0.1':", err);
-              resolve('0.0.1');
+              console.warn("Unable to parse metadata from JSON, falling back:", err);
+              resolve({ version: '0.0.1', formId: 'Unknown ID' });
             }
           };
           reader.onerror = () => {
-            resolve('0.0.1');
+            resolve({ version: '0.0.1', formId: 'Unknown ID' });
           };
           reader.readAsText(file);
         });
@@ -314,15 +312,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Edit Mode: check if a new file is uploaded, otherwise fall back to the existing filename
         if (fileInput && fileInput.files && fileInput.files.length > 0) {
           filename = fileInput.files[0].name;
-          // Extract version from newly uploaded schema file
-          version = await getUploadedSchemaVersion(fileInput.files[0]);
+          const metadata = await getUploadedFormMetadata(fileInput.files[0]);
+          version = metadata.version;
+          formId = metadata.formId;
         } else {
           filename = formsList[editIndex].filename; // Fall back to existing file name
           version = formsList[editIndex].version;   // Keep existing version unchanged
+          formId = formsList[editIndex].form_id;    // Keep existing Form ID unchanged
         }
         
-        // Preserve original Form ID exactly
-        formId = formsList[editIndex].form_id;
         shouldSave = true; // Always save in edit mode
       } else {
         // Create Mode: we must select a file to save
@@ -330,11 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
           filename = fileInput.files[0].name;
           shouldSave = true;
           
-          // Generate a new random 3-digit Form ID
-          formId = Math.floor(100 + Math.random() * 900);
-          
-          // Extract version from uploaded schema file
-          version = await getUploadedSchemaVersion(fileInput.files[0]);
+          const metadata = await getUploadedFormMetadata(fileInput.files[0]);
+          version = metadata.version;
+          formId = metadata.formId;
         }
       }
       
@@ -447,5 +443,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     }
+  }
+
+  // Clear data footer link
+  const clearDataLink = document.getElementById('clear-data-link') || Array.from(document.querySelectorAll('.ons-footer a')).find(el => el.textContent.trim() === 'Clear data');
+  if (clearDataLink) {
+    clearDataLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      sessionStorage.clear();
+      window.location.reload();
+    });
   }
 });
