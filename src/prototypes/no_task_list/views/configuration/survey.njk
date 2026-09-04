@@ -51,67 +51,85 @@ prevPage: views/migrate
         </div>
     </div>
     <h2 class="ons-u-mt-l">Manage the survey configuration</h2>
-    {{
-        onsCard({
-            "title": {
-                "id": 'forms',
-                "text": 'Survey forms',
-                "url": pageInfo.rootPath + '/views/configuration/forms/formslist.html'
-            },
-            "body":{
-                "id": 'forms-text',
-                "text": 'Add new forms or update the existing ones.'
-            }
-        })
-    }}
-    {{
-        onsCard({
-            "title": {
-                "id": 'rules',
-                "text": 'Validation rules',
-                "url": pageInfo.rootPath + '/views/configuration/rules/rules.html'
-            },
-            "body":{
-                "id": 'rules-text',
-                "text": 'Set up new, or reconfigure existing, validation rules.'
-            }
-        })
-    }}
-    {{
-        onsCard({
-            "title": {
-                "id": 'reference_data',
-                "text": 'Reference datasets'
-            },
-            "body":{
-                "id": 'reference_data_text',
-                "text": 'Adding new reference datasets must be done via Digital Services.'
-            }
-        })
-    }}
-    {{
-        onsCard({
-            "title": {
-                "id": 'derived_questions',
-                "text": 'Create derived questions and values'
-            },
-            "body":{
-                "id": 'derived_text',
-                "text": 'Creating new derived questions and values must be done via Digital Services.'
-            }
-        })
-    }}
-    {{
-        onsCard({
-            "title": {
-                "id": 'versions',
-                "text": 'Manage survey releases and deployments',
-                "url": pageInfo.rootPath + '/views/configuration/deployment/versions.html'
-            },
-            "body":{
-                "id": 'versions-text',
-                "text": 'Create a survey release that can be deployed, and trigger deployments to UAT or PROD.'
-            }
-        })
-    }}
+        <div class="ons-container">
+            <div class="ons-grid">
+                <div class="ons-grid__col ons-col-6@m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": 'forms',
+                            "text": 'Survey forms',
+                            "url": pageInfo.rootPath + '/views/configuration/forms/formslist.html'
+                        },
+                        "body":{
+                            "id": 'forms-text',
+                            "text": 'Add new forms or update the existing ones.'
+                        }
+                    })
+                }}
+                </div>
+
+                <div class="ons-grid__col ons-col-6@m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": 'rules',
+                            "text": 'Validation rules',
+                            "url": pageInfo.rootPath + '/views/configuration/rules/rules.html'
+                        },
+                        "body":{
+                            "id": 'rules-text',
+                            "text": 'Set up new, or reconfigure existing, validation rules.'
+                        }
+                    })
+                }}  
+                </div>
+
+                <div class="ons-grid__col ons-col-6@m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": 'reference_data',
+                            "text": 'Reference datasets'
+                        },
+                        "body":{
+                            "id": 'reference_data_text',
+                            "text": 'Adding new reference datasets must be done via Digital Services.'
+                        }
+                    })
+                }}
+                </div>
+
+                <div class="ons-grid__col ons-col-6@m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": 'derived_questions',
+                            "text": 'Create derived questions and values'
+                        },
+                        "body":{
+                            "id": 'derived_text',
+                            "text": 'Creating new derived questions and values must be done via Digital Services.'
+                        }
+                    })
+                }}
+                </div>
+
+                <div class="ons-grid__col ons-col-6@m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": 'versions',
+                            "text": 'Manage survey releases and deployments',
+                            "url": pageInfo.rootPath + '/views/configuration/deployment/versions.html'
+                        },
+                        "body":{
+                            "id": 'versions-text',
+                            "text": 'Create a survey release that can be deployed, and trigger deployments to UAT or PROD.'
+                        }
+                    })
+                }}
+                </div>
+            </div>
+        </div>
 {% endblock %}
