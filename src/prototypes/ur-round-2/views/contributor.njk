@@ -1,0 +1,17 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/home
+---
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    }
+] %}
+
+{% block main %}
+    <h1>Search for a contributor</h1>
+    <p>Use this tool to search for contributors and view their response details and status.</p>
+{% endblock %}

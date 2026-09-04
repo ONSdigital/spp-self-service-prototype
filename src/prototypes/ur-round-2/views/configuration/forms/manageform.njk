@@ -1,0 +1,98 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/configuration/forms/formslist
+---
+{% from "components/summary/_macro.njk" import onsSummary %}
+{% from "components/table/_macro.njk" import onsTable %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
+        "text": "Forms list"
+    }
+] %}
+
+{% block main %}
+    <h1>Manage Form</h1>
+
+    {{
+        onsSummary({
+            "summaries": [
+                {
+                    "groups": [
+                        {
+                            "rows": [
+                                {
+                                    "id": "form-title-row",
+                                    "title": "Form title",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Change",
+                                                    "visuallyHiddenText": "form title",
+                                                    "url": "#0"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "form-id-row",
+                                    "title": "Form ID",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "" }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "uploaded-file-row",
+                                    "title": "Uploaded file",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Change",
+                                                    "visuallyHiddenText": "uploaded file",
+                                                    "url": "#0"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        })
+    }}
+    <h2 class="ons-u-mt-l">Update form</h2>
+    <p>To update the form schema or ID; upload a new json schema file. If any changes are required to the contents of the form itself they should be made in Author and then exported as a new JSON file.</p>
+    <h2 class="ons-u-mt-l">Remove form from survey</h2>
+    <p>You can archive this form from the survey so that it not longer shows on the list of forms for the survey.</p>
+    <p>An archive of all obsolete forms is available to view from the main forms list page.</p>
+{% endblock %}

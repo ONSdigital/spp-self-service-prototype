@@ -1,0 +1,51 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/configuration/deployment/versiondetails
+---
+
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versionadded.html",
+        "text": "Releases"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versiondetails.html",
+        "text": "Details"
+    }
+] %}
+
+{% block main %}
+
+<h1>Are you sure you want to deploy now?</h1>
+<p>To deploy to UAT you must:</p>
+<ul>
+    <li>Have warned users</li>
+    <li>Have approval from the Digital Services SPP team</li>
+    <li>Have scheduled the downtime</li>
+</ul>
+<p>By submitting below you confirm that deployment can start immediately.<p>
+{{
+    onsButton({
+        "text": "Begin deployment",
+        "id": "btn-deploy",
+        "url": pageInfo.rootPath + "/views/configuration/deployment/deployed.html",
+        "noIcon": true
+    })
+}}
+{% endblock %}

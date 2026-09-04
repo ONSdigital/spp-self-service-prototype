@@ -1,0 +1,163 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/home
+---
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    }
+] %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/pagination/_macro.njk" import onsPagination %}
+
+{% block main %}
+    <h1>Migrate a survey from another platform</h1>
+    <p>Use SPP Self Service to migrate, configure, and manage surveys.</p>
+
+    <h2>Choose survey to configure</h2>
+    <p>The table contains all ONS surveys that are available to be configured on SPP.</p>
+
+    {{
+        onsTable({
+            "id": "existing-surveys-table",
+            "ths": [
+                { "value": "ID" },
+                { "value": "Code" },
+                { "value": "Name" }
+            ],
+            "trs": [
+                {
+                    "tds": [
+                        { "value": "001" },
+                        { "value": "NBS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="001" data-survey-code="NBS" data-survey-name="New Business Survey">New Business Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "002" },
+                        { "value": "BERD" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="002" data-survey-code="BERD" data-survey-name="Business Enterprise Research and Development">Business Enterprise Research and Development</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "007" },
+                        { "value": "LCRE" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="007" data-survey-code="LCRE" data-survey-name="Low Carbon & Renewable Energy Economy Survey">Low Carbon & Renewable Energy Economy Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "009" },
+                        { "value": "MBS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="009" data-survey-code="MBS" data-survey-name="Monthly Business Survey">Monthly Business Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "010" },
+                        { "value": "PI" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="010" data-survey-code="PI" data-survey-name="Purchases Inquiry">Purchases Inquiry</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "017" },
+                        { "value": "QSS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="017" data-survey-code="QSS" data-survey-name="Quarterly Stocks Survey">Quarterly Stocks Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "023" },
+                        { "value": "RSI" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="023" data-survey-code="RSI" data-survey-name="Monthly Business Survey (Retail Sales Index)">Monthly Business Survey (Retail Sales Index)</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "024" },
+                        { "value": "QFS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="024" data-survey-code="QFS" data-survey-name="Quarterly Fuels Survey">Quarterly Fuels Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "093" },
+                        { "value": "FSPS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="093" data-survey-code="FSPS" data-survey-name="Financial Survey of Pension Schemes">Financial Survey of Pension Schemes</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "134" },
+                        { "value": "MWSS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="134" data-survey-code="MWSS" data-survey-name="Monthly Wages & Salaries Survey">Monthly Wages & Salaries Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "139" },
+                        { "value": "QBS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="139" data-survey-code="QBS" data-survey-name="Quarterly Business Survey">Quarterly Business Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "141" },
+                        { "value": "ASHE" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="141" data-survey-code="ASHE" data-survey-name="Annual Survey of Hours and Earnings">Annual Survey of Hours and Earnings</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "144" },
+                        { "value": "UKIS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="144" data-survey-code="UKIS" data-survey-name="UK Innovation Survey">UK Innovation Survey</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "228" },
+                        { "value": "CONST" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="228" data-survey-code="CONST" data-survey-name="Monthly Business Survey (Construction)">Monthly Business Survey (Construction)</a>' }
+                    ]
+                },
+                {
+                    "tds": [
+                        { "value": "266" },
+                        { "value": "QFS" },
+                        { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/survey.html" class="spp-survey-select-link" data-survey-id="266" data-survey-code="QFS" data-survey-name="Financial Services Survey">Financial Services Survey</a>' }
+                    ]
+                }
+            ]
+        })
+    }}
+
+    <div id="spp-survey-pagination" class="ons-u-mt-m">
+        {{
+            onsPagination({
+                "currentPageNumber": 1,
+                "totalNumberOfPages": 2,
+                "pages": [
+                    { "url": "#1" },
+                    { "url": "#2" }
+                ]
+            })
+        }}
+    </div>
+
+    <h2 class="ons-u-mt-l">Migrate a survey</h2>
+    <p>Before you being migrating a survey you must have prepared the following:</p>
+    <h3>Survey forms</h3>
+    <p>Survey forms should be configured using Author and stored locally as JSON files on your computer to upload as part of the migration workflow.</p>
+    <h3>Reference data</h3>
+    <p>Tested and validated reference data CSV files that comply with existing reference datasets in SPP.</p>
+    <h3>Validation rules</h3>
+    <p>Documented and agreed validation rules that have been approved by business survey teams and Methodology.</p>
+
+{% endblock %}

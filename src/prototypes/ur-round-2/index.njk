@@ -1,0 +1,18 @@
+---
+group: User Research Log
+title: Create survey release - UR Round 2
+layout: ur-round-2/views/_main
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% block main %}
+    <h1>Private Beta UR Round 2</h1>
+    <p>This is the version of the prototype used for carrying out round 2 of Private Beta research in September 2026.</p>
+    {{
+        onsButton({
+            "text": "Start",
+            "classes": "ons-u-mt-l",
+            "url": pageInfo.rootPath + "/views/home.html"
+        })
+    }}
+{% endblock %}

@@ -1,0 +1,146 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+prevPage: views/configuration/survey/formslist
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/table/_macro.njk" import onsTable %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/home.html",
+        "text": "Home"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Migrate a survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
+        "text": "Forms list"
+    }
+] %}
+
+{% block main %}
+    <h1 id="form-preview-h1">Form preview</h1>
+    {% set bdodSettingsTable %}
+        {{
+            onsTable({
+                "id": "form-preview-table",
+                "ths": [
+                    { "value": "Q Code", "thClasses": "spp-col-qcode" },
+                    { "value": "Question Label", "thClasses": "spp-col-question" },
+                    { "value": "Response type", "thClasses": "spp-col-responsetype" }
+                ],
+                "trs": [
+                    {
+                        "tds": [
+                            { "value": "Q1" },
+                            { "value": "Start date" },
+                            { "value": "Date" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q2" },
+                            { "value": "End date" },
+                            { "value": "Date" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q40" },
+                            { "value": "Total turnover" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q41" },
+                            { "value": "Total amount receivable in respect of invoices raised during period" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q42" },
+                            { "value": "Value of grants, donations, legacies, investments and incorporated income" },
+                            { "value": "Currency" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q50" },
+                            { "value": "Number of employees" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q51" },
+                            { "value": "Number of male employees working more than 30 hours per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q52" },
+                            { "value": "Number of male employees working 30 hours or less per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q53" },
+                            { "value": "Number of female employees working more than 30 hours per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q54" },
+                            { "value": "Number of female employees working 30 hours or less per week" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q55" },
+                            { "value": "Any further comment about your employee headcount" },
+                            { "value": "Text" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q101" },
+                            { "value": "How many sites do you have" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q102" },
+                            { "value": "How many new sites opened since the last period" },
+                            { "value": "Numeric" }
+                        ]
+                    },
+                    {
+                        "tds": [
+                            { "value": "Q103" },
+                            { "value": "Any other information about your sites" },
+                            { "value": "Text" }
+                        ]
+                    }
+                ]
+            })
+        }}
+    {% endset %}
+    <div class="ons-u-mb-l">
+        {{ bdodSettingsTable | safe }}
+    </div>
+{% endblock %}
