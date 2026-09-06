@@ -1,0 +1,173 @@
+---
+group: User Research Log
+title: No task list
+layout: ur-round-2/views/_main
+---
+{% set breadcrumbs = [] %}
+{% from "components/input/_macro.njk" import onsInput %}
+{% from "components/list/_macro.njk" import onsList %}
+{% from "components/card/_macro.njk" import onsCard %}
+
+{% block main %}
+    <h1>Welcome to the Statistical Preparation Platform</h1>
+    <h2>What do you want to do?</h2>
+
+    <div class="ons-grid ons-u-mb-l">
+        <div class="ons-grid__col ons-col-8@m">
+            {{
+                onsInput({
+                    "id": "search-field",
+                    "label": {
+                        "text": "Search"
+                    },
+                    "accessiblePlaceholder": true,
+                    "searchButton": {
+                        "visuallyHideButtonText": true,
+                        "text": "Search",
+                        "iconType": "search"
+                    }
+                })
+            }}
+        </div>
+    </div>
+
+    <aside class="ons-table-of-contents-container" aria-label="Table of contents">
+        <nav class="ons-table-of-contents" aria-label="Table of contents">
+            <div class="ons-grid">
+                <div class="ons-grid__col ons-col-6@m">
+                    {{
+                        onsList({
+                            "element": "ul",
+                            "variants": "dashed",
+                            "classes": "ons-u-mb-no",
+                            "itemsList": [
+                                {
+                                    "url": pageInfo.rootPath + "/views/migrate.html",
+                                    "text": "Migrate a survey from another platform"
+                                },
+                                {
+                                    "url": pageInfo.rootPath + "/views/prioritisation.html",
+                                    "text": "Use the work prioritisation tool"
+                                },
+                                {
+                                    "url": pageInfo.rootPath + "/views/contributor.html",
+                                    "text": "Search for a contributor"
+                                }
+                            ]
+                        })
+                    }}
+                </div>
+                <div class="ons-grid__col ons-col-6@m">
+                    {{
+                        onsList({
+                            "element": "ul",
+                            "variants": "dashed",
+                            "classes": "ons-u-mb-no",
+                            "itemsList": [
+                                {
+                                    "url": pageInfo.rootPath + "/views/dashboard.html",
+                                    "text": "Access the survey dashboards"
+                                },
+                                {
+                                    "url": pageInfo.rootPath + "/views/results.html",
+                                    "text": "Create results snapshot"
+                                },
+                                {
+                                    "url": pageInfo.rootPath + "/views/referencedata.html",
+                                    "text": "Access the reference datasets"
+                                }
+                            ]
+                        })
+                    }}
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <h2>Browse the Statistical Preparation Platform</h2>
+    <div class="ons-grid ons-u-mb-l">
+        <div class="ons-grid__col ons-col-6@m">
+            {{
+                onsCard({
+                    "title": {
+                        "id": "card-validation-rules",
+                        "text": "Browse validation rules",
+                        "url": "#0"
+                    },
+                    "body": {
+                        "id": "text-validation-rules",
+                        "text": "Explore what validation rules are available"
+                    }
+                })
+            }}
+        </div>
+        <div class="ons-grid__col ons-col-6@m">
+            {{
+                onsCard({
+                    "title": {
+                        "id": "card-reference-data",
+                        "text": "Browse reference data",
+                        "url": "#0"
+                    },
+                    "body": {
+                        "id": "text-reference-data",
+                        "text": "Explore the available reference datasets"
+                    }
+                })
+            }}
+        </div>
+    </div>
+
+    <hr class="spp-section-divider" />
+
+    <h2>More information</h2>
+    <div class="ons-grid">
+        <div class="ons-grid__col ons-col-12">
+            <div class="ons-u-mb-m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": "card-business-glossary",
+                            "text": "Business glossary",
+                            "url": "#0"
+                        },
+                        "body": {
+                            "id": "text-business-glossary",
+                            "text": "Definitions of common business and statistical terms"
+                        }
+                    })
+                }}
+            </div>
+            <div class="ons-u-mb-m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": "card-learn-validation",
+                            "text": "Learn about validation rules",
+                            "url": "#0"
+                        },
+                        "body": {
+                            "id": "text-learn-validation",
+                            "text": "Discover about implementing validation rules on responses"
+                        }
+                    })
+                }}
+            </div>
+            <div class="ons-u-mb-m">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": "card-learn-reference",
+                            "text": "Learn about reference datasets",
+                            "url": "#0"
+                        },
+                        "body": {
+                            "id": "text-learn-reference",
+                            "text": "Discovery how setting up reference datasets aids survey running"
+                        }
+                    })
+                }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

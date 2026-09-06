@@ -1,12 +1,11 @@
 ---
-group: Working Version
+group: User Research Log
 title: No task list
-layout: no_task_list/views/_main
+layout: ur-round-2/views/_main
 prevPage: views/configuration/survey
 ---
 {% from "components/table/_macro.njk" import onsTable %}
 {% from "components/button/_macro.njk" import onsButton %}
-{% from "components/panel/_macro.njk" import onsPanel %}
 
 {% set breadcrumbs = [
     {
@@ -24,21 +23,6 @@ prevPage: views/configuration/survey
 ] %}
 
 {% block main %}
-
-{%
-    call onsPanel({
-        "variant": 'success',
-        "id": "survey-success",
-        "iconType": 'check',
-        "iconSize": "xl",
-        "classes": "ons-u-mb-m"
-    })
-%}
-    <h1>Deployment has begun</h1>
-    <p>3.2 (2026 Final) is currently being deployed to UAT.</p>
-    <p>Speak to DS to tell them to commence the configuration of test data in the UAT environment.</p>
-{% endcall %}
-
     <h1>Manage survey releases and deployments</h1>
     <h2>Available releases for New Business Survey</h2>
     {{
@@ -58,7 +42,7 @@ prevPage: views/configuration/survey
                             "value": '<a href="' + pageInfo.rootPath + '/views/configuration/deployment/versiondetails.html" class="spp-version-select-link" data-version-name="3.2 Rhino">3.2 - 2026 Final</a>'
                         },
                         {
-                            "value": "Deployed to UAT today"
+                            "value": "Draft"
                         }
                     ]
                 },
