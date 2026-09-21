@@ -14,11 +14,18 @@ prevPage: views/home
 {% from "components/pagination/_macro.njk" import onsPagination %}
 
 {% block main %}
-    <h1>Migrate a survey from another platform</h1>
+    <h1>Configure a survey</h1>
     <p>Use SPP Self Service to migrate, configure, and manage surveys.</p>
 
-    <h2>Choose survey to configure</h2>
+    <h2>Choose survey to set up</h2>
     <p>The table contains all ONS surveys that are available to be configured on SPP.</p>
+    <p>Using SPP Self Service you can:</p>
+    <ul>
+        <li>Add or update survey form types</li>
+        <li>Add or update validation rules</li>
+        <li>Create a new release of a survey to deploy to SPP environments</li>
+    </ul>
+    <p>Click on the survey name to access its configuration.</p>
 
     {{
         onsTable({
@@ -151,8 +158,8 @@ prevPage: views/home
         }}
     </div>
 
-    <h2 class="ons-u-mt-l">Migrate a survey</h2>
-    <p>Before you being migrating a survey you must have prepared the following:</p>
+    <h2 class="ons-u-mt-l">Set up a survey</h2>
+    <p>Before you begin configuring a survey you must have prepared the following:</p>
     <h3>Survey forms</h3>
     <p>Survey forms should be configured using Author and stored locally as JSON files on your computer to upload as part of the migration workflow.</p>
     <h3>Reference data</h3>

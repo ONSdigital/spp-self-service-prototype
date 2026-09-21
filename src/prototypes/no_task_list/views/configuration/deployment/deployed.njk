@@ -7,6 +7,7 @@ prevPage: views/configuration/survey
 {% from "components/table/_macro.njk" import onsTable %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/panel/_macro.njk" import onsPanel %}
+{% from "components/card/_macro.njk" import onsCard %}
 
 {% set breadcrumbs = [
     {
@@ -40,6 +41,19 @@ prevPage: views/configuration/survey
 {% endcall %}
 
     <h1>Manage survey releases and deployments</h1>
+        {{
+        onsCard({
+            "title": {
+                "id": 'newRelease',
+                "text": 'Create a new release',
+                "url": pageInfo.rootPath + '/views/configuration/deployment/newversion.html'
+            },
+            "body":{
+                "id": 'newRelease-text',
+                "text": 'Use the latest forms and rules configured to create a new deployable release of the survey.'
+            }
+        })
+    }} 
     <h2>Available releases for New Business Survey</h2>
     {{
         onsTable({
@@ -135,16 +149,4 @@ prevPage: views/configuration/survey
             ]
         })
     }}
-    <h2 class="ons-u-mt-l">Create a new release</h2>
-    <p>Use the latest forms and rules configured to create a new deployable release of the survey.<p>
-    {{
-    onsButton({
-        "type": 'button',
-        "text": 'Create a release',
-        "variants": 'secondary',
-        "url": pageInfo.rootPath + "/views/configuration/deployment/newversion.html",
-        "noIcon": true,
-        "id": "btn-create-version"
-    })
-}}
 {% endblock %}

@@ -5,6 +5,7 @@ layout: no_task_list/views/_main
 prevPage: views/configuration/survey
 ---
 {% from "components/button/_macro.njk" import onsButton %}
+{% from "components/card/_macro.njk" import onsCard %}
 
 {% set breadcrumbs = [
     {
@@ -40,33 +41,31 @@ prevPage: views/configuration/survey
 
     <hr class="spp-section-divider" />
 
-    <h2 class="ons-u-mt-l">Add more forms</h2>
-    <p>You can add additional forms as they become available. To replace an existing form with a new version, click on the form above.</p>
+    {{
+        onsCard({
+            "title": {
+                "id": 'addForms',
+                "text": 'Add more forms',
+                "url": pageInfo.rootPath + '/views/configuration/forms/uploadjson.html'
+            },
+            "body":{
+                "id": 'addForms-text',
+                "text": 'You can add additional forms as they become available. To replace an existing form with a new version, click on the form above.'
+            }
+        })
+    }}  
 
     {{
-        onsButton({
-            "text": "Add forms",
-            "variants": "secondary",
-            "url": pageInfo.rootPath + "/views/configuration/forms/uploadjson.html",
-            "noIcon": true,
-            "classes": "ons-u-mb-m",
-            "id": "btn-add-forms"
+        onsCard({
+            "title": {
+                "id": 'bdodQuestions',
+                "text": 'Configure BDOD question settings',
+                "url": pageInfo.rootPath + '/views/configuration/forms/bdodsettings.html'
+            },
+            "body":{
+                "id": 'bdodQuestions-text',
+                "text": "Users can apply 'Check comment' to any question that is used as a comment field to ensure that the response is checked by the BDOD team. These questions can also be flagged as 'Read only' to ensure BDOD reviewers are unable to change the response."
+            }
         })
-    }}
-
-    <hr class="spp-section-divider" />
-
-    <h2 class="ons-u-mt-l">Configure BDOD question settings</h2>
-    <p>Users can apply 'Check comment' to any question that is used as a comment field to ensure that the response is checked by the BDOD team.</p>
-    <p>These questions can also be flagged as 'Read only' to ensure BDOD reviewers are unable to change the response.</p>
-
-    {{
-        onsButton({
-            "text": "Configure BDOD settings",
-            "variants": "secondary",
-            "url": pageInfo.rootPath + "/views/configuration/forms/bdodsettings.html",
-            "noIcon": true,
-            "id": "btn-add-question-metadata"
-        })
-    }}
+    }} 
 {% endblock %}

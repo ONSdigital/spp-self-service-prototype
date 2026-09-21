@@ -6,6 +6,7 @@ prevPage: views/configuration/deployment/versiondetails
 ---
 
 {% from "components/button/_macro.njk" import onsButton %}
+{% from "components/input/_macro.njk" import onsInput %}
 
 {% set breadcrumbs = [
     {
@@ -39,7 +40,22 @@ prevPage: views/configuration/deployment/versiondetails
     <li>Have approval from the Digital Services SPP team</li>
     <li>Have scheduled the downtime</li>
 </ul>
-<p>By submitting below you confirm that deployment can start immediately.<p>
+
+<h2 class="ons-u-mt-l">Add survey start date</h2>
+<p>A survey start period must be provided that aligns with the test survey data available in UAT.</p>
+<p>A survey end period will be automatically added when a new survey release is deployed with a start date after this.</p>
+
+{{
+        onsInput({
+            "id": "start-period",
+            "label": {
+                "text": "Survey start period in UAT",
+                "description": "Format YYYYMM"
+            }
+        })
+    }}
+
+<p class="ons-u-mt-l">By submitting below you confirm that deployment can start immediately.<p>
 {{
     onsButton({
         "text": "Begin deployment",
