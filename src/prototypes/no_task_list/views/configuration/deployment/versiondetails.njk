@@ -7,20 +7,16 @@ prevPage: views/configuration/deployment/versionadded
 
 {% from "components/summary/_macro.njk" import onsSummary %}
 {% from "components/button/_macro.njk" import onsButton %}
-{% from "components/panel/_macro.njk" import onsPanel %}
+{% from "components/card/_macro.njk" import onsCard %}
 
 {% set breadcrumbs = [
     {
-        "url": pageInfo.rootPath + "/views/home.html",
-        "text": "Home"
-    },
-    {
         "url": pageInfo.rootPath + "/views/migrate.html",
-        "text": "Migrate a survey"
+        "text": "Survey configuration"
     },
     {
         "url": pageInfo.rootPath + "/views/configuration/survey.html",
-        "text": "Survey"
+        "text": "NBS (001)"
     },
     {
         "url": pageInfo.rootPath + "/views/configuration/deployment/versions.html",
@@ -117,23 +113,48 @@ prevPage: views/configuration/deployment/versionadded
 }}
 
 <h2 class="ons-u-mt-l">Deployments</h2>
-<p>If appropriate approval has been obtained, this survey release can be deployed to UAT or Production.</p>
-<p>Ensure you have coordinated any deployments with users, the SPP team, and project teams.</p>
-{{
-    onsButton({
-        "text": "Deploy to UAT",
-        "id": "btn-uat",
-        "url": pageInfo.rootPath + "/views/configuration/deployment/uatdeploy.html",
-        "noIcon": true
-    })
-}}
-<div class="ons-u-mt-l">
-{%
-    call onsPanel({
-        "variant": 'warn'
-    })
-%}
-    It is not currently possible to deploy to production. Further approval is required.
-{% endcall %}
-</div>
+<p>You can deploy the survey to the following environments.</p>
+
+    {{
+        onsCard({
+            "title": {
+                "id": 'uat',
+                "text": 'Deploy to UAT',
+                "url": pageInfo.rootPath + '/views/configuration/deployment/uatdeploy.html'
+            },
+            "body":{
+                "id": 'uat-text',
+                "text": 'Deploy this release to the User Acceptance Testing environment of SPP.'
+            }
+        })
+    }}
+
+    {{
+        onsCard({
+            "title": {
+                "id": 'preprod',
+                "text": 'Deploy to Preproduction',
+                "url": pageInfo.rootPath + '/views/configuration/deployment/uatdeploy.html'
+            },
+            "body":{
+                "id": 'preprod-text',
+                "text": 'Deploy this release to the Preproduction testing environment of SPP.'
+            }
+        })
+    }} 
+
+    {{
+        onsCard({
+            "title": {
+                "id": 'prod',
+                "text": 'Deploy to Production',
+                "url": pageInfo.rootPath + '/views/configuration/deployment/uatdeploy.html'
+            },
+            "body":{
+                "id": 'prod-text',
+                "text": 'Deploy this release to the Production environment of SPP.'
+            }
+        })
+    }} 
+
 {% endblock %}

@@ -8,7 +8,7 @@ prevPage: views/migrate
 {% set breadcrumbs = [
     {
         "url": pageInfo.rootPath + "/views/migrate.html",
-        "text": "Migrate"
+        "text": "Survey configuration"
     }
 ] %}
 
@@ -17,7 +17,7 @@ prevPage: views/migrate
     <p>This survey is currently deployed to:</p>
 
     <div class="ons-grid">
-        <div class="ons-grid__col ons-col-6@m">
+        <div class="ons-grid__col ons-col-4@m">
             <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
                 {{
                     onsCard({
@@ -27,13 +27,29 @@ prevPage: views/migrate
                         },
                         "body": {
                             "id": "text-uat",
-                            "text": "Release: 3.1 (2026 Refinements)"
+                            "text": "Release: 3.1 (2026 updates)"
                         }
                     })
                 }}
             </div>
         </div>
-        <div class="ons-grid__col ons-col-6@m">
+        <div class="ons-grid__col ons-col-4@m">
+            <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": "card-preprod",
+                            "text": "Preproduction"
+                        },
+                        "body": {
+                            "id": "text-preprod",
+                            "text": "Release: 2.3 (2025 final)"
+                        }
+                    })
+                }}
+            </div>
+        </div>
+        <div class="ons-grid__col ons-col-4@m">
             <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
                 {{
                     onsCard({
@@ -44,6 +60,38 @@ prevPage: views/migrate
                         "body": {
                             "id": "text-production",
                             "text": "Release: 2.3 (2025 final)"
+                        }
+                    })
+                }}
+            </div>
+        </div>
+        <div class="ons-grid__col ons-col-4@m">
+            <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": "card-dev",
+                            "text": "Development"
+                        },
+                        "body": {
+                            "id": "text-dev",
+                            "text": "Release: 3.1 (2026 updates)"
+                        }
+                    })
+                }}
+            </div>
+        </div>
+        <div class="ons-grid__col ons-col-4@m">
+            <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
+                {{
+                    onsCard({
+                        "title": {
+                            "id": "card-int",
+                            "text": "Integration"
+                        },
+                        "body": {
+                            "id": "text-int",
+                            "text": "Release: 3.1 (2026 updates)"
                         }
                     })
                 }}
@@ -125,7 +173,7 @@ prevPage: views/migrate
                         },
                         "body":{
                             "id": 'versions-text',
-                            "text": 'Create a survey release that can be deployed, and trigger deployments to UAT or PROD.'
+                            "text": 'Create a survey release that can be deployed and trigger deployments.'
                         }
                     })
                 }}

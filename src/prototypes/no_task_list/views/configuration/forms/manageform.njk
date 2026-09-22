@@ -6,19 +6,16 @@ prevPage: views/configuration/forms/formslist
 ---
 {% from "components/summary/_macro.njk" import onsSummary %}
 {% from "components/table/_macro.njk" import onsTable %}
+{% from "components/card/_macro.njk" import onsCard %}
 
 {% set breadcrumbs = [
     {
-        "url": pageInfo.rootPath + "/views/home.html",
-        "text": "Home"
-    },
-    {
         "url": pageInfo.rootPath + "/views/migrate.html",
-        "text": "Migrate a survey"
+        "text": "Survey configuration"
     },
     {
         "url": pageInfo.rootPath + "/views/configuration/survey.html",
-        "text": "Survey"
+        "text": "NBS (001)"
     },
     {
         "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
@@ -92,4 +89,19 @@ prevPage: views/configuration/forms/formslist
     }}
     <h2 class="ons-u-mt-l">Update form</h2>
     <p>To update the form schema or ID; upload a new json schema file. If any changes are required to the contents of the form itself they should be made in Author and then exported as a new JSON file.</p>
+
+    {{
+        onsCard({
+            "title": {
+                "id": 'deleteForm',
+                "text": 'Delete form',
+                "url": pageInfo.rootPath + '/views/configuration/forms/deleteform.html'
+            },
+            "body":{
+                "id": 'deleteForm-text',
+                "text": "Remove this form from the list of forms available in SPP Self Service only. This does not delete any forms that have been deployed to SPP Core."
+            }
+        })
+    }} 
+
 {% endblock %}

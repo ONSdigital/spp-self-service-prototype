@@ -1,0 +1,44 @@
+---
+group: Working Version
+title: No task list
+layout: no_task_list/views/_main
+prevPage: views/configuration/forms/formslist
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "NBS (001)"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
+        "text": "Forms list"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/forms/manageform.html",
+        "text": "Manage form"
+    }
+] %}
+
+{% block main %}
+    <h1>Delete Form</h1>
+    <p>This action will remove the chosen form from the list of forms in SPP Self Service.</p>
+    <p>This will not delete the form if it has been deployed to any SPP environment.</p>
+    <h2>Are you sure you want to delete this form?</p>
+
+    {{
+        onsButton({
+            "text": "Delete form",
+            "classes": "ons-u-mt-m",
+            "url": pageInfo.rootPath + "/views/configuration/forms/formslist.html",
+            "noIcon": true,
+            "id": "btn-delete-forms"
+        })
+    }}
+
+{% endblock %}
