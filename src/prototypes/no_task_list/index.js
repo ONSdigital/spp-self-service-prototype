@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const version = form.version || '0.0.1';
         
         html += `
-          <div class="ons-grid__col ons-col-6@m">
+          <div class="ons-grid__col ons-col-4@m">
             <div class="ons-card" style="border: 1px solid var(--ons-color-borders); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem; background: var(--ons-color-white); height: calc(100% - 1.5rem); box-sizing: border-box;">
               <div class="ons-card__body">
                 <h2 class="ons-card__title ons-u-fs-m" id="card-title-${index}" style="margin: 0 0 1rem 0;">

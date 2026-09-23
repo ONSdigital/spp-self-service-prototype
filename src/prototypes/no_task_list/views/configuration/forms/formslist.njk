@@ -9,16 +9,12 @@ prevPage: views/configuration/survey
 
 {% set breadcrumbs = [
     {
-        "url": pageInfo.rootPath + "/views/home.html",
-        "text": "Home"
-    },
-    {
         "url": pageInfo.rootPath + "/views/migrate.html",
-        "text": "Migrate a survey"
+        "text": "Survey configuration"
     },
     {
         "url": pageInfo.rootPath + "/views/configuration/survey.html",
-        "text": "Survey"
+        "text": "NBS (001)"
     }
 ] %}
 
@@ -45,7 +41,7 @@ prevPage: views/configuration/survey
         onsCard({
             "title": {
                 "id": 'addForms',
-                "text": 'Add more forms',
+                "text": 'Add forms',
                 "url": pageInfo.rootPath + '/views/configuration/forms/uploadjson.html'
             },
             "body":{
