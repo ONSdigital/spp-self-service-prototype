@@ -1,0 +1,63 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/deployment/versiondetails
+---
+
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/input/_macro.njk" import onsInput %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "NBS (001)"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versionadded.html",
+        "text": "Releases"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versiondetails.html",
+        "text": "Details"
+    }
+] %}
+
+{% block main %}
+
+<h1>Are you sure you want to deploy now?</h1>
+<p>To deploy to UAT you must:</p>
+<ul>
+    <li>Have warned users</li>
+    <li>Have approval from the Digital Services SPP team</li>
+    <li>Have scheduled the downtime</li>
+</ul>
+
+<h2 class="ons-u-mt-l">Add survey start date</h2>
+<p>A survey start period must be provided that aligns with the test survey data available in UAT.</p>
+<p>A survey end period will be automatically added when a new survey release is deployed with a start date after this.</p>
+
+{{
+        onsInput({
+            "id": "start-period",
+            "label": {
+                "text": "Survey start period in UAT",
+                "description": "Format YYYYMM"
+            }
+        })
+    }}
+
+<p class="ons-u-mt-l">By submitting below you confirm that deployment can start immediately.<p>
+{{
+    onsButton({
+        "text": "Begin deployment",
+        "id": "btn-deploy",
+        "url": pageInfo.rootPath + "/views/configuration/deployment/deployed.html",
+        "noIcon": true
+    })
+}}
+{% endblock %}

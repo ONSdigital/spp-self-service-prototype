@@ -1,0 +1,174 @@
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/tabs/_macro.njk" import onsTabs %}
+
+{% macro formQuestionTabs(params) %}
+    {% set dataset = params.dataset | default("mbs") %}
+
+{% if dataset == "dummy" %}
+    {% set forms = [
+        {
+            "id": "dummy-form-1",
+            "title": "Form 1",
+            "sourceId": "001",
+            "questions": [
+                { "code": "Q101", "text": "Which type of organisation best describes your zoo?", "type": "Radio button", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 0, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q102", "text": "How many visitors did your zoo have last year?", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q103", "text": "How many staff did you employ?", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false }
+            ]
+        },
+        {
+            "id": "dummy-form-2",
+            "title": "Form 2",
+            "sourceId": "002",
+            "questions": [
+                { "code": "Q201", "text": "How many animals resided at your site in the previous year?", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q202", "text": "Any other comments?", "type": "TEXT", "required": false, "readOnly": false, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false }
+            ]
+        }
+    ] %}
+{% else %}
+    {% set forms = [
+        {
+            "id": "form-1",
+            "title": "Form 1",
+            "sourceId": "009",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q40", "text": "Total Turnover", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q49", "text": "Value of exports", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        },
+        {
+            "id": "form-2",
+            "title": "Form 2",
+            "sourceId": "010",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q110", "text": "Total value of potable water supplied to customers in megalitres", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        },
+        {
+            "id": "form-3",
+            "title": "Form 3",
+            "sourceId": "011",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q40", "text": "Total Turnover", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q49", "text": "Value of exports", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q90", "text": "Excise duty", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        },
+        {
+            "id": "form-4",
+            "title": "Form 4",
+            "sourceId": "012",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q40", "text": "Total Turnover", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false }
+            ]
+        },
+        {
+            "id": "form-5",
+            "title": "Form 5",
+            "sourceId": "013",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q46", "text": "Total Amount receivable in respect of invoices raised during period inc progress pmts exc VAT grants donation", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q47", "text": "Value of grants donations legacies investment incorporated income and general funding (inc fundraising eg european LEA govt grants", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q40", "text": "(Derived) Total Turnover", "type": "NUMERIC", "required": false, "readOnly": true, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "46 + 47", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        },
+        {
+            "id": "form-6",
+            "title": "Form 6",
+            "sourceId": "014",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q42", "text": "Commission or Fees", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q43", "text": "Sales on Own Account", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q40", "text": "(Derived) Total Turnover", "type": "NUMERIC", "required": false, "readOnly": true, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "42 + 43", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        },
+        {
+            "id": "form-7",
+            "title": "Form 7",
+            "sourceId": "015",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q46", "text": "(Derived) Total Amount receivable in respect of invoices raised during period inc progress pmts exc VAT grants donation", "type": "NUMERIC", "required": false, "readOnly": true, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "40", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q40", "text": "Total Turnover", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        },
+        {
+            "id": "form-8",
+            "title": "Form 8",
+            "sourceId": "016",
+            "questions": [
+                { "code": "Q11", "text": "Start Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q12", "text": "End Date", "type": "DATE", "required": true, "readOnly": false, "decimalPlaces": 0, "maxLength": 10, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": false },
+                { "code": "Q42", "text": "(Derived) Commission or Fees", "type": "NUMERIC", "required": false, "readOnly": true, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "40", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q40", "text": "Total Turnover", "type": "NUMERIC", "required": false, "readOnly": false, "decimalPlaces": 2, "maxLength": 10, "derivedFormula": "", "dateAdjustment": true, "hasCommentCheck": false },
+                { "code": "Q146", "text": "Comment", "type": "TEXT", "required": false, "readOnly": true, "decimalPlaces": 0, "maxLength": 2000, "derivedFormula": "", "dateAdjustment": false, "hasCommentCheck": true }
+            ]
+        }
+    ] %}
+{% endif %}
+
+{% set tabItems = [] %}
+
+    {% for form in forms %}
+        {% set trs = [] %}
+        {% for row in form.questions %}
+            {% set requiredValue = "true" if row.required else "false" %}
+            {% set readOnlyValue = "true" if row.readOnly else "false" %}
+            {% set typeLabel = row.type + (" (read only)" if row.readOnly else "") %}
+            {% set checkboxId = "select-question-" + dataset + "-" + form.id + "-" + (row.code | lower) + "-" + (loop.index | string) %}
+            {% set questionAttributes = "data-form-id='" + form.id + "' data-form-title='" + form.title + "' data-source-form-id='" + (form.sourceId | string) + "' data-question-code='" + row.code + "' data-question-label='" + row.text + "' data-question-type='" + row.type + "' data-question-required='" + requiredValue + "' data-question-readonly='" + readOnlyValue + "' data-question-decimal-places='" + (row.decimalPlaces | string) + "' data-question-max-length='" + (row.maxLength | string) + "' data-question-derived-formula='" + row.derivedFormula + "'" %}
+            {% set selectQuestionCheckbox = "<span class='ons-checkbox'><input type='checkbox' id='" + checkboxId + "' class='ons-checkbox__input' data-select-question-checkbox " + questionAttributes + " value='" + row.code + "' /><label class='ons-checkbox__label' for='" + checkboxId + "' aria-label='Select " + row.code + " on " + form.title + "'></label></span>" %}
+
+            {% set tr = {
+                "tds": [
+                    { "value": row.code },
+                    { "value": row.text },
+                    { "value": typeLabel },
+                    { "value": "Yes" if row.required else "No" },
+                    { "value": selectQuestionCheckbox | safe }
+                ]
+            } %}
+
+            {% set trs = (trs.push(tr), trs) %}
+        {% endfor %}
+
+        {% set tableHtml %}
+            {{ onsTable({
+                "ths": [
+                    { "value": "Question code" },
+                    { "value": "Question" },
+                    { "value": "Type" },
+                    { "value": "Required" },
+                    { "value": "Validation rules" }
+                ],
+                "trs": trs
+            }) }}
+        {% endset %}
+
+        {% set tab = { "id": form.id, "title": form.title, "content": tableHtml | safe } %}
+        {% set tabItems = (tabItems.push(tab), tabItems) %}
+    {% endfor %}
+
+    {{ onsTabs({ "title": "Forms", "tabs": tabItems }) }}
+{% endmacro %}

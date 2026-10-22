@@ -1,0 +1,375 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/rules/template
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/details/_macro.njk" import onsDetails %}
+{% from "components/input/_macro.njk" import onsInput %}
+{% from "components/select/_macro.njk" import onsSelect %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey",
+        "id": "breadcrumb-survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/rules.html",
+        "text": "Rule summary"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
+        "text": "Add a validation rule"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/template.html",
+        "text": "Select template"
+    },
+    {
+        "text": "Configure rule"
+    }
+] %}
+
+{% set responseTypeOptions = [
+    { "value": "", "text": "-- Select --", "selected": true },
+    { "value": "response", "text": "Response" },
+    { "value": "adjustedresponse", "text": "Adjusted response" }
+] %}
+
+{% set thresholdTypeOptions = [
+    { "value": "", "text": "-- Select --", "selected": true },
+    { "value": "constant", "text": "Constant" },
+    { "value": "surveyconfig", "text": "Survey configuration data" }
+] %}
+
+{% set operatorOptions = [
+    { "value": "", "text": "-- Select --", "selected": true },
+    { "value": "=", "text": "=" },
+    { "value": "!=", "text": "!=" },
+    { "value": ">", "text": ">" },
+    { "value": "<", "text": "<" },
+    { "value": ">=", "text": ">=" },
+    { "value": "<=", "text": "<=" }
+] %}
+
+{% macro primaryQuestionRow(idPrefix, labelText, defaultQcode="Q100") %}
+    <div class="spp-parameter-row">
+        <span class="spp-parameter-label" id="{{ idPrefix }}-question-label">{{ labelText }}</span>
+        <div class="spp-parameter-fields">
+            {{
+                onsSelect({
+                    "id": idPrefix + "-question-type",
+                    "name": idPrefix + "-question-type",
+                    "fieldClasses": "ons-u-mb-no",
+                    "classes": "ons-input--block",
+                    "label": {
+                        "text": labelText + " response type",
+                        "classes": "ons-u-vh"
+                    },
+                    "options": responseTypeOptions
+                })
+            }}
+            <span class="spp-parameter-readonly-qcode" data-primary-qcode>{{ defaultQcode }}</span>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro comparisonQuestionRow(idPrefix, fieldKey, labelText, defaultQcode="Q100") %}
+    <div class="spp-parameter-row">
+        <span class="spp-parameter-label" id="{{ idPrefix }}-{{ fieldKey }}-label">{{ labelText }}</span>
+        <div class="spp-parameter-fields spp-parameter-fields--three">
+            {{
+                onsSelect({
+                    "id": idPrefix + "-" + fieldKey + "-type",
+                    "name": idPrefix + "-" + fieldKey + "-type",
+                    "fieldClasses": "ons-u-mb-no",
+                    "classes": "ons-input--block",
+                    "label": {
+                        "text": labelText + " response type",
+                        "classes": "ons-u-vh"
+                    },
+                    "options": responseTypeOptions
+                })
+            }}
+            {{
+                onsInput({
+                    "id": idPrefix + "-" + fieldKey + "-qcode",
+                    "name": idPrefix + "-" + fieldKey + "-qcode",
+                    "fieldClasses": "ons-u-mb-no",
+                    "classes": "ons-input--block",
+                    "value": defaultQcode,
+                    "autocomplete": "off",
+                    "attributes": {
+                        "data-default-primary-qcode": "true",
+                        "placeholder": "Question code"
+                    },
+                    "label": {
+                        "text": labelText + " question code",
+                        "classes": "ons-u-vh"
+                    }
+                })
+            }}
+            {{
+                onsInput({
+                    "id": idPrefix + "-" + fieldKey + "-offset",
+                    "name": idPrefix + "-" + fieldKey + "-offset",
+                    "type": "number",
+                    "fieldClasses": "ons-u-mb-no",
+                    "classes": "ons-input--block",
+                    "value": "0",
+                    "autocomplete": "off",
+                    "attributes": {
+                        "placeholder": "Offset"
+                    },
+                    "label": {
+                        "text": labelText + " offset",
+                        "classes": "ons-u-vh"
+                    }
+                })
+            }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% block main %}
+    <h1>Configure validation rule instance / enter parameter</h1>
+
+    <div id="configure-rule-container">
+        <h2 id="configure-template-code">VDLPGTX</h2>
+
+        <dl class="spp-parameter-summary">
+            <dt>Question</dt>
+            <dd id="configure-question">Q100</dd>
+            <dt>Form</dt>
+            <dd id="configure-form">Form 1 (009)</dd>
+        </dl>
+
+        <form id="configure-rule-form">
+            {# VDLPGTX #}
+            <div data-template-section="VDLPGTX">
+                {{ primaryQuestionRow("vdlpgtx", "Question") }}
+                {{ comparisonQuestionRow("vdlpgtx", "comparison", "Comparison question") }}
+
+                <div class="spp-parameter-row">
+                    <span class="spp-parameter-label" id="vdlpgtx-threshold-label">Threshold</span>
+                    <div class="spp-parameter-fields">
+                        {{
+                            onsSelect({
+                                "id": "vdlpgtx-threshold-type",
+                                "name": "vdlpgtx-threshold-type",
+                                "fieldClasses": "ons-u-mb-no",
+                                "classes": "ons-input--block",
+                                "label": {
+                                    "text": "Threshold type",
+                                    "classes": "ons-u-vh"
+                                },
+                                "options": thresholdTypeOptions
+                            })
+                        }}
+                        {{
+                            onsInput({
+                                "id": "vdlpgtx-threshold-value",
+                                "name": "vdlpgtx-threshold-value",
+                                "fieldClasses": "ons-u-mb-no",
+                                "classes": "ons-input--block",
+                                "value": "0",
+                                "autocomplete": "off",
+                                "label": {
+                                    "text": "Threshold value",
+                                    "classes": "ons-u-vh"
+                                }
+                            })
+                        }}
+                    </div>
+                </div>
+
+                <div class="spp-parameter-row">
+                    <span class="spp-parameter-label" id="vdlpgtx-percentage-label">Percentage</span>
+                    <div class="spp-parameter-fields spp-parameter-fields--single">
+                        {{
+                            onsInput({
+                                "id": "vdlpgtx-percentage-value",
+                                "name": "vdlpgtx-percentage-value",
+                                "type": "number",
+                                "fieldClasses": "ons-u-mb-no",
+                                "classes": "ons-input--block",
+                                "value": "0",
+                                "autocomplete": "off",
+                                "label": {
+                                    "text": "Percentage",
+                                    "classes": "ons-u-vh"
+                                },
+                                "suffix": {
+                                    "title": "per cent",
+                                    "text": "%",
+                                    "id": "vdlpgtx-percentage-suffix"
+                                }
+                            })
+                        }}
+                    </div>
+                </div>
+            </div>
+
+            {# QVQ #}
+            <div data-template-section="QVQ" hidden>
+                {{ primaryQuestionRow("qvq", "Question") }}
+                {{ comparisonQuestionRow("qvq", "comparison", "Comparison question") }}
+
+                <div class="spp-parameter-row">
+                    <span class="spp-parameter-label" id="qvq-operator-label">Operator</span>
+                    <div class="spp-parameter-fields spp-parameter-fields--single">
+                        {{
+                            onsSelect({
+                                "id": "qvq-operator",
+                                "name": "qvq-operator",
+                                "fieldClasses": "ons-u-mb-no",
+                                "classes": "ons-input--block",
+                                "label": {
+                                    "text": "Operator",
+                                    "classes": "ons-u-vh"
+                                },
+                                "options": operatorOptions
+                            })
+                        }}
+                    </div>
+                </div>
+            </div>
+
+            {# VRWV #}
+            <div data-template-section="VRWV" hidden>
+                {{ primaryQuestionRow("vrwv", "Question 1") }}
+                {{ comparisonQuestionRow("vrwv", "q2", "Question 2") }}
+                {{ comparisonQuestionRow("vrwv", "q3", "Question 3") }}
+                {{ comparisonQuestionRow("vrwv", "q4", "Question 4") }}
+            </div>
+
+            {# QEZCGZ #}
+            <div data-template-section="QEZCGZ" hidden>
+                {{ primaryQuestionRow("qezcgz", "Question") }}
+                {{ comparisonQuestionRow("qezcgz", "comparison", "Comparison question") }}
+            </div>
+
+            {# VGZAQTC #}
+            <div data-template-section="VGZAQTC" hidden>
+                {{ primaryQuestionRow("vgzaqtc", "Question") }}
+                {{ comparisonQuestionRow("vgzaqtc", "comparison", "Comparison question") }}
+
+                <div class="spp-parameter-row">
+                    <span class="spp-parameter-label" id="vgzaqtc-operator-label">Comparison operator</span>
+                    <div class="spp-parameter-fields spp-parameter-fields--single">
+                        {{
+                            onsSelect({
+                                "id": "vgzaqtc-operator",
+                                "name": "vgzaqtc-operator",
+                                "fieldClasses": "ons-u-mb-no",
+                                "classes": "ons-input--block",
+                                "label": {
+                                    "text": "Comparison operator",
+                                    "classes": "ons-u-vh"
+                                },
+                                "options": operatorOptions
+                            })
+                        }}
+                    </div>
+                </div>
+
+                <div class="spp-parameter-row">
+                    <span class="spp-parameter-label" id="vgzaqtc-threshold-label">Threshold</span>
+                    <div class="spp-parameter-fields spp-parameter-fields--single">
+                        {{
+                            onsInput({
+                                "id": "vgzaqtc-threshold",
+                                "name": "vgzaqtc-threshold",
+                                "type": "number",
+                                "fieldClasses": "ons-u-mb-no",
+                                "classes": "ons-input--block",
+                                "value": "0",
+                                "autocomplete": "off",
+                                "label": {
+                                    "text": "Threshold",
+                                    "classes": "ons-u-vh"
+                                }
+                            })
+                        }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="spp-parameter-row ons-u-mt-l">
+                <span class="spp-parameter-label" id="rule-error-message-label">Error message</span>
+                <div class="spp-parameter-fields spp-parameter-fields--full">
+                    {{
+                        onsInput({
+                            "id": "rule-error-message",
+                            "name": "rule-error-message",
+                            "fieldClasses": "ons-u-mb-no",
+                            "classes": "ons-input--block",
+                            "value": "Validation check failed.",
+                            "autocomplete": "off",
+                            "label": {
+                                "text": "Error message",
+                                "classes": "ons-u-vh"
+                            }
+                        })
+                    }}
+                </div>
+            </div>
+
+            <hr class="spp-section-divider">
+
+            {% call onsDetails({
+                "id": "formula-details",
+                "title": "Formula",
+                "open": true
+            }) %}
+                <div id="formula-content" class="spp-formula-content">
+                    <p>abs(question - comparison_question) &gt; threshold</p>
+                    <p>AND</p>
+                    <p>question &lt; (comparison_question * percentage)</p>
+                    <p>AND</p>
+                    <p>previous_period_and_status_clear_exists = 1</p>
+                    <p>AND</p>
+                    <p>previous_form_id = current_form_id</p>
+                    <p>AND</p>
+                    <p>question != -1</p>
+                </div>
+
+                <div class="ons-u-mt-l">
+                    {{
+                        onsButton({
+                            "text": "Refresh formula",
+                            "type": "button",
+                            "variants": "secondary",
+                            "id": "refresh-formula-button"
+                        })
+                    }}
+                    <p id="configure-status" class="ons-u-mt-m ons-u-vh" role="status" aria-live="polite"></p>
+                </div>
+            {% endcall %}
+
+            <hr class="spp-section-divider">
+
+            <div class="ons-u-mt-l">
+                {{
+                    onsButton({
+                        "text": "Save rule",
+                        "type": "submit",
+                        "id": "save-rule-button",
+                        "iconType": ""
+                    })
+                }}
+            </div>
+        </form>
+    </div>
+
+    <div id="configure-fallback" hidden>
+        <h2 id="configure-fallback-template-code"></h2>
+        <p>Configuration for this validation rule template is not available yet.</p>
+    </div>
+{% endblock %}

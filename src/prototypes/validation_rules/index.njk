@@ -1,0 +1,18 @@
+---
+group: Working Version
+title: Private Beta - Validation rules
+layout: validation_rules/views/_main
+---
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% block main %}
+    <h1>Journey without a task list</h1>
+    <p>This is the version of the prototype where we are trialling not having a central task list page for managing survey configurations.</p>
+    {{
+        onsButton({
+            "text": "Start",
+            "classes": "ons-u-mt-l",
+            "url": pageInfo.rootPath + "/views/migrate.html"
+        })
+    }}
+{% endblock %}

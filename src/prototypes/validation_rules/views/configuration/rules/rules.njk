@@ -1,0 +1,61 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/rules/rules
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/pagination/_macro.njk" import onsPagination %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey",
+        "id": "breadcrumb-survey"
+    }
+] %}
+
+{% block main %}
+    <h1>Rule summary page</h1>
+    <p>View existing rules and add new validation rules</p>
+
+    <p id="rule-summary-empty" class="ons-u-mb-l" hidden>No validation rules have been configured yet.</p>
+
+    {{
+        onsTable({
+            "id": "rule-summary-table",
+            "ths": [
+                { "value": "Rule ID" },
+                { "value": "Template" },
+                { "value": "QCode" },
+                { "value": "Message" },
+                { "value": "Action" }
+            ],
+            "trs": []
+        })
+    }}
+
+    <div id="rule-summary-pagination" class="ons-u-mt-m ons-u-mb-l" hidden>
+        {{
+            onsPagination({
+                "currentPageNumber": 1,
+                "pages": [
+                    { "url": "#1" }
+                ]
+            })
+        }}
+    </div>
+
+    {{
+        onsButton({
+            "text": "Add rule",
+            "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
+            "iconType": ""
+        })
+    }}
+{% endblock %}

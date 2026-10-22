@@ -1,0 +1,67 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/survey
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/card/_macro.njk" import onsCard %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "NBS (001)"
+    }
+] %}
+
+{% block main %}
+    <h1>New Business Survey (123)</h1>
+
+    <h2>Survey forms</h2>
+    <p>All forms uploaded to SPP so far appear in the list below.</p>
+
+    <!-- This container will be populated dynamically by index.js -->
+    <div id="spp-forms-accordion-area" class="ons-u-mb-m">
+        <!-- Default Empty State -->
+        <div class="ons-panel ons-panel--info ons-panel--no-title ons-u-mb-m">
+            <span class="ons-panel__assistive-text">Information</span>
+            <div class="ons-panel__body">
+                <p>No forms uploaded yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="spp-section-divider" />
+
+    {{
+        onsCard({
+            "title": {
+                "id": 'addForms',
+                "text": 'Add forms',
+                "url": pageInfo.rootPath + '/views/configuration/forms/uploadjson.html'
+            },
+            "body":{
+                "id": 'addForms-text',
+                "text": 'You can add additional forms as they become available. To replace an existing form with a new version, click on the form above.'
+            }
+        })
+    }}  
+
+    {{
+        onsCard({
+            "title": {
+                "id": 'bdodQuestions',
+                "text": 'Configure BDOD question settings',
+                "url": pageInfo.rootPath + '/views/configuration/forms/bdodsettings.html'
+            },
+            "body":{
+                "id": 'bdodQuestions-text',
+                "text": "Users can apply 'Check comment' to any question that is used as a comment field to ensure that the response is checked by the BDOD team. These questions can also be flagged as 'Read only' to ensure BDOD reviewers are unable to change the response."
+            }
+        })
+    }} 
+{% endblock %}
