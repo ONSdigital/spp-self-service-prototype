@@ -1,0 +1,134 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/deployments/versions
+---
+{% from "components/radios/_macro.njk" import onsRadios %}
+{% from "components/question/_macro.njk" import onsQuestion %}
+{% from "components/input/_macro.njk" import onsInput %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/select/_macro.njk" import onsSelect %}
+{% from "components/button/_macro.njk" import onsButton %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "NBS (001)"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versions.html",
+        "text": "Releases"
+    }
+] %}
+
+{% block main %}
+
+<h1>Create a new release</h1>
+<p>Newly created releases will be numbered to the next logical value in the release history.</p>
+{%
+    call onsQuestion({
+        "title": "Select release type",
+        "legendIsQuestionTitle": true,
+        "legendTitleClasses": "ons-u-fs-r--b"
+    })
+%}
+{{
+    onsRadios({
+        "dontWrap": true,
+        "name": "release",
+        "radios": [
+            {
+                "id": "minor-version",
+                "label": {
+                    "text": "Minor release",
+                    "description": "Will create release number 3.2"
+                },
+                "name": "minor"
+            },
+            {
+                "id": "major-version",
+                "label": {
+                    "text": "Major release",
+                    "description": "Will create release number 4.0"
+                },
+                "name": "major"
+            }
+        ]
+    })
+}}
+
+{% endcall %}
+
+    {{
+        onsInput({
+            "id": "version-name",
+            "name": "version-name",
+            "fieldClasses": "ons-u-mt-l",
+            "label": {
+                "text": "Release name",
+                "description": "A title or name by which this release is referred"
+            }
+        })
+    }}
+
+    <h2 class="ons-u-mt-l">Forms</h2>
+    <p>The following forms will be included in the release:</p>
+
+    {{ onsTable({
+        "id": "new-version-forms-table",
+        "ths": [
+            { "value": "Form", "classes": "spp-col-metadata" },
+            { "value": "Uploaded date", "classes": "spp-col-rules" }
+        ],
+        "trs": [
+            {
+                "tds": [
+                    { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/forms/formpreview.html?formTitle=General%20form&formId=123" target="_blank">General form (0123)</a>' | safe },
+                    { "value": "10/09/2026" }
+                ]
+            },
+            {
+                "tds": [
+                    { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/forms/formpreview.html?formTitle=Shop%20form&formId=234" target="_blank">Shop form (0234)</a>' | safe },
+                    { "value": "10/09/2026" }
+                ]
+            },
+            {
+                "tds": [
+                    { "value": '<a href="' + pageInfo.rootPath + '/views/configuration/forms/formpreview.html?formTitle=Petrol%20Station%20form&formId=345" target="_blank">Petrol Station form (0345)</a>' | safe },
+                    { "value": "10/09/2026" }
+                ]
+            }
+        ]
+    }) 
+}}
+
+<h2 class="ons-u-mt-l">Validation rules</h2>
+<p>All validation rules for the selected forms will be deployed. A list of these can be exported to check with stakeholders.</p>
+{{
+    onsButton({
+        "text": "Export rules file",
+        "variants": "secondary",
+        "noIcon": true,
+        "classes": "ons-u-mb-m",
+        "id": "btn-export"
+    })
+}}
+
+<h2 class="ons-u-mt-l">Create release</h2>
+<p>This will add the above configured release to the table of available survey releases.</p>
+{{
+    onsButton({
+        "text": "Create survey release",
+        "id": "btn-create-version",
+        "url": pageInfo.rootPath + "/views/configuration/deployment/versionadded.html",
+        "noIcon": true
+    })
+}}
+
+{% endblock %}

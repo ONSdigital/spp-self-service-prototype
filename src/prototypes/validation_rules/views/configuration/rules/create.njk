@@ -1,0 +1,47 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/survey
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "validation_rules/views/configuration/rules/_partials/form-question-tabs.njk" import formQuestionTabs with context %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey",
+        "id": "breadcrumb-survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/rules.html",
+        "text": "Rule summary"
+    }
+] %}
+
+{% block main %}
+    <h1>Add a validation rule to a question</h1>
+    <p>To add a validation rule, select the specific question in the survey where you want to apply the check.</p>
+
+    <div data-form-dataset="mbs">
+        {{ formQuestionTabs({ "dataset": "mbs" }) }}
+    </div>
+
+    <div data-form-dataset="dummy" hidden>
+        {{ formQuestionTabs({ "dataset": "dummy" }) }}
+    </div>
+
+    {{ 
+        onsButton({
+            "text": "Save and continue",
+            "id": "create-save-continue-button",
+            "url": pageInfo.rootPath + "/views/configuration/rules/template.html",
+            "iconType": ""
+        })
+    }}
+
+{% endblock %}

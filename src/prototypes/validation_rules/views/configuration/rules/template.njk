@@ -1,0 +1,178 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/rules/create
+---
+{% from "components/tabs/_macro.njk" import onsTabs %}
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/autosuggest/_macro.njk" import onsAutosuggest %}
+{% from "components/table-of-contents/_macro.njk" import onsTableOfContents %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey",
+        "id": "breadcrumb-survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/rules.html",
+        "text": "Rule summary"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
+        "text": "Add a validation rule"
+    }
+] %}
+
+{% block main %}
+
+{% set templates = [
+    { "code": "CQTCVACQ", "name": "Compare Question To A Constant Value And A Comparison Question", "formula": "question = constant_value AND question != comparison_question", "group": "Numeric Comparison" },
+    { "code": "CVDLPGTX", "name": "Construction Value Decrease Last Period Greater Than X", "formula": "abs(question - comparison_question) > threshold AND question < (comparison_question * percentage) AND previous_period_exists = 1", "group": "Construction Comparison" },
+    { "code": "CVILPGTX", "name": "Construction Value Increase Last Period Greater Than X", "formula": "abs(question - comparison_question) > threshold AND question > (comparison_question * percentage) AND previous_period_exists = 1", "group": "Construction Comparison" },
+    { "code": "DAE",      "name": "Date Adjustment Error", "formula": "dateadjustmenterrorflag != '' OR dateadjustmentlengthflag = 'SL'", "group": "Date Adjustment" },
+    { "code": "DALW",     "name": "Date Adjustment Long Warning", "formula": "dateadjustmentlengthflag = 'L'", "group": "Date Adjustment" },
+    { "code": "DAME",     "name": "Date Adjustment Midpoint Error", "formula": "dateadjustmentmidpointflag = 'C'", "group": "Date Adjustment" },
+    { "code": "DASW",     "name": "Date Adjustment Short Warning", "formula": "dateadjustmentlengthflag = 'S'", "group": "Date Adjustment" },
+    { "code": "DIVWTIT",  "name": "Difference In Values Within Threshold And Tolerance", "formula": "abs(question - comparison_question) > (threshold + tolerance) OR abs(question - comparison_question) < (threshold - tolerance)", "group": "Numeric Comparison" },
+    { "code": "DTE",      "name": "Double Text Equality", "formula": "question_a = answer_a AND question_b = answer_b", "group": "Logic" },
+    { "code": "FV",       "name": "Fixed Value", "formula": "question = 99999999999", "group": "Logic" },
+    { "code": "IV",       "name": "Invalid Value", "formula": "question NOTIN [comparison_value]", "group": "Logic" },
+    { "code": "MGR",      "name": "Missing Grouping Response", "formula": "question > 0 AND comparison_question = 0 AND previous_period_and_status_clear_exists = 1 AND check_question = check_value AND prev_form_id = 21", "group": "Group check" },
+    { "code": "MGVE",     "name": "Missing Group Value when Expected", "formula": "question > 0 AND comparison_question != 'C' AND comparison_question != 'D'", "group": "Group check" },
+    { "code": "NV",       "name": "Negative Value", "formula": "question < 0", "group": "Logic" },
+    { "code": "POPM",     "name": "Period on Period Movement", "formula": "abs(question - comparison_question) > threshold AND question > 0 AND comparison_question > 0", "group": "Period on Period" },
+    { "code": "POPMF",    "name": "Period on Period Movement with Formid", "formula": "abs(question - comparison_question) > threshold AND previous_period_and_status_clear_exists = 1 and previous_form_id = current_form_id", "group": "Period on Period" },
+    { "code": "POPMPS",   "name": "Period on Period Movement Previous Status", "formula": "abs(question - comparison_question) > threshold AND question > 0 AND comparison_question > 0 AND previous_period_and_status_clear_exists = 1", "group": "Period on Period" },
+    { "code": "POPMRZ",   "name": "Period on Period Movement Ratio To Zero", "formula": "question = 0 AND comparison_question > 0 AND comparison_question > threshold * previous_comparison_question AND previous_period_exists = 1", "group": "Period on Period" },
+    { "code": "POPQVQ",   "name": "Period on Period Q Vs Q", "formula": "question != comparison_question", "group": "Period on Period" },
+    { "code": "POPQVQCELL", "name": "Period on Period Question versus Question Cell", "formula": "question - comparison_question != 1 AND cellnumber IN [cell_list] AND previous_period_exists = 1 AND ( question - comparison_question = 1 OR comparison_question != 0 )", "group": "Period on Period" },
+    { "code": "POPRRM",   "name": "Period on Period Ratio of Ratios Movement", "formula": "(question * previous_comparison_question >= increaseFactor * comparison_question * previous_question) OR (comparison_question * previous_question >= decreaseFactor * question * previous_comparison_question) AND question > 0 AND comparison_question > 0 AND previous_question > 0 AND previous_comparison_question > 0 AND previous_period_exists = 1", "group": "Period on Period" },
+    { "code": "POPZC",    "name": "Period on Period Zero Continuity", "formula": "question != comparison_question AND ( question = 0 OR comparison_question = 0 ) AND abs(question - comparison_question) > threshold", "group": "Data Check" },
+    { "code": "PPVB",     "name": "Previous Period Value is Blank", "formula": "comparison_question = '' AND previous_period_exists = 1", "group": "Data Check" },
+    { "code": "PPVZ",     "name": "Previous Period Value is Zero", "formula": "comparison_question = 0 AND previous_period_exists = 1", "group": "Data Check" },
+    { "code": "QAYCQVELZ","name": "Response equals string value and another response equals non-string value", "formula": "question = value AND comparison_question = value2", "group": "Numeric Comparison" },
+    { "code": "QEZCGZ",   "name": "Question Equal to Zero and Comparison Greater than Zero", "formula": "question = 0 and comparison_question > 0", "group": "Data Check" },
+    { "code": "QEZCGZC",  "name": "Question is blank or 0 and previous clear response is 0", "formula": "question = 0 and comparison_question > 0 and previous_period_and_status_clear_exists = 1", "group": "Data Check" },
+    { "code": "QGVQEPP",  "name": "Question Greater Than Threshold and Question Equal to Previous Period Question", "formula": "question > 500000 AND question = previous_period_question AND previous_period_exists = 1", "group": "Period on Period" },
+    { "code": "QMVCLT",   "name": "Question matches value and Comparison less than threshold", "formula": "question = value AND comparison_question < threshold", "group": "Numeric Comparison" },
+    { "code": "QVDQ",     "name": "Question vs Derived Question", "formula": "question != comparison_question", "group": "Construction Comparison" },
+    { "code": "QVQ",      "name": "Question vs Question", "formula": "question operator comparison_question", "group": "Numeric Comparison" },
+    { "code": "QVQGZ",    "name": "Question Vs Derived Question and Greater Than Zero", "formula": "(question != comparison_question and comparison_question > 0)", "group": "Construction Comparison" },
+    { "code": "QVQT",     "name": "Current period Value vs Derived Value Greater than Threshold", "formula": "abs(question - comparison_question) > threshold", "group": "Construction Comparison" },
+    { "code": "QVV",      "name": "Comment Present", "formula": "question operator value", "group": "System Flag" },
+    { "code": "QZCNRU",   "name": "Question is 0 and Contributor is New Reporting Unit", "formula": "question = 0 AND newreportingunit = 'True'", "group": "Data Check" },
+    { "code": "QZNCSPP",  "name": "Question is 0 and Not a Clear status in Previous Period", "formula": "question = 0 AND (previous_status = 'Formsentout' OR previous_status = 'Checkneeded')", "group": "Data Check" },
+    { "code": "SEF",      "name": "Selective Editing Fail", "formula": "flag = 'F' OR flag = 'M'", "group": "System Flag" },
+    { "code": "TCC",      "name": "Total count check", "formula": "(count = 1 And total != 0 And total != 100) Or (count > 1 And total != 100)", "group": "Total check" },
+    { "code": "TCCF",     "name": "Totals Components Correction Failed", "formula": "(marker = 'M' OR marker = 'S') AND total > 0", "group": "System Flag" },
+    { "code": "VB",       "name": "Value is Blank", "formula": "question = ''", "group": "Data Check" },
+    { "code": "VBZ",      "name": "Value is Blank or Zero", "formula": "question = '' OR question = 0", "group": "Data Check" },
+    { "code": "VBZCY",    "name": "Value is Blank or Zero and Comparison question is Yes", "formula": "(comparison_question = 'YES') AND (abs(question) <= 0) OR question = ''", "group": "Data Check" },
+    { "code": "VDCLTX",   "name": "Value Divided by Comparison less than X", "formula": "question / comparison_question < value", "group": "Numeric Comparison" },
+    { "code": "VDLPGTX",  "name": "Value Decrease Last Period Greater Than X", "formula": "abs(question - comparison_question) > threshold and question < (comparison_question * percentage) AND previous_period_and_status_clear_exists = 1 AND previous_form_id = current_form_id AND question != -1", "group": "Period on Period" },
+    { "code": "VDSLPADF", "name": "Value Decrease Since Last Period And Different FormID", "formula": "abs(total_group - comparison_question) > threshold and abs(total_group - comparison_question) <= max_threshold and total_group < (comparison_question * percentage) AND previous_form_id != current_form_id AND comparison_question != -1", "group": "Period on Period" },
+    { "code": "VFDSLPADF","name": "Value FTE Decrease Since Last Period And Different FormID", "formula": "abs(question - comparison_question) > threshold and question < (comparison_question * percentage) AND previous_form_id != current_form_id AND comparison_question != -1", "group": "Period on Period" },
+    { "code": "VFISLPADF","name": "Value FTE Increase Since Last Period And Different FormID", "formula": "abs(question - comparison_question) > threshold and question > (comparison_question * percentage) AND previous_form_id != current_form_id AND comparison_question != -1", "group": "Period on Period" },
+    { "code": "VGTPC",    "name": "Value is Greater Than Product of Comparison", "formula": "question > (comparison * multiplier)", "group": "Numeric Comparison" },
+    { "code": "VGZAQTC",  "name": "Value Greater than Zero and Question Threshold Criteria", "formula": "question > 0 and comparison_question > 0 and question comparison_operator threshold * comparison_question", "group": "Numeric Comparison" },
+    { "code": "VILPGTX",  "name": "Value Increase Last Period Greater Than X", "formula": "abs(question - comparison_question) > threshold and question > (comparison_question * percentage) AND previous_period_and_status_clear_exists = 1 and previous_form_id = current_form_id", "group": "Period on Period" },
+    { "code": "VISLPADF", "name": "Value Increase Since Last Period And Different FormID", "formula": "abs(total_group - comparison_question) > threshold and abs(total_group - comparison_question) <= max_threshold and total_group > (comparison_question * percentage) AND previous_form_id != current_form_id AND comparison_question != -1", "group": "Period on Period" },
+    { "code": "VLCSLPDF", "name": "Value Large Change Since Last Period And Different FormID", "formula": "abs(total_group - comparison_question) > threshold AND previous_form_id != current_form_id AND comparison_question != -1", "group": "Period on Period" },
+    { "code": "VOVLVOV",  "name": "Value Operator Value Logical_operator Value Operator Value", "formula": "value1 operator1 value2 logical_operator value3 operator2 value4", "group": "Numeric Comparison" },
+    { "code": "VP",       "name": "Value Present", "formula": "question != ''", "group": "Data Check" },
+    { "code": "VPSIC",    "name": "Value Present SIC", "formula": "question > 0 AND frosic IN [sic_list]", "group": "Data Check" },
+    { "code": "VRWV",     "name": "Values Returned Without Values", "formula": "(question_1 > 0 or question_2 > 0) and (question_3 = 0 and question_4 = 0)", "group": "Data Check" },
+    { "code": "VZ",       "name": "Value is Zero", "formula": "question = 0", "group": "Data Check" }
+] %}
+
+{% set groups = [] %}
+{% for t in templates %}
+    {% if t.group not in groups %}
+        {% set groups = (groups.push(t.group), groups) %}
+    {% endif %}
+{% endfor %}
+
+<h1>Search validation rule templates to configure</h1>
+<p id="template-selected-questions" class="ons-u-mb-m" hidden></p>
+
+<div id="template-page">
+    <div class="spp-template-search ons-u-mb-l">
+        {{
+            onsAutosuggest({
+                "id": "template-search",
+                "externalInitialiser": true,
+                "containerClasses": "ons-js-template-search",
+                "minChars": 1,
+                "input": {
+                    "label": {
+                        "text": "Template code",
+                        "description": "Start typing a template code, for example QVQ, to see matching templates."
+                    },
+                    "autocomplete": "off",
+                    "width": "30"
+                },
+                "instructions": "Use up and down keys to navigate suggestions once you have typed one character. Use the enter key to select a suggestion. Touch device users explore by touch or with swipe gestures.",
+                "ariaYouHaveSelected": "You have selected",
+                "ariaMinChars": "Enter 1 or more characters for suggestions.",
+                "ariaOneResult": "There is one suggestion available.",
+                "ariaNResults": "There are {n} suggestions available.",
+                "ariaLimitedResults": "Results have been limited to 10 suggestions. Type more characters to improve your search.",
+                "moreResults": "Continue entering to improve suggestions.",
+                "resultsTitle": "Matching templates",
+                "resultsTitleId": "template-search-results-title",
+                "noResults": "No templates found. Try a different template code.",
+                "typeMore": "Continue entering to get suggestions."
+            })
+        }}
+    </div>
+
+{% set tocItems = [] %}
+{% for group in groups %}
+    {% set tocItem = { "text": group, "url": "#" + (group | lower | replace(" ", "-")) } %}
+    {% set tocItems = (tocItems.push(tocItem), tocItems) %}
+{% endfor %}
+
+{{
+    onsTableOfContents({
+        "title": "Template groups",
+        "itemsList": tocItems
+    })
+}}
+
+<p id="template-no-results" class="ons-u-mt-m" hidden>No validation rule templates match your search. Try a different template code.</p>
+
+{% for group in groups %}
+    <section id="{{ group | lower | replace(' ', '-') }}" class="ons-u-mb-xl">
+        <h2>{{ group }}</h2>
+        {% for t in templates | sort(attribute="code") %}
+            {% if t.group == group %}
+            <div class="ons-card ons-u-mb-m" data-template-card data-template-code="{{ t.code }}" data-template-name="{{ t.name }}">
+                <h3 class="ons-u-fs-m ons-u-mb-xs">{{ t.code }}</h3>
+                <p class="ons-u-fs-s ons-u-mb-xs">{{ t.name }}</p>
+                <p class="ons-u-mb-s"><code>{{ t.formula }}</code></p>
+                <div>
+                    {{
+                        onsButton({
+                            "text": "Select rule",
+                            "iconType": "",
+                            "attributes": { "data-template-code": t.code, "data-select-btn": "true" },
+                            "url": pageInfo.rootPath + "/views/configuration/rules/configure.html",
+                            "id": "select-rule-button-" + (t.code | lower),
+                            "variants": "secondary"
+                        })
+                    }}
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </section>
+{% endfor %}
+</div>
+
+{% endblock %}
