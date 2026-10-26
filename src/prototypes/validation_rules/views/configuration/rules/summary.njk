@@ -1,0 +1,184 @@
+---
+group: Working Version
+title: No task list
+layout: validation_rules/views/_main
+prevPage: views/configuration/rules/configure
+---
+{% from "components/button/_macro.njk" import onsButton %}
+{% from "components/summary/_macro.njk" import onsSummary %}
+
+{% set breadcrumbs = [
+    {
+        "url": pageInfo.rootPath + "/views/migrate.html",
+        "text": "Survey configuration"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/survey.html",
+        "text": "Survey",
+        "id": "breadcrumb-survey"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/rules.html",
+        "text": "Rule summary"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
+        "text": "Add a validation rule"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/template.html",
+        "text": "Select template"
+    },
+    {
+        "url": pageInfo.rootPath + "/views/configuration/rules/configure.html",
+        "text": "Configure rule"
+    },
+    {
+        "text": "Summary"
+    }
+] %}
+
+{% block main %}
+    <h1>Summary page</h1>
+
+    {{
+        onsSummary({
+            "summaries": [
+                {
+                    "title": "Validation rules",
+                    "groups": [
+                        {
+                            "rows": [
+                                {
+                                    "id": "summary-question-row",
+                                    "title": "Question",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "Q100" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Edit",
+                                                    "visuallyHiddenText": "question",
+                                                    "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
+                                                    "attributes": {
+                                                        "data-summary-edit-question": "true"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "summary-form-row",
+                                    "title": "Form ID",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "Form 1 (009)" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Edit",
+                                                    "visuallyHiddenText": "form ID",
+                                                    "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
+                                                    "attributes": {
+                                                        "data-summary-edit-question": "true"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "summary-template-row",
+                                    "title": "Validation rule",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "VDLPGTX" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Edit",
+                                                    "visuallyHiddenText": "validation rule",
+                                                    "url": pageInfo.rootPath + "/views/configuration/rules/template.html"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "summary-formula-row",
+                                    "title": "Formula",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Edit",
+                                                    "visuallyHiddenText": "formula",
+                                                    "url": pageInfo.rootPath + "/views/configuration/rules/configure.html#configure-rule-form"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "summary-severity-row",
+                                    "title": "Severity level",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "Error" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Edit",
+                                                    "visuallyHiddenText": "severity level",
+                                                    "url": pageInfo.rootPath + "/views/configuration/rules/configure.html#rule-severity-fieldset"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "summary-message-row",
+                                    "title": "Error message",
+                                    "itemsList": [
+                                        {
+                                            "valueList": [
+                                                { "text": "Error message" }
+                                            ],
+                                            "actions": [
+                                                {
+                                                    "text": "Edit",
+                                                    "visuallyHiddenText": "error message",
+                                                    "url": pageInfo.rootPath + "/views/configuration/rules/configure.html#rule-error-message"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        })
+    }}
+
+    <div class="ons-u-mt-l">
+        {{
+            onsButton({
+                "text": "Save and continue",
+                "type": "button",
+                "id": "summary-save-rule-button",
+                "iconType": ""
+            })
+        }}
+    </div>
+{% endblock %}

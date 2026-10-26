@@ -166,7 +166,7 @@
             }) }}
         {% endset %}
 
-        {% set tab = { "id": form.id, "title": form.title, "content": tableHtml | safe } %}
+        {% set tab = { "id": dataset + "-" + form.id, "title": form.title, "content": tableHtml | safe } %}
         {% set tabItems = (tabItems.push(tab), tabItems) %}
     {% endfor %}
 

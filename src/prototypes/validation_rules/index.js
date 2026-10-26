@@ -71,6 +71,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  const SURVEY_CATALOG = [
+    { id: '001', code: 'NBS', name: 'New Business Survey' },
+    { id: '002', code: 'BERD', name: 'Business Enterprise Research and Development' },
+    { id: '007', code: 'LCRE', name: 'Low Carbon & Renewable Energy Economy Survey' },
+    { id: '009', code: 'MBS', name: 'Monthly Business Survey' },
+    { id: '010', code: 'PI', name: 'Purchases Inquiry' },
+    { id: '017', code: 'QSS', name: 'Quarterly Stocks Survey' },
+    { id: '023', code: 'RSI', name: 'Monthly Business Survey (Retail Sales Index)' },
+    { id: '024', code: 'QFS', name: 'Quarterly Fuels Survey' },
+    { id: '093', code: 'FSPS', name: 'Financial Survey of Pension Schemes' },
+    { id: '134', code: 'MWSS', name: 'Monthly Wages & Salaries Survey' },
+    { id: '139', code: 'QBS', name: 'Quarterly Business Survey' },
+    { id: '141', code: 'ASHE', name: 'Annual Survey of Hours and Earnings' },
+    { id: '144', code: 'UKIS', name: 'UK Innovation Survey' },
+    { id: '228', code: 'CONST', name: 'Monthly Business Survey (Construction)' },
+    { id: '266', code: 'QFS', name: 'Financial Services Survey' }
+  ];
+
+  const applySurveyFromQueryParams = () => {
+    const surveyParam = new URLSearchParams(window.location.search).get('survey');
+    if (!surveyParam) {
+      return;
+    }
+
+    const code = surveyParam.trim().toUpperCase();
+    const matchedSurvey = SURVEY_CATALOG.find((s) => s.code === code);
+
+    if (matchedSurvey) {
+      const previousSurvey = getCurrentSurvey();
+      if (!previousSurvey || previousSurvey.code !== matchedSurvey.code || previousSurvey.id !== matchedSurvey.id) {
+        sessionStorage.removeItem('current-validation-rule');
+      }
+      sessionStorage.setItem('current-survey', JSON.stringify(matchedSurvey));
+    }
+  };
+
+  applySurveyFromQueryParams();
   updateSurveyBreadcrumb();
   updateFormDatasetVisibility();
 
@@ -520,12 +557,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const RULES_STORAGE_KEYS = ['spp-validation-rules-mbs', 'spp-validation-rules-dummy'];
 
-  // Clear data footer link
+  // Clear data footer link — forget everything except the currently selected survey
   const clearDataLink = document.getElementById('clear-data-link') || Array.from(document.querySelectorAll('.ons-footer a')).find(el => el.textContent.trim() === 'Clear data');
   if (clearDataLink) {
     clearDataLink.addEventListener('click', (e) => {
       e.preventDefault();
+      const preservedSurvey = sessionStorage.getItem('current-survey');
       sessionStorage.clear();
+      if (preservedSurvey) {
+        sessionStorage.setItem('current-survey', preservedSurvey);
+      }
       RULES_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
       window.location.reload();
     });
@@ -586,7 +627,256 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   };
 
-  // create.html — store the selected question(s) when continuing to template selection
+  const formatFormId = (idRaw) => {
+    if (!idRaw) {
+      return '009';
+    }
+    return /^\d+$/.test(String(idRaw)) ? String(idRaw).padStart(3, '0') : String(idRaw);
+  };
+
+  const getSelectedTargets = (rule) => {
+    if (Array.isArray(rule.selectedQuestions) && rule.selectedQuestions.length > 0) {
+      return rule.selectedQuestions;
+    }
+    if (rule.questionCode || rule.formTitle) {
+      return [rule];
+    }
+    return [];
+  };
+
+  const formatQuestionSummary = (rule, fallback = 'Q100') => {
+    const targets = getSelectedTargets(rule);
+    if (targets.length === 0) {
+      return fallback;
+    }
+    const codes = Array.from(new Set(targets.map((q) => q.questionCode).filter(Boolean)));
+    return codes.join(', ') || fallback;
+  };
+
+  const formatFormSummary = (rule, fallback = 'Form 1 (009)') => {
+    const targets = getSelectedTargets(rule);
+    if (targets.length === 0) {
+      return fallback;
+    }
+    const labels = Array.from(
+      new Set(
+        targets
+          .map((q) => {
+            const title = q.formTitle || '';
+            const sourceId = q.sourceFormId ? formatFormId(q.sourceFormId) : '';
+            return title ? `${title}${sourceId ? ` (${sourceId})` : ''}` : '';
+          })
+          .filter(Boolean)
+      )
+    );
+    return labels.join(', ') || fallback;
+  };
+
+  const TEMPLATE_NAMES = {
+    CQTCVACQ: 'Compare Question To A Constant Value And A Comparison Question',
+    CVDLPGTX: 'Construction Value Decrease Last Period Greater Than X',
+    CVILPGTX: 'Construction Value Increase Last Period Greater Than X',
+    DAE: 'Date Adjustment Error',
+    DALW: 'Date Adjustment Long Warning',
+    DAME: 'Date Adjustment Midpoint Error',
+    DASW: 'Date Adjustment Short Warning',
+    DIVWTIT: 'Difference In Values Within Threshold And Tolerance',
+    DTE: 'Double Text Equality',
+    FV: 'Fixed Value',
+    IV: 'Invalid Value',
+    MGR: 'Missing Grouping Response',
+    MGVE: 'Missing Group Value when Expected',
+    NV: 'Negative Value',
+    POPM: 'Period on Period Movement',
+    POPMF: 'Period on Period Movement with Formid',
+    POPMPS: 'Period on Period Movement Previous Status',
+    POPMRZ: 'Period on Period Movement Ratio To Zero',
+    POPQVQ: 'Period on Period Q Vs Q',
+    POPQVQCELL: 'Period on Period Question versus Question Cell',
+    POPRRM: 'Period on Period Ratio of Ratios Movement',
+    POPZC: 'Period on Period Zero Continuity',
+    PPVB: 'Previous Period Value is Blank',
+    PPVZ: 'Previous Period Value is Zero',
+    QAYCQVELZ: 'Response equals string value and another response equals non-string value',
+    QEZCGZ: 'Question Equal to Zero and Comparison Greater than Zero',
+    QEZCGZC: 'Question is blank or 0 and previous clear response is 0',
+    QGVQEPP: 'Question Greater Than Threshold and Question Equal to Previous Period Question',
+    QMVCLT: 'Question matches value and Comparison less than threshold',
+    QVDQ: 'Question vs Derived Question',
+    QVQ: 'Question vs Question',
+    QVQGZ: 'Question Vs Derived Question and Greater Than Zero',
+    QVQT: 'Current period Value vs Derived Value Greater than Threshold',
+    QVV: 'Comment Present',
+    QZCNRU: 'Question is 0 and Contributor is New Reporting Unit',
+    QZNCSPP: 'Question is 0 and Not a Clear status in Previous Period',
+    SEF: 'Selective Editing Fail',
+    TCC: 'Total count check',
+    TCCF: 'Totals Components Correction Failed',
+    VB: 'Value is Blank',
+    VBZ: 'Value is Blank or Zero',
+    VBZCY: 'Value is Blank or Zero and Comparison question is Yes',
+    VDCLTX: 'Value Divided by Comparison less than X',
+    VDLPGTX: 'Value Decrease Last Period Greater Than X',
+    VDSLPADF: 'Value Decrease Since Last Period And Different FormID',
+    VFDSLPADF: 'Value FTE Decrease Since Last Period And Different FormID',
+    VFISLPADF: 'Value FTE Increase Since Last Period And Different FormID',
+    VGTPC: 'Value is Greater Than Product of Comparison',
+    VGZAQTC: 'Value Greater than Zero and Question Threshold Criteria',
+    VILPGTX: 'Value Increase Last Period Greater Than X',
+    VISLPADF: 'Value Increase Since Last Period And Different FormID',
+    VLCSLPDF: 'Value Large Change Since Last Period And Different FormID',
+    VOVLVOV: 'Value Operator Value Logical_operator Value Operator Value',
+    VP: 'Value Present',
+    VPSIC: 'Value Present SIC',
+    VRWV: 'Values Returned Without Values',
+    VZ: 'Value is Zero'
+  };
+
+  const INITIAL_FORMULAS = {
+    VDLPGTX:
+      'abs(question - comparison_question) > threshold AND question < (comparison_question * percentage) AND previous_period_and_status_clear_exists = 1 AND previous_form_id = current_form_id AND question != -1',
+    QVQ: 'question operator comparison_question',
+    VRWV: '(question_1 > 0 OR question_2 > 0) AND (question_3 = 0 AND question_4 = 0)',
+    QEZCGZ: 'question = 0 AND comparison_question > 0',
+    VGZAQTC: 'question > 0 AND comparison_question > 0 AND question comparison_operator threshold * comparison_question'
+  };
+
+  const buildRuleFormulaString = (templateCode, primaryQuestionCode, params = {}) => {
+    const getParam = (key) => (params && params[key] !== undefined && params[key] !== null ? String(params[key]).trim() : '');
+
+    const formatResponseCall = (responseType, qcode, offsetRaw, fallbackPlaceholder) => {
+      const fn = responseType || '';
+      const code = qcode || primaryQuestionCode;
+      const offset = offsetRaw === '' || offsetRaw === undefined || offsetRaw === null ? '0' : offsetRaw;
+      if (!fn) {
+        return fallbackPlaceholder;
+      }
+      return `${fn}(${code}, ${offset})`;
+    };
+
+    const formatThresholdValue = (thresholdType, thresholdValRaw) => {
+      const val = thresholdValRaw === '' ? '0' : thresholdValRaw;
+      if (thresholdType === 'surveyconfig') {
+        return `surveyconfig(${val})`;
+      }
+      if (thresholdType === 'constant') {
+        return val;
+      }
+      return val || 'threshold';
+    };
+
+    const formatPercentageDecimal = (percentageRaw) => {
+      if (percentageRaw === '' || percentageRaw === undefined || percentageRaw === null) {
+        return '0';
+      }
+      const cleaned = String(percentageRaw).replace(/%/g, '').trim();
+      const num = parseFloat(cleaned);
+      if (isNaN(num)) {
+        return cleaned || 'percentage';
+      }
+      return String(Number((num / 100).toFixed(6)));
+    };
+
+    const formatPrimaryExpr = (prefix, fallback = 'question') =>
+      formatResponseCall(getParam(`${prefix}-question-type`) || 'response', primaryQuestionCode, '0', fallback);
+
+    const formatCompExpr = (prefix, fieldKey = 'comparison', fallback = 'comparison_question', usePrimaryFallback = true) => {
+      const qcodeVal = getParam(`${prefix}-${fieldKey}-qcode`) || (usePrimaryFallback ? primaryQuestionCode : '');
+      if (!qcodeVal) {
+        return fallback;
+      }
+      return formatResponseCall(
+        getParam(`${prefix}-${fieldKey}-type`) || 'response',
+        qcodeVal,
+        getParam(`${prefix}-${fieldKey}-offset`),
+        fallback
+      );
+    };
+
+    if (templateCode === 'VDLPGTX') {
+      const qExpr = formatPrimaryExpr('vdlpgtx');
+      const compExpr = formatCompExpr('vdlpgtx');
+      const thresholdExpr = formatThresholdValue(
+        getParam('vdlpgtx-threshold-type') || 'constant',
+        getParam('vdlpgtx-threshold-value')
+      );
+      const percentageExpr = formatPercentageDecimal(getParam('vdlpgtx-percentage-value'));
+
+      return `abs(${qExpr} - ${compExpr}) > ${thresholdExpr} AND ${qExpr} < (${compExpr} * ${percentageExpr}) AND previous_period_and_status_clear_exists = 1 AND previous_form_id = current_form_id AND ${qExpr} != -1`;
+    }
+    if (templateCode === 'QVQ') {
+      const qExpr = formatPrimaryExpr('qvq');
+      const compExpr = formatCompExpr('qvq');
+      const op = getParam('qvq-operator') || 'operator';
+      return `${qExpr} ${op} ${compExpr}`;
+    }
+    if (templateCode === 'VRWV') {
+      const q1Expr = formatPrimaryExpr('vrwv', 'question_1');
+      const q2Expr = formatCompExpr('vrwv', 'q2', 'question_2', false);
+      const q3Expr = formatCompExpr('vrwv', 'q3', 'question_3', false);
+      const q4Expr = formatCompExpr('vrwv', 'q4', 'question_4', false);
+      return `(${q1Expr} > 0 OR ${q2Expr} > 0) AND (${q3Expr} = 0 AND ${q4Expr} = 0)`;
+    }
+    if (templateCode === 'QEZCGZ') {
+      const qExpr = formatPrimaryExpr('qezcgz');
+      const compExpr = formatCompExpr('qezcgz');
+      return `${qExpr} = 0 AND ${compExpr} > 0`;
+    }
+    if (templateCode === 'VGZAQTC') {
+      const qExpr = formatPrimaryExpr('vgzaqtc');
+      const compExpr = formatCompExpr('vgzaqtc');
+      const op = getParam('vgzaqtc-operator') || 'comparison_operator';
+      const threshold = getParam('vgzaqtc-threshold') === '' ? '0' : getParam('vgzaqtc-threshold');
+      return `${qExpr} > 0 AND ${compExpr} > 0 AND ${qExpr} ${op} ${threshold} * ${compExpr}`;
+    }
+    return INITIAL_FORMULAS[templateCode] || '';
+  };
+
+  const renderMultilineFormula = (container, formulaText) => {
+    if (!container) {
+      return;
+    }
+    const parts = String(formulaText || '')
+      .split(/\s+\b(AND|OR)\b\s+/i)
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    container.innerHTML = '';
+    parts.forEach((part) => {
+      const p = document.createElement('p');
+      const upper = part.toUpperCase();
+      p.textContent = upper === 'AND' || upper === 'OR' ? upper : part;
+      container.appendChild(p);
+    });
+  };
+
+  const addNewRuleButton = document.getElementById('add-new-rule-button');
+  if (addNewRuleButton) {
+    addNewRuleButton.addEventListener('click', () => {
+      sessionStorage.removeItem('current-validation-rule');
+    });
+  }
+
+  // create.html — restore checkboxes only when explicitly editing from summary
+  const allQuestionCheckboxes = document.querySelectorAll('[data-select-question-checkbox]');
+  if (allQuestionCheckboxes.length > 0) {
+    const existingRule = getCurrentValidationRule();
+    if (existingRule.editingQuestions) {
+      const targetsToRestore = getSelectedTargets(existingRule);
+      allQuestionCheckboxes.forEach((cb) => {
+        const formId = cb.getAttribute('data-form-id') || '';
+        const qCode = cb.getAttribute('data-question-code') || '';
+        if (
+          targetsToRestore.some(
+            (q) => (q.formId ? q.formId === formId : true) && q.questionCode === qCode
+          )
+        ) {
+          cb.checked = true;
+        }
+      });
+    }
+  }
+
   const createSaveContinueButton = document.getElementById('create-save-continue-button');
   if (createSaveContinueButton) {
     createSaveContinueButton.addEventListener('click', () => {
@@ -597,10 +887,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (checkedBoxes.length > 0) {
         const selectedQuestions = checkedBoxes.map(getQuestionContextFromElement);
+        const existingRule = getCurrentValidationRule();
         setCurrentValidationRule({
           ...selectedQuestions[0],
-          ruleId: '',
+          ruleId: existingRule.ruleId || '',
+          severity: existingRule.severity || 'error',
+          errorMessage: existingRule.errorMessage || 'Error message',
           selectedQuestions,
+          editingQuestions: false,
           templateCode: '',
           parameters: {}
         });
@@ -641,7 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (tbody) {
-        const configureUrl = `${rootPath}/views/configuration/rules/configure.html`;
+        const configureUrl = `${rootPath}/views/configuration/rules/summary.html`;
         tbody.innerHTML = rules
           .map(
             (rule) => `<tr class="ons-table__row">
@@ -660,9 +954,23 @@ document.addEventListener('DOMContentLoaded', () => {
           const ruleId = link.getAttribute('data-rule-id') || '';
           const matchedRule = rules.find((r) => r.ruleId === ruleId);
           if (matchedRule) {
+            const restoredSelectedQuestions =
+              Array.isArray(matchedRule.selectedQuestions) && matchedRule.selectedQuestions.length > 0
+                ? matchedRule.selectedQuestions
+                : [
+                    {
+                      formId: matchedRule.formId || 'form-1',
+                      formTitle: matchedRule.formTitle || 'Form 1',
+                      sourceFormId: formatFormId(matchedRule.sourceFormId),
+                      questionCode: matchedRule.questionCode || 'Q100',
+                      questionLabel: matchedRule.questionLabel || ''
+                    }
+                  ];
+
             setCurrentValidationRule({
               ...matchedRule,
-              selectedQuestions: null,
+              selectedQuestions: restoredSelectedQuestions,
+              editingQuestions: false,
               parameters: matchedRule.parameters || {}
             });
           }
@@ -742,9 +1050,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectRuleButtons = document.querySelectorAll('[data-select-btn]');
   selectRuleButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
+      const newTemplateCode = (btn.getAttribute('data-template-code') || '').toUpperCase();
+      const existingRule = getCurrentValidationRule();
+      const isSameTemplate = (existingRule.templateCode || '').toUpperCase() === newTemplateCode;
       setCurrentValidationRule({
-        templateCode: btn.getAttribute('data-template-code') || '',
-        parameters: {}
+        templateCode: newTemplateCode,
+        parameters: isSameTemplate ? existingRule.parameters || {} : {}
       });
     });
   });
@@ -1047,7 +1358,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('configure-rule-container');
     const fallback = document.getElementById('configure-fallback');
     const templateCodeHeading = document.getElementById('configure-template-code');
+    const templateNameEl = document.getElementById('configure-template-name');
     const fallbackTemplateCode = document.getElementById('configure-fallback-template-code');
+    const fallbackTemplateName = document.getElementById('configure-fallback-template-name');
+    const templateName = TEMPLATE_NAMES[templateCode] || '';
 
     if (container) {
       container.hidden = !isSupported;
@@ -1061,8 +1375,18 @@ document.addEventListener('DOMContentLoaded', () => {
       templateCodeHeading.textContent = templateCode;
     }
 
+    if (templateNameEl) {
+      templateNameEl.textContent = templateName;
+      templateNameEl.hidden = !templateName;
+    }
+
     if (fallbackTemplateCode) {
       fallbackTemplateCode.textContent = templateCode;
+    }
+
+    if (fallbackTemplateName) {
+      fallbackTemplateName.textContent = templateName;
+      fallbackTemplateName.hidden = !templateName;
     }
 
     if (isSupported) {
@@ -1075,31 +1399,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const form = document.getElementById('configure-rule-form');
 
       if (questionElement) {
-        const selectedQuestions = Array.isArray(currentRule.selectedQuestions) && currentRule.selectedQuestions.length > 0
-          ? currentRule.selectedQuestions
-          : null;
-        questionElement.textContent = selectedQuestions
-          ? Array.from(new Set(selectedQuestions.map((q) => q.questionCode).filter(Boolean))).join(', ') || primaryQuestionCode
-          : primaryQuestionCode;
+        questionElement.textContent = formatQuestionSummary(currentRule, primaryQuestionCode);
       }
-
-      const formatFormId = (idRaw) => {
-        if (!idRaw) {
-          return '009';
-        }
-        return /^\d+$/.test(String(idRaw)) ? String(idRaw).padStart(3, '0') : String(idRaw);
-      };
 
       if (formElement) {
-        const formTitle = currentRule.formTitle || '';
-        const sourceFormId = currentRule.sourceFormId ? formatFormId(currentRule.sourceFormId) : '';
-        formElement.textContent = formTitle
-          ? `${formTitle}${sourceFormId ? ` (${sourceFormId})` : ''}`
-          : 'Form 1 (009)';
+        formElement.textContent = formatFormSummary(currentRule, 'Form 1 (009)');
       }
 
+      const allCodesText = formatQuestionSummary(currentRule, primaryQuestionCode);
       document.querySelectorAll('[data-primary-qcode]').forEach((el) => {
-        el.textContent = primaryQuestionCode;
+        el.textContent = allCodesText;
       });
 
       document.querySelectorAll('[data-default-primary-qcode]').forEach((input) => {
@@ -1110,6 +1419,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (errorMessageInput && currentRule.errorMessage) {
         errorMessageInput.value = currentRule.errorMessage;
       }
+
+      if (currentRule.severity) {
+        const severityRadio = document.querySelector(`input[name="rule-severity"][value="${currentRule.severity}"]`);
+        if (severityRadio) {
+          severityRadio.checked = true;
+        }
+      }
+
+      const getSelectedSeverity = () => {
+        const checked = document.querySelector('input[name="rule-severity"]:checked');
+        return checked ? checked.value : 'error';
+      };
 
       const getValue = (id) => {
         const el = document.getElementById(id);
@@ -1123,124 +1444,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
 
+      const restoreConfigureFormState = () => {
+        const latestRule = getCurrentValidationRule();
+        const latestParams = latestRule.parameters || {};
+
+        document.querySelectorAll('[data-default-primary-qcode]').forEach((input) => {
+          input.value = primaryQuestionCode;
+        });
+
+        Object.entries(latestParams).forEach(([id, val]) => {
+          setValue(id, val);
+        });
+
+        if (errorMessageInput && latestRule.errorMessage) {
+          errorMessageInput.value = latestRule.errorMessage;
+        }
+
+        if (latestRule.severity) {
+          const severityRadio = document.querySelector(`input[name="rule-severity"][value="${latestRule.severity}"]`);
+          if (severityRadio) {
+            severityRadio.checked = true;
+          }
+        }
+      };
+
       const savedParameters = currentRule.parameters || {};
-      Object.entries(savedParameters).forEach(([id, val]) => {
-        setValue(id, val);
-      });
-
-      const formatResponseCall = (responseType, qcode, offsetRaw, fallbackPlaceholder) => {
-        const fn = responseType || '';
-        const code = qcode || primaryQuestionCode;
-        const offset = offsetRaw === '' || offsetRaw === undefined || offsetRaw === null ? '0' : offsetRaw;
-        if (!fn) {
-          return fallbackPlaceholder;
-        }
-        return `${fn}(${code}, ${offset})`;
-      };
-
-      const formatThresholdValue = (thresholdType, thresholdValRaw) => {
-        const val = thresholdValRaw === '' ? '0' : thresholdValRaw;
-        if (thresholdType === 'surveyconfig') {
-          return `surveyconfig(${val})`;
-        }
-        if (thresholdType === 'constant') {
-          return val;
-        }
-        return val || 'threshold';
-      };
-
-      const formatPercentageDecimal = (percentageRaw) => {
-        if (percentageRaw === '' || percentageRaw === undefined || percentageRaw === null) {
-          return '0';
-        }
-        const cleaned = String(percentageRaw).replace(/%/g, '').trim();
-        const num = parseFloat(cleaned);
-        if (isNaN(num)) {
-          return cleaned || 'percentage';
-        }
-        return String(Number((num / 100).toFixed(6)));
-      };
+      restoreConfigureFormState();
+      // Re-apply after @ons/prototype-kit QuestionManager's setTimeout(0) so it cannot clobber restored values
+      window.setTimeout(restoreConfigureFormState, 0);
 
       const formulaContent = document.getElementById('formula-content');
-
-      const setFormulaDisplay = (formulaText) => {
-        if (!formulaContent) {
-          return;
-        }
-        const parts = String(formulaText || '')
-          .split(/\s+\b(AND|OR)\b\s+/i)
-          .map((part) => part.trim())
-          .filter(Boolean);
-
-        formulaContent.innerHTML = '';
-        parts.forEach((part) => {
-          const p = document.createElement('p');
-          const upper = part.toUpperCase();
-          p.textContent = upper === 'AND' || upper === 'OR' ? upper : part;
-          formulaContent.appendChild(p);
-        });
-      };
-
-      const INITIAL_FORMULAS = {
-        VDLPGTX:
-          'abs(question - comparison_question) > threshold AND question < (comparison_question * percentage) AND previous_period_and_status_clear_exists = 1 AND previous_form_id = current_form_id AND question != -1',
-        QVQ: 'question operator comparison_question',
-        VRWV: '(question_1 > 0 OR question_2 > 0) AND (question_3 = 0 AND question_4 = 0)',
-        QEZCGZ: 'question = 0 AND comparison_question > 0',
-        VGZAQTC: 'question > 0 AND comparison_question > 0 AND question comparison_operator threshold * comparison_question'
-      };
-
-      const showInitialFormulaTemplate = () => {
-        setFormulaDisplay(INITIAL_FORMULAS[templateCode] || '');
-      };
-
-      const formatPrimaryExpr = (prefix, fallback = 'question') =>
-        formatResponseCall(getValue(`${prefix}-question-type`), primaryQuestionCode, '0', fallback);
-
-      const formatCompExpr = (prefix, fieldKey = 'comparison', fallback = 'comparison_question') =>
-        formatResponseCall(
-          getValue(`${prefix}-${fieldKey}-type`),
-          getValue(`${prefix}-${fieldKey}-qcode`) || primaryQuestionCode,
-          getValue(`${prefix}-${fieldKey}-offset`),
-          fallback
-        );
-
-      const computeUpdatedFormula = () => {
-        if (templateCode === 'VDLPGTX') {
-          const qExpr = formatPrimaryExpr('vdlpgtx');
-          const compExpr = formatCompExpr('vdlpgtx');
-          const thresholdExpr = formatThresholdValue(
-            getValue('vdlpgtx-threshold-type'),
-            getValue('vdlpgtx-threshold-value')
-          );
-          const percentageExpr = formatPercentageDecimal(getValue('vdlpgtx-percentage-value'));
-
-          setFormulaDisplay(
-            `abs(${qExpr} - ${compExpr}) > ${thresholdExpr} AND ${qExpr} < (${compExpr} * ${percentageExpr}) AND previous_period_and_status_clear_exists = 1 AND previous_form_id = current_form_id AND ${qExpr} != -1`
-          );
-        } else if (templateCode === 'QVQ') {
-          const qExpr = formatPrimaryExpr('qvq');
-          const compExpr = formatCompExpr('qvq');
-          const op = getValue('qvq-operator') || 'operator';
-          setFormulaDisplay(`${qExpr} ${op} ${compExpr}`);
-        } else if (templateCode === 'VRWV') {
-          const q1Expr = formatPrimaryExpr('vrwv', 'question_1');
-          const q2Expr = formatCompExpr('vrwv', 'q2', 'question_2');
-          const q3Expr = formatCompExpr('vrwv', 'q3', 'question_3');
-          const q4Expr = formatCompExpr('vrwv', 'q4', 'question_4');
-          setFormulaDisplay(`(${q1Expr} > 0 OR ${q2Expr} > 0) AND (${q3Expr} = 0 AND ${q4Expr} = 0)`);
-        } else if (templateCode === 'QEZCGZ') {
-          const qExpr = formatPrimaryExpr('qezcgz');
-          const compExpr = formatCompExpr('qezcgz');
-          setFormulaDisplay(`${qExpr} = 0 AND ${compExpr} > 0`);
-        } else if (templateCode === 'VGZAQTC') {
-          const qExpr = formatPrimaryExpr('vgzaqtc');
-          const compExpr = formatCompExpr('vgzaqtc');
-          const op = getValue('vgzaqtc-operator') || 'comparison_operator';
-          const threshold = getValue('vgzaqtc-threshold') === '' ? '0' : getValue('vgzaqtc-threshold');
-          setFormulaDisplay(`${qExpr} > 0 AND ${compExpr} > 0 AND ${qExpr} ${op} ${threshold} * ${compExpr}`);
-        }
-      };
 
       const collectParameters = () => {
         const activeSection = document.querySelector(`[data-template-section="${templateCode}"]`);
@@ -1253,12 +1486,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return params;
       };
 
+      const persistDraftRuleState = () => {
+        setCurrentValidationRule({
+          templateCode,
+          severity: getSelectedSeverity(),
+          errorMessage: getValue('rule-error-message') || 'Error message',
+          parameters: collectParameters()
+        });
+      };
+
+      if (form) {
+        form.addEventListener('input', persistDraftRuleState);
+        form.addEventListener('change', persistDraftRuleState);
+      }
+
+      const showInitialFormulaTemplate = () => {
+        renderMultilineFormula(formulaContent, INITIAL_FORMULAS[templateCode] || '');
+      };
+
+      const computeUpdatedFormula = () => {
+        const formulaStr = buildRuleFormulaString(templateCode, primaryQuestionCode, collectParameters());
+        renderMultilineFormula(formulaContent, formulaStr);
+      };
+
       const refreshFormula = () => {
         computeUpdatedFormula();
         const parameters = collectParameters();
 
         setCurrentValidationRule({
           templateCode,
+          severity: getSelectedSeverity(),
           errorMessage: getValue('rule-error-message') || 'Validation check failed.',
           parameters
         });
@@ -1281,38 +1538,113 @@ document.addEventListener('DOMContentLoaded', () => {
         showInitialFormulaTemplate();
       }
 
-      const saveConfiguredRule = () => {
-        const parameters = collectParameters();
-        const errorMessage = getValue('rule-error-message') || 'Validation check failed.';
+      const proceedToRuleSummary = () => {
+        window.DONT_SUBMIT = true;
+        persistDraftRuleState();
+        window.location.href = `${rootPath}/views/configuration/rules/summary.html`;
+      };
+
+      const saveRuleButton = document.getElementById('save-rule-button');
+      if (saveRuleButton) {
+        saveRuleButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          proceedToRuleSummary();
+        });
+      }
+
+      if (form) {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          proceedToRuleSummary();
+        });
+      }
+    }
+  }
+
+  // summary.html — display rule summary and persist rule(s) on Save and continue
+  if (window.location.pathname.includes('summary')) {
+    const currentRule = getCurrentValidationRule();
+    const templateCode = (currentRule.templateCode || 'VDLPGTX').toUpperCase();
+    const primaryQuestionCode = currentRule.questionCode || 'Q100';
+    const severity = currentRule.severity || 'error';
+    const errorMessage = currentRule.errorMessage || 'Error message';
+    const parameters = currentRule.parameters || {};
+
+    const setSummaryRowText = (rowId, text) => {
+      const el = document.querySelector(`#${rowId} .ons-summary__text`);
+      if (el) {
+        el.textContent = text;
+      }
+    };
+
+    setSummaryRowText('summary-question-row', formatQuestionSummary(currentRule, primaryQuestionCode));
+    setSummaryRowText('summary-form-row', formatFormSummary(currentRule, 'Form 1 (009)'));
+    setSummaryRowText('summary-template-row', templateCode);
+    setSummaryRowText('summary-severity-row', severity.charAt(0).toUpperCase() + severity.slice(1));
+    setSummaryRowText('summary-message-row', errorMessage);
+
+    const summaryFormulaEl = document.querySelector('#summary-formula-row .ons-summary__text');
+    if (summaryFormulaEl) {
+      summaryFormulaEl.classList.add('spp-formula-content');
+      const formulaStr =
+        Object.keys(parameters).length > 0
+          ? buildRuleFormulaString(templateCode, primaryQuestionCode, parameters)
+          : INITIAL_FORMULAS[templateCode] || '';
+      renderMultilineFormula(summaryFormulaEl, formulaStr);
+    }
+
+    document.querySelectorAll('[data-summary-edit-question]').forEach((link) => {
+      link.addEventListener('click', () => {
+        setCurrentValidationRule({
+          editingQuestions: true
+        });
+      });
+    });
+
+    const summarySaveButton = document.getElementById('summary-save-rule-button');
+    if (summarySaveButton) {
+      summarySaveButton.addEventListener('click', (event) => {
+        event.preventDefault();
         const rules = getStoredRules();
         const defaultFormId = formatFormId(currentRule.sourceFormId);
 
         if (currentRule.ruleId) {
+          const targets = getSelectedTargets(currentRule);
+          const primaryTarget = targets[0] || currentRule;
           const existingIndex = rules.findIndex((r) => r.ruleId === currentRule.ruleId);
           if (existingIndex !== -1) {
             rules[existingIndex] = {
               ...rules[existingIndex],
+              formId: primaryTarget.formId || rules[existingIndex].formId || 'form-1',
+              formTitle: primaryTarget.formTitle || rules[existingIndex].formTitle || 'Form 1',
+              sourceFormId: formatFormId(primaryTarget.sourceFormId || rules[existingIndex].sourceFormId || defaultFormId),
               templateCode,
-              questionCode: primaryQuestionCode,
+              questionCode: primaryTarget.questionCode || primaryQuestionCode,
+              questionLabel: primaryTarget.questionLabel || rules[existingIndex].questionLabel || '',
+              selectedQuestions: targets,
+              severity,
               errorMessage,
               parameters
             };
           } else {
             rules.push({
               ruleId: currentRule.ruleId,
-              formId: currentRule.formId || 'form-1',
-              formTitle: currentRule.formTitle || 'Form 1',
-              sourceFormId: defaultFormId,
-              questionCode: primaryQuestionCode,
-              questionLabel: currentRule.questionLabel || '',
+              formId: primaryTarget.formId || 'form-1',
+              formTitle: primaryTarget.formTitle || 'Form 1',
+              sourceFormId: formatFormId(primaryTarget.sourceFormId || defaultFormId),
+              questionCode: primaryTarget.questionCode || primaryQuestionCode,
+              questionLabel: primaryTarget.questionLabel || '',
+              selectedQuestions: targets,
               templateCode,
+              severity,
               errorMessage,
               parameters
             });
           }
         } else {
-          const targets = Array.isArray(currentRule.selectedQuestions) && currentRule.selectedQuestions.length > 0
-            ? currentRule.selectedQuestions
+          const targets = getSelectedTargets(currentRule);
+          const effectiveTargets = targets.length > 0
+            ? targets
             : [{
                 formId: currentRule.formId || 'form-1',
                 formTitle: currentRule.formTitle || 'Form 1',
@@ -1321,16 +1653,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 questionLabel: currentRule.questionLabel || ''
               }];
 
-          targets.forEach((target) => {
+          effectiveTargets.forEach((target) => {
             const nextId = getNextRuleId(rules);
-            rules.push({
-              ruleId: nextId,
+            const normalizedTarget = {
               formId: target.formId || 'form-1',
               formTitle: target.formTitle || 'Form 1',
               sourceFormId: formatFormId(target.sourceFormId || defaultFormId),
               questionCode: target.questionCode || primaryQuestionCode,
-              questionLabel: target.questionLabel || '',
+              questionLabel: target.questionLabel || ''
+            };
+            rules.push({
+              ruleId: nextId,
+              ...normalizedTarget,
+              selectedQuestions: [normalizedTarget],
               templateCode,
+              severity,
               errorMessage,
               parameters
             });
@@ -1338,30 +1675,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         saveStoredRules(rules);
-
-        setCurrentValidationRule({
-          templateCode,
-          errorMessage,
-          parameters
-        });
-
+        sessionStorage.removeItem('current-validation-rule');
         window.location.href = `${rootPath}/views/configuration/rules/rules.html`;
-      };
-
-      const saveRuleButton = document.getElementById('save-rule-button');
-      if (saveRuleButton) {
-        saveRuleButton.addEventListener('click', (event) => {
-          event.preventDefault();
-          saveConfiguredRule();
-        });
-      }
-
-      if (form) {
-        form.addEventListener('submit', (event) => {
-          event.preventDefault();
-          saveConfiguredRule();
-        });
-      }
+      });
     }
   }
 });

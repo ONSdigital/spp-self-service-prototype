@@ -7,7 +7,9 @@ prevPage: views/configuration/rules/template
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/details/_macro.njk" import onsDetails %}
 {% from "components/input/_macro.njk" import onsInput %}
+{% from "components/radios/_macro.njk" import onsRadios %}
 {% from "components/select/_macro.njk" import onsSelect %}
+{% from "components/textarea/_macro.njk" import onsTextarea %}
 
 {% set breadcrumbs = [
     {
@@ -37,14 +39,12 @@ prevPage: views/configuration/rules/template
 ] %}
 
 {% set responseTypeOptions = [
-    { "value": "", "text": "-- Select --", "selected": true },
-    { "value": "response", "text": "Response" },
+    { "value": "response", "text": "Response", "selected": true },
     { "value": "adjustedresponse", "text": "Adjusted response" }
 ] %}
 
 {% set thresholdTypeOptions = [
-    { "value": "", "text": "-- Select --", "selected": true },
-    { "value": "constant", "text": "Constant" },
+    { "value": "constant", "text": "Constant", "selected": true },
     { "value": "surveyconfig", "text": "Survey configuration data" }
 ] %}
 
@@ -80,7 +80,8 @@ prevPage: views/configuration/rules/template
     </div>
 {% endmacro %}
 
-{% macro comparisonQuestionRow(idPrefix, fieldKey, labelText, defaultQcode="Q100") %}
+{% macro comparisonQuestionRow(idPrefix, fieldKey, labelText, defaultQcode="Q100", usePrimaryDefault=true) %}
+    {% set qcodeAttributes = { "placeholder": "Question code", "data-default-primary-qcode": "true" } if usePrimaryDefault else { "placeholder": "Question code" } %}
     <div class="spp-parameter-row">
         <span class="spp-parameter-label" id="{{ idPrefix }}-{{ fieldKey }}-label">{{ labelText }}</span>
         <div class="spp-parameter-fields spp-parameter-fields--three">
@@ -105,10 +106,7 @@ prevPage: views/configuration/rules/template
                     "classes": "ons-input--block",
                     "value": defaultQcode,
                     "autocomplete": "off",
-                    "attributes": {
-                        "data-default-primary-qcode": "true",
-                        "placeholder": "Question code"
-                    },
+                    "attributes": qcodeAttributes,
                     "label": {
                         "text": labelText + " question code",
                         "classes": "ons-u-vh"
@@ -141,7 +139,8 @@ prevPage: views/configuration/rules/template
     <h1>Configure validation rule instance / enter parameter</h1>
 
     <div id="configure-rule-container">
-        <h2 id="configure-template-code">VDLPGTX</h2>
+        <h2 id="configure-template-code" class="ons-u-mb-2xs">VDLPGTX</h2>
+        <p id="configure-template-name" class="ons-u-fs-r ons-u-mb-m">Value Decrease Last Period Greater Than X</p>
 
         <dl class="spp-parameter-summary">
             <dt>Question</dt>
@@ -244,9 +243,9 @@ prevPage: views/configuration/rules/template
             {# VRWV #}
             <div data-template-section="VRWV" hidden>
                 {{ primaryQuestionRow("vrwv", "Question 1") }}
-                {{ comparisonQuestionRow("vrwv", "q2", "Question 2") }}
-                {{ comparisonQuestionRow("vrwv", "q3", "Question 3") }}
-                {{ comparisonQuestionRow("vrwv", "q4", "Question 4") }}
+                {{ comparisonQuestionRow("vrwv", "q2", "Question 2", "", false) }}
+                {{ comparisonQuestionRow("vrwv", "q3", "Question 3", "", false) }}
+                {{ comparisonQuestionRow("vrwv", "q4", "Question 4", "", false) }}
             </div>
 
             {# QEZCGZ #}
@@ -301,32 +300,11 @@ prevPage: views/configuration/rules/template
                 </div>
             </div>
 
-            <div class="spp-parameter-row ons-u-mt-l">
-                <span class="spp-parameter-label" id="rule-error-message-label">Error message</span>
-                <div class="spp-parameter-fields spp-parameter-fields--full">
-                    {{
-                        onsInput({
-                            "id": "rule-error-message",
-                            "name": "rule-error-message",
-                            "fieldClasses": "ons-u-mb-no",
-                            "classes": "ons-input--block",
-                            "value": "Validation check failed.",
-                            "autocomplete": "off",
-                            "label": {
-                                "text": "Error message",
-                                "classes": "ons-u-vh"
-                            }
-                        })
-                    }}
-                </div>
-            </div>
-
             <hr class="spp-section-divider">
 
             {% call onsDetails({
                 "id": "formula-details",
-                "title": "Formula",
-                "open": true
+                "title": "Formula"
             }) %}
                 <div id="formula-content" class="spp-formula-content">
                     <p>abs(question - comparison_question) &gt; threshold</p>
@@ -357,8 +335,51 @@ prevPage: views/configuration/rules/template
 
             <div class="ons-u-mt-l">
                 {{
+                    onsRadios({
+                        "id": "rule-severity-fieldset",
+                        "name": "rule-severity",
+                        "legend": "Severity level",
+                        "description": "Errors cannot be changed and must be fixed, while warnings can be reviewed and adjusted if appropriate.",
+                        "value": "error",
+                        "radios": [
+                            {
+                                "id": "rule-severity-error",
+                                "label": {
+                                    "text": "Error"
+                                },
+                                "value": "error"
+                            },
+                            {
+                                "id": "rule-severity-warning",
+                                "label": {
+                                    "text": "Warning"
+                                },
+                                "value": "warning"
+                            }
+                        ]
+                    })
+                }}
+            </div>
+
+            <div class="ons-u-mt-l">
+                {{
+                    onsTextarea({
+                        "id": "rule-error-message",
+                        "name": "rule-error-message",
+                        "rows": 4,
+                        "value": "Error message",
+                        "label": {
+                            "text": "Severity level message",
+                            "description": "Modify the pre filled response."
+                        }
+                    })
+                }}
+            </div>
+
+            <div class="ons-u-mt-l">
+                {{
                     onsButton({
-                        "text": "Save rule",
+                        "text": "Save and continue",
                         "type": "submit",
                         "id": "save-rule-button",
                         "iconType": ""
@@ -369,7 +390,8 @@ prevPage: views/configuration/rules/template
     </div>
 
     <div id="configure-fallback" hidden>
-        <h2 id="configure-fallback-template-code"></h2>
+        <h2 id="configure-fallback-template-code" class="ons-u-mb-2xs"></h2>
+        <p id="configure-fallback-template-name" class="ons-u-fs-r ons-u-mb-m" hidden></p>
         <p>Configuration for this validation rule template is not available yet.</p>
     </div>
 {% endblock %}

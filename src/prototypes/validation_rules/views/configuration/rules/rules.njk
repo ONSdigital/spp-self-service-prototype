@@ -33,7 +33,7 @@ prevPage: views/configuration/rules/rules
                 { "value": "Rule ID" },
                 { "value": "Template" },
                 { "value": "QCode" },
-                { "value": "Message" },
+                { "value": "Error / Warning" },
                 { "value": "Action" }
             ],
             "trs": []
@@ -54,6 +54,7 @@ prevPage: views/configuration/rules/rules
     {{
         onsButton({
             "text": "Add rule",
+            "id": "add-new-rule-button",
             "url": pageInfo.rootPath + "/views/configuration/rules/create.html",
             "iconType": ""
         })
