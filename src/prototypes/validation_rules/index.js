@@ -777,6 +777,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return String(Number((num / 100).toFixed(6)));
     };
 
+    const isPlaceholderValue = (val) => !val || val === '-- Select --';
+
     const formatPrimaryExpr = (prefix, fallback = 'question') =>
       formatResponseCall(getParam(`${prefix}-question-type`) || 'response', primaryQuestionCode, '0', fallback);
 
@@ -807,7 +809,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (templateCode === 'QVQ') {
       const qExpr = formatPrimaryExpr('qvq');
       const compExpr = formatCompExpr('qvq');
-      const op = getParam('qvq-operator') || 'operator';
+      const rawOp = getParam('qvq-operator');
+      const op = isPlaceholderValue(rawOp) ? 'operator' : rawOp;
       return `${qExpr} ${op} ${compExpr}`;
     }
     if (templateCode === 'VRWV') {
@@ -825,7 +828,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (templateCode === 'VGZAQTC') {
       const qExpr = formatPrimaryExpr('vgzaqtc');
       const compExpr = formatCompExpr('vgzaqtc');
-      const op = getParam('vgzaqtc-operator') || 'comparison_operator';
+      const rawOp = getParam('vgzaqtc-operator');
+      const op = isPlaceholderValue(rawOp) ? 'comparison_operator' : rawOp;
       const threshold = getParam('vgzaqtc-threshold') === '' ? '0' : getParam('vgzaqtc-threshold');
       return `${qExpr} > 0 AND ${compExpr} > 0 AND ${qExpr} ${op} ${threshold} * ${compExpr}`;
     }
@@ -1447,6 +1451,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const restoreConfigureFormState = () => {
         const latestRule = getCurrentValidationRule();
         const latestParams = latestRule.parameters || {};
+
+        // Prevent @ons/prototype-kit QuestionManager from overwriting configure form fields via sessionStorage[pathname]
+        sessionStorage.removeItem(window.location.pathname);
+
+        ['qvq-operator', 'vgzaqtc-operator'].forEach((opId) => {
+          const opSelect = document.getElementById(opId);
+          if (opSelect) {
+            opSelect.selectedIndex = 0;
+          }
+        });
+
+        ['vrwv-q2-qcode', 'vrwv-q3-qcode', 'vrwv-q4-qcode'].forEach((qId) => {
+          setValue(qId, '');
+        });
 
         document.querySelectorAll('[data-default-primary-qcode]').forEach((input) => {
           input.value = primaryQuestionCode;
