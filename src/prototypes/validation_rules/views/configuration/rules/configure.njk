@@ -58,75 +58,98 @@ prevPage: views/configuration/rules/template
     { "value": "<=", "text": "<=" }
 ] %}
 
-{% macro primaryQuestionRow(idPrefix, labelText, defaultQcode="Q100") %}
-    <div class="spp-parameter-row">
-        <span class="spp-parameter-label" id="{{ idPrefix }}-question-label">{{ labelText }}</span>
-        <div class="spp-parameter-fields">
-            {{
-                onsSelect({
-                    "id": idPrefix + "-question-type",
-                    "name": idPrefix + "-question-type",
-                    "fieldClasses": "ons-u-mb-no",
-                    "classes": "ons-input--block",
-                    "label": {
-                        "text": labelText + " response type",
-                        "classes": "ons-u-vh"
+{% macro primaryQuestionBlock(idPrefix, labelText) %}
+    <div class="spp-parameter-block">
+        {{
+            onsRadios({
+                "id": idPrefix + "-question-type-fieldset",
+                "name": idPrefix + "-question-type",
+                "legend": labelText,
+                "description": "Select the response type.",
+                "borderless": true,
+                "value": "response",
+                "radios": [
+                    {
+                        "id": idPrefix + "-question-type-response",
+                        "label": {
+                            "text": "Response"
+                        },
+                        "value": "response",
+                        "checked": true
                     },
-                    "options": responseTypeOptions
-                })
-            }}
-            <span class="spp-parameter-readonly-qcode" data-primary-qcode>{{ defaultQcode }}</span>
-        </div>
+                    {
+                        "id": idPrefix + "-question-type-adjustedresponse",
+                        "label": {
+                            "text": "Adjusted response"
+                        },
+                        "value": "adjustedresponse"
+                    }
+                ]
+            })
+        }}
     </div>
 {% endmacro %}
 
-{% macro comparisonQuestionRow(idPrefix, fieldKey, labelText, defaultQcode="Q100", usePrimaryDefault=true) %}
+{% macro comparisonQuestionBlock(idPrefix, fieldKey, labelText, defaultQcode="Q100", usePrimaryDefault=true, defaultOffset="0") %}
     {% set qcodeAttributes = { "placeholder": "Question code", "data-default-primary-qcode": "true" } if usePrimaryDefault else { "placeholder": "Question code" } %}
-    <div class="spp-parameter-row">
-        <span class="spp-parameter-label" id="{{ idPrefix }}-{{ fieldKey }}-label">{{ labelText }}</span>
-        <div class="spp-parameter-fields spp-parameter-fields--three">
-            {{
-                onsSelect({
-                    "id": idPrefix + "-" + fieldKey + "-type",
-                    "name": idPrefix + "-" + fieldKey + "-type",
-                    "fieldClasses": "ons-u-mb-no",
-                    "classes": "ons-input--block",
-                    "label": {
-                        "text": labelText + " response type",
-                        "classes": "ons-u-vh"
+    {% set qcodeDescription = "Question code (defaults to the selected question)." if usePrimaryDefault else "Question code (for example, Q40)." %}
+    <div class="spp-parameter-block">
+        {{
+            onsRadios({
+                "id": idPrefix + "-" + fieldKey + "-type-fieldset",
+                "name": idPrefix + "-" + fieldKey + "-type",
+                "legend": labelText,
+                "description": "Select the response type.",
+                "borderless": true,
+                "value": "response",
+                "radios": [
+                    {
+                        "id": idPrefix + "-" + fieldKey + "-type-response",
+                        "label": {
+                            "text": "Response"
+                        },
+                        "value": "response",
+                        "checked": true
                     },
-                    "options": responseTypeOptions
-                })
-            }}
+                    {
+                        "id": idPrefix + "-" + fieldKey + "-type-adjustedresponse",
+                        "label": {
+                            "text": "Adjusted response"
+                        },
+                        "value": "adjustedresponse"
+                    }
+                ]
+            })
+        }}
+        <div class="ons-u-mt-s">
             {{
                 onsInput({
                     "id": idPrefix + "-" + fieldKey + "-qcode",
                     "name": idPrefix + "-" + fieldKey + "-qcode",
                     "fieldClasses": "ons-u-mb-no",
-                    "classes": "ons-input--block",
                     "value": defaultQcode,
                     "autocomplete": "off",
                     "attributes": qcodeAttributes,
                     "label": {
                         "text": labelText + " question code",
+                        "description": qcodeDescription,
                         "classes": "ons-u-vh"
                     }
                 })
             }}
+        </div>
+        <div class="ons-u-mt-s">
             {{
                 onsInput({
                     "id": idPrefix + "-" + fieldKey + "-offset",
                     "name": idPrefix + "-" + fieldKey + "-offset",
                     "type": "number",
                     "fieldClasses": "ons-u-mb-no",
-                    "classes": "ons-input--block",
-                    "value": "0",
+                    "value": defaultOffset,
                     "autocomplete": "off",
-                    "attributes": {
-                        "placeholder": "Offset"
-                    },
                     "label": {
-                        "text": labelText + " offset",
+                        "text": labelText + " period offset",
+                        "description": "Period offset (for example, 1 = 1 month, 12 = 1 year).",
                         "classes": "ons-u-vh"
                     }
                 })
@@ -151,36 +174,50 @@ prevPage: views/configuration/rules/template
 
         <form id="configure-rule-form">
             {# VDLPGTX #}
-            <div data-template-section="VDLPGTX">
-                {{ primaryQuestionRow("vdlpgtx", "Question") }}
-                {{ comparisonQuestionRow("vdlpgtx", "comparison", "Comparison question") }}
+            <div data-template-section="VDLPGTX" class="spp-parameter-vertical">
+                {{ primaryQuestionBlock("vdlpgtx", "Question") }}
+                {{ comparisonQuestionBlock("vdlpgtx", "comparison", "Comparison question", "Q100", true, "1") }}
 
-                <div class="spp-parameter-row">
-                    <span class="spp-parameter-label" id="vdlpgtx-threshold-label">Threshold</span>
-                    <div class="spp-parameter-fields">
-                        {{
-                            onsSelect({
-                                "id": "vdlpgtx-threshold-type",
-                                "name": "vdlpgtx-threshold-type",
-                                "fieldClasses": "ons-u-mb-no",
-                                "classes": "ons-input--block",
-                                "label": {
-                                    "text": "Threshold type",
-                                    "classes": "ons-u-vh"
+                <div class="spp-parameter-block">
+                    {{
+                        onsRadios({
+                            "id": "vdlpgtx-threshold-type-fieldset",
+                            "name": "vdlpgtx-threshold-type",
+                            "legend": "Threshold",
+                            "description": "Select the threshold type.",
+                            "borderless": true,
+                            "value": "constant",
+                            "radios": [
+                                {
+                                    "id": "vdlpgtx-threshold-type-constant",
+                                    "label": {
+                                        "text": "Constant",
+                                        "description": "Input the number below"
+                                    },
+                                    "value": "constant",
+                                    "checked": true
                                 },
-                                "options": thresholdTypeOptions
-                            })
-                        }}
+                                {
+                                    "id": "vdlpgtx-threshold-type-surveyconfig",
+                                    "label": {
+                                        "text": "Survey configuration data",
+                                        "description": "Input the field name below"
+                                    },
+                                    "value": "surveyconfig"
+                                }
+                            ]
+                        })
+                    }}
+                    <div class="ons-u-mt-s">
                         {{
                             onsInput({
                                 "id": "vdlpgtx-threshold-value",
                                 "name": "vdlpgtx-threshold-value",
                                 "fieldClasses": "ons-u-mb-no",
-                                "classes": "ons-input--block",
-                                "value": "0",
                                 "autocomplete": "off",
                                 "label": {
                                     "text": "Threshold value",
+                                    "description": "Enter the threshold value.",
                                     "classes": "ons-u-vh"
                                 }
                             })
@@ -188,115 +225,98 @@ prevPage: views/configuration/rules/template
                     </div>
                 </div>
 
-                <div class="spp-parameter-row">
-                    <span class="spp-parameter-label" id="vdlpgtx-percentage-label">Percentage</span>
-                    <div class="spp-parameter-fields spp-parameter-fields--single">
-                        {{
-                            onsInput({
-                                "id": "vdlpgtx-percentage-value",
-                                "name": "vdlpgtx-percentage-value",
-                                "type": "number",
-                                "fieldClasses": "ons-u-mb-no",
-                                "classes": "ons-input--block",
-                                "value": "0",
-                                "autocomplete": "off",
-                                "label": {
-                                    "text": "Percentage",
-                                    "classes": "ons-u-vh"
-                                },
-                                "suffix": {
-                                    "title": "per cent",
-                                    "text": "%",
-                                    "id": "vdlpgtx-percentage-suffix"
-                                }
-                            })
-                        }}
-                    </div>
+                <div class="spp-parameter-block">
+                    {{
+                        onsInput({
+                            "id": "vdlpgtx-percentage-value",
+                            "name": "vdlpgtx-percentage-value",
+                            "type": "number",
+                            "value": "0",
+                            "autocomplete": "off",
+                            "label": {
+                                "text": "Percentage",
+                                "description": "Enter the percentage threshold."
+                            },
+                            "suffix": {
+                                "title": "per cent",
+                                "text": "%",
+                                "id": "vdlpgtx-percentage-suffix"
+                            }
+                        })
+                    }}
                 </div>
             </div>
 
             {# QVQ #}
-            <div data-template-section="QVQ" hidden>
-                {{ primaryQuestionRow("qvq", "Question") }}
-                {{ comparisonQuestionRow("qvq", "comparison", "Comparison question") }}
+            <div data-template-section="QVQ" class="spp-parameter-vertical" hidden>
+                {{ primaryQuestionBlock("qvq", "Question") }}
+                {{ comparisonQuestionBlock("qvq", "comparison", "Comparison question") }}
 
-                <div class="spp-parameter-row">
-                    <span class="spp-parameter-label" id="qvq-operator-label">Operator</span>
-                    <div class="spp-parameter-fields spp-parameter-fields--single">
-                        {{
-                            onsSelect({
-                                "id": "qvq-operator",
-                                "name": "qvq-operator",
-                                "fieldClasses": "ons-u-mb-no",
-                                "classes": "ons-input--block",
-                                "label": {
-                                    "text": "Operator",
-                                    "classes": "ons-u-vh"
-                                },
-                                "options": operatorOptions
-                            })
-                        }}
-                    </div>
+                <div class="spp-parameter-block">
+                    {{
+                        onsSelect({
+                            "id": "qvq-operator",
+                            "name": "qvq-operator",
+                            "fieldClasses": "ons-u-mb-no",
+                            "label": {
+                                "text": "Operator",
+                                "description": "Select the comparison operator."
+                            },
+                            "options": operatorOptions
+                        })
+                    }}
                 </div>
             </div>
 
             {# VRWV #}
-            <div data-template-section="VRWV" hidden>
-                {{ primaryQuestionRow("vrwv", "Question 1") }}
-                {{ comparisonQuestionRow("vrwv", "q2", "Question 2", "", false) }}
-                {{ comparisonQuestionRow("vrwv", "q3", "Question 3", "", false) }}
-                {{ comparisonQuestionRow("vrwv", "q4", "Question 4", "", false) }}
+            <div data-template-section="VRWV" class="spp-parameter-vertical" hidden>
+                {{ primaryQuestionBlock("vrwv", "Question 1") }}
+                {{ comparisonQuestionBlock("vrwv", "q2", "Question 2", "", false) }}
+                {{ comparisonQuestionBlock("vrwv", "q3", "Question 3", "", false) }}
+                {{ comparisonQuestionBlock("vrwv", "q4", "Question 4", "", false) }}
             </div>
 
             {# QEZCGZ #}
-            <div data-template-section="QEZCGZ" hidden>
-                {{ primaryQuestionRow("qezcgz", "Question") }}
-                {{ comparisonQuestionRow("qezcgz", "comparison", "Comparison question") }}
+            <div data-template-section="QEZCGZ" class="spp-parameter-vertical" hidden>
+                {{ primaryQuestionBlock("qezcgz", "Question") }}
+                {{ comparisonQuestionBlock("qezcgz", "comparison", "Comparison question") }}
             </div>
 
             {# VGZAQTC #}
-            <div data-template-section="VGZAQTC" hidden>
-                {{ primaryQuestionRow("vgzaqtc", "Question") }}
-                {{ comparisonQuestionRow("vgzaqtc", "comparison", "Comparison question") }}
+            <div data-template-section="VGZAQTC" class="spp-parameter-vertical" hidden>
+                {{ primaryQuestionBlock("vgzaqtc", "Question") }}
+                {{ comparisonQuestionBlock("vgzaqtc", "comparison", "Comparison question") }}
 
-                <div class="spp-parameter-row">
-                    <span class="spp-parameter-label" id="vgzaqtc-operator-label">Comparison operator</span>
-                    <div class="spp-parameter-fields spp-parameter-fields--single">
-                        {{
-                            onsSelect({
-                                "id": "vgzaqtc-operator",
-                                "name": "vgzaqtc-operator",
-                                "fieldClasses": "ons-u-mb-no",
-                                "classes": "ons-input--block",
-                                "label": {
-                                    "text": "Comparison operator",
-                                    "classes": "ons-u-vh"
-                                },
-                                "options": operatorOptions
-                            })
-                        }}
-                    </div>
+                <div class="spp-parameter-block">
+                    {{
+                        onsSelect({
+                            "id": "vgzaqtc-operator",
+                            "name": "vgzaqtc-operator",
+                            "fieldClasses": "ons-u-mb-no",
+                            "label": {
+                                "text": "Comparison operator",
+                                "description": "Select the comparison operator."
+                            },
+                            "options": operatorOptions
+                        })
+                    }}
                 </div>
 
-                <div class="spp-parameter-row">
-                    <span class="spp-parameter-label" id="vgzaqtc-threshold-label">Threshold</span>
-                    <div class="spp-parameter-fields spp-parameter-fields--single">
-                        {{
-                            onsInput({
-                                "id": "vgzaqtc-threshold",
-                                "name": "vgzaqtc-threshold",
-                                "type": "number",
-                                "fieldClasses": "ons-u-mb-no",
-                                "classes": "ons-input--block",
-                                "value": "0",
-                                "autocomplete": "off",
-                                "label": {
-                                    "text": "Threshold",
-                                    "classes": "ons-u-vh"
-                                }
-                            })
-                        }}
-                    </div>
+                <div class="spp-parameter-block">
+                    {{
+                        onsInput({
+                            "id": "vgzaqtc-threshold",
+                            "name": "vgzaqtc-threshold",
+                            "type": "number",
+                            "fieldClasses": "ons-u-mb-no",
+                            "value": "0",
+                            "autocomplete": "off",
+                            "label": {
+                                "text": "Threshold",
+                                "description": "Enter the threshold value."
+                            }
+                        })
+                    }}
                 </div>
             </div>
 
@@ -327,6 +347,14 @@ prevPage: views/configuration/rules/template
                             "id": "refresh-formula-button"
                         })
                     }}
+                    {{
+                        onsButton({
+                            "text": "Show base formula",
+                            "type": "button",
+                            "variants": "secondary",
+                            "id": "toggle-formula-mode-button"
+                        })
+                    }}
                     <p id="configure-status" class="ons-u-mt-m ons-u-vh" role="status" aria-live="polite"></p>
                 </div>
             {% endcall %}
@@ -340,6 +368,7 @@ prevPage: views/configuration/rules/template
                         "name": "rule-severity",
                         "legend": "Severity level",
                         "description": "Errors cannot be changed and must be fixed, while warnings can be reviewed and adjusted if appropriate.",
+                        "borderless": true,
                         "value": "error",
                         "radios": [
                             {
@@ -367,7 +396,9 @@ prevPage: views/configuration/rules/template
                         "id": "rule-error-message",
                         "name": "rule-error-message",
                         "rows": 4,
-                        "value": "Error message",
+                        "attributes": {
+                            "placeholder": "Error message"
+                        },
                         "label": {
                             "text": "Severity level message",
                             "description": "Modify the pre filled response."

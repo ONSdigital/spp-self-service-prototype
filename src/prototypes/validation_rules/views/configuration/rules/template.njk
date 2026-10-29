@@ -4,10 +4,10 @@ title: No task list
 layout: validation_rules/views/_main
 prevPage: views/configuration/rules/create
 ---
-{% from "components/tabs/_macro.njk" import onsTabs %}
 {% from "components/button/_macro.njk" import onsButton %}
 {% from "components/autosuggest/_macro.njk" import onsAutosuggest %}
-{% from "components/table-of-contents/_macro.njk" import onsTableOfContents %}
+{% from "components/table/_macro.njk" import onsTable %}
+{% from "components/pagination/_macro.njk" import onsPagination %}
 
 {% set breadcrumbs = [
     {
@@ -69,7 +69,7 @@ prevPage: views/configuration/rules/create
     { "code": "QZCNRU",   "name": "Question is 0 and Contributor is New Reporting Unit", "formula": "question = 0 AND newreportingunit = 'True'", "group": "Data Check" },
     { "code": "QZNCSPP",  "name": "Question is 0 and Not a Clear status in Previous Period", "formula": "question = 0 AND (previous_status = 'Formsentout' OR previous_status = 'Checkneeded')", "group": "Data Check" },
     { "code": "SEF",      "name": "Selective Editing Fail", "formula": "flag = 'F' OR flag = 'M'", "group": "System Flag" },
-    { "code": "TCC",      "name": "Total count check", "formula": "(count = 1 And total != 0 And total != 100) Or (count > 1 And total != 100)", "group": "Total check" },
+    { "code": "TCC",      "name": "Total count check", "formula": "(count = 1 And total != 0 And total != 100) Or (count > 1 And total != 100)", "group": "Data Check" },
     { "code": "TCCF",     "name": "Totals Components Correction Failed", "formula": "(marker = 'M' OR marker = 'S') AND total > 0", "group": "System Flag" },
     { "code": "VB",       "name": "Value is Blank", "formula": "question = ''", "group": "Data Check" },
     { "code": "VBZ",      "name": "Value is Blank or Zero", "formula": "question = '' OR question = 0", "group": "Data Check" },
@@ -111,8 +111,8 @@ prevPage: views/configuration/rules/create
                 "minChars": 1,
                 "input": {
                     "label": {
-                        "text": "Template code",
-                        "description": "Start typing a template code, for example QVQ, to see matching templates."
+                        "text": "Search templates",
+                        "description": "Start typing a template code/name, for example QVQ, to see matching templates."
                     },
                     "autocomplete": "off",
                     "width": "30"
@@ -132,47 +132,80 @@ prevPage: views/configuration/rules/create
         }}
     </div>
 
-{% set tocItems = [] %}
-{% for group in groups %}
-    {% set tocItem = { "text": group, "url": "#" + (group | lower | replace(" ", "-")) } %}
-    {% set tocItems = (tocItems.push(tocItem), tocItems) %}
-{% endfor %}
-
-{{
-    onsTableOfContents({
-        "title": "Template groups",
-        "itemsList": tocItems
-    })
-}}
-
-<p id="template-no-results" class="ons-u-mt-m" hidden>No validation rule templates match your search. Try a different template code.</p>
-
-{% for group in groups %}
-    <section id="{{ group | lower | replace(' ', '-') }}" class="ons-u-mb-xl">
-        <h2>{{ group }}</h2>
-        {% for t in templates | sort(attribute="code") %}
-            {% if t.group == group %}
-            <div class="ons-card ons-u-mb-m" data-template-card data-template-code="{{ t.code }}" data-template-name="{{ t.name }}">
-                <h3 class="ons-u-fs-m ons-u-mb-xs">{{ t.code }}</h3>
-                <p class="ons-u-fs-s ons-u-mb-xs">{{ t.name }}</p>
-                <p class="ons-u-mb-s"><code>{{ t.formula }}</code></p>
-                <div>
-                    {{
-                        onsButton({
-                            "text": "Select rule",
-                            "iconType": "",
-                            "attributes": { "data-template-code": t.code, "data-select-btn": "true" },
-                            "url": pageInfo.rootPath + "/views/configuration/rules/configure.html",
-                            "id": "select-rule-button-" + (t.code | lower),
-                            "variants": "secondary"
-                        })
-                    }}
-                </div>
-            </div>
-            {% endif %}
+    <div class="spp-template-groups ons-u-mb-l" role="group" aria-label="Filter templates by group">
+        {% for group in groups %}
+            {{
+                onsButton({
+                    "text": group,
+                    "type": "button",
+                    "variants": ["ghost", "small"],
+                    "classes": "spp-template-group-btn",
+                    "iconType": "",
+                    "attributes": {
+                        "data-template-group-btn": group,
+                        "aria-pressed": "false"
+                    }
+                })
+            }}
         {% endfor %}
-    </section>
-{% endfor %}
+    </div>
+
+    <p id="template-no-results" class="ons-u-mt-m" hidden>No validation rule templates match your search. Try a different template code.</p>
+
+    {% set templateRows = [] %}
+    {% for t in templates | sort(attribute="code") %}
+        {% set radioId = "select-template-" + (t.code | lower) %}
+        {% set selectTemplateRadio = "<span class='ons-radios__item ons-radios__item--no-border spp-table-radio-item'><span class='ons-radio ons-radio--no-border'><input type='radio' id='" + radioId + "' class='ons-radio__input ons-js-radio' name='selected-template' data-select-template-radio data-template-code='" + t.code + "' data-template-name='" + t.name + "' data-template-group='" + t.group + "' value='' /><label class='ons-radio__label' id='" + radioId + "-label' for='" + radioId + "' aria-label='Select " + t.code + "'></label></span></span>" %}
+        {% set tr = {
+            "tds": [
+                { "value": selectTemplateRadio | safe },
+                { "value": "<strong>" + t.code + "</strong>" | safe },
+                { "value": t.name },
+                { "value": t.group }
+            ]
+        } %}
+        {% set templateRows = (templateRows.push(tr), templateRows) %}
+    {% endfor %}
+
+    {{
+        onsTable({
+            "id": "template-selection-table",
+            "ths": [
+                { "value": "", "classes": "spp-col-select" },
+                { "value": "Rule code" },
+                { "value": "Rule description" },
+                { "value": "Group" }
+            ],
+            "trs": templateRows
+        })
+    }}
+
+    <div id="template-selection-pagination" class="ons-u-mt-m ons-u-mb-l">
+        {{
+            onsPagination({
+                "currentPageNumber": 1,
+                "pages": [
+                    { "url": "#1" },
+                    { "url": "#2" },
+                    { "url": "#3" },
+                    { "url": "#4" },
+                    { "url": "#5" },
+                    { "url": "#6" }
+                ]
+            })
+        }}
+    </div>
+
+    <div class="ons-u-mt-l">
+        {{
+            onsButton({
+                "text": "Save and continue",
+                "id": "template-save-continue-button",
+                "url": pageInfo.rootPath + "/views/configuration/rules/configure.html",
+                "iconType": ""
+            })
+        }}
+    </div>
 </div>
 
 {% endblock %}
