@@ -1,0 +1,33 @@
+plugins = []
+headers = []
+redirects = []
+
+[build]
+edge_functions = "/Users/richardphillips/prototypes/spp-self-service/netlify/edge-functions"
+publish = "/Users/richardphillips/prototypes/spp-self-service/build"
+publishOrigin = "config"
+commandOrigin = "config"
+base = "/Users/richardphillips/prototypes/spp-self-service"
+command = "yarn build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[edge_functions]]
+path = "/*"
+function = "auth"
+
+[functions]
+
+[functions."*"]
