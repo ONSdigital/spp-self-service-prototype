@@ -138,15 +138,15 @@
             {% set typeLabel = row.type + (" (read only)" if row.readOnly else "") %}
             {% set checkboxId = "select-question-" + dataset + "-" + form.id + "-" + (row.code | lower) + "-" + (loop.index | string) %}
             {% set questionAttributes = "data-form-id='" + form.id + "' data-form-title='" + form.title + "' data-source-form-id='" + (form.sourceId | string) + "' data-question-code='" + row.code + "' data-question-label='" + row.text + "' data-question-type='" + row.type + "' data-question-required='" + requiredValue + "' data-question-readonly='" + readOnlyValue + "' data-question-decimal-places='" + (row.decimalPlaces | string) + "' data-question-max-length='" + (row.maxLength | string) + "' data-question-derived-formula='" + row.derivedFormula + "'" %}
-            {% set selectQuestionCheckbox = "<span class='ons-checkbox'><input type='checkbox' id='" + checkboxId + "' class='ons-checkbox__input' data-select-question-checkbox " + questionAttributes + " value='" + row.code + "' /><label class='ons-checkbox__label' for='" + checkboxId + "' aria-label='Select " + row.code + " on " + form.title + "'></label></span>" %}
+            {% set selectQuestionCheckbox = "<span class='ons-checkbox'><input type='checkbox' id='" + checkboxId + "' class='ons-checkbox__input' data-select-question-checkbox " + questionAttributes + " value='' /><label class='ons-checkbox__label' for='" + checkboxId + "' aria-label='Select " + row.code + " on " + form.title + "'></label></span>" %}
 
             {% set tr = {
                 "tds": [
+                    { "value": selectQuestionCheckbox | safe },
                     { "value": row.code },
                     { "value": row.text },
                     { "value": typeLabel },
-                    { "value": "Yes" if row.required else "No" },
-                    { "value": selectQuestionCheckbox | safe }
+                    { "value": "Yes" if row.required else "No" }
                 ]
             } %}
 
@@ -156,11 +156,11 @@
         {% set tableHtml %}
             {{ onsTable({
                 "ths": [
+                    { "value": "", "classes": "spp-col-select" },
                     { "value": "Question code" },
                     { "value": "Question" },
                     { "value": "Type" },
-                    { "value": "Required" },
-                    { "value": "Validation rules" }
+                    { "value": "Required" }
                 ],
                 "trs": trs
             }) }}

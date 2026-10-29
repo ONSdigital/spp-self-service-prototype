@@ -109,14 +109,14 @@ Do not remove. Required for dynamic generation of survey summary page
 }
 
 .ons-table__cell {
-  .ons-checkbox {
+  .ons-checkbox:not(.ons-radio) {
     width: 22px;
     height: 22px;
     margin: 0 auto;
     display: block;
     position: relative;
 
-    &__input {
+    .ons-checkbox__input {
       left: 0;
       top: 0;
       margin: 0;
@@ -125,7 +125,7 @@ Do not remove. Required for dynamic generation of survey summary page
       position: absolute;
     }
 
-    &__label {
+    .ons-checkbox__label {
       padding: 0;
       width: 22px;
       height: 22px;
@@ -145,6 +145,45 @@ Do not remove. Required for dynamic generation of survey summary page
       &::after {
         left: 7px;
         top: 2px;
+      }
+    }
+  }
+}
+
+.spp-table-radio-item {
+  margin-bottom: 0 !important;
+  min-width: 0 !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: block;
+  margin: 0 auto;
+
+  .ons-radio--no-border {
+    display: block;
+    position: relative;
+    width: 22px;
+    height: 22px;
+
+    > .ons-radio__input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 0;
+      width: 22px;
+      height: 22px;
+    }
+
+    > .ons-radio__label {
+      padding: 0;
+      width: 22px;
+      height: 22px;
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      &::before {
+        display: none !important;
       }
     }
   }
@@ -202,6 +241,54 @@ Do not remove. Required for dynamic generation of survey summary page
 .spp-template-card--selected {
   outline: 3px solid var(--ons-color-focus);
   outline-offset: 3px;
+}
+
+.spp-template-groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+
+  .ons-btn + .ons-btn {
+    margin-left: 0;
+  }
+}
+
+.spp-template-group-btn {
+  width: 100%;
+
+  &,
+  &:hover,
+  &:focus,
+  &:active,
+  &:focus:hover {
+    .ons-btn__inner {
+      width: 100%;
+      box-sizing: border-box;
+      justify-content: center;
+      background: transparent !important;
+      border: 1px solid var(--ons-color-ocean-blue) !important;
+      border-radius: 4px;
+      box-shadow: none !important;
+      color: var(--ons-color-ocean-blue) !important;
+      font-weight: 600;
+    }
+  }
+
+  &.active,
+  &[aria-pressed='true'] {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus:hover {
+      .ons-btn__inner {
+        background: var(--ons-color-ocean-blue) !important;
+        border-color: var(--ons-color-ocean-blue) !important;
+        box-shadow: none !important;
+        color: var(--ons-color-white) !important;
+      }
+    }
+  }
 }
 
 .spp-parameter-summary {
@@ -262,6 +349,24 @@ Do not remove. Required for dynamic generation of survey summary page
   padding: 0.5rem 0;
 }
 
+.spp-parameter-block {
+  margin-bottom: 1.5rem;
+
+  .ons-input--text,
+  .ons-input--select,
+  .ons-input-type__inner,
+  .ons-radios__item {
+    width: 100%;
+    max-width: $input-width;
+    box-sizing: border-box;
+  }
+
+  .ons-radio {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 .spp-formula-content {
   p {
     margin-bottom: 1rem;
@@ -294,5 +399,9 @@ Do not remove. Required for dynamic generation of survey summary page
 
   .spp-parameter-fields--single {
     max-width: none;
+  }
+
+  .spp-template-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

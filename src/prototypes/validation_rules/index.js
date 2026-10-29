@@ -755,10 +755,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const formatThresholdValue = (thresholdType, thresholdValRaw) => {
-      const val = thresholdValRaw === '' ? '0' : thresholdValRaw;
       if (thresholdType === 'surveyconfig') {
-        return `surveyconfig(${val})`;
+        return thresholdValRaw === '' ? 'surveyconfig()' : `surveyconfig(${thresholdValRaw})`;
       }
+      const val = thresholdValRaw === '' ? '0' : thresholdValRaw;
       if (thresholdType === 'constant') {
         return val;
       }
@@ -896,7 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ...selectedQuestions[0],
           ruleId: existingRule.ruleId || '',
           severity: existingRule.severity || 'error',
-          errorMessage: existingRule.errorMessage || 'Error message',
+          errorMessage: existingRule.errorMessage || '',
           selectedQuestions,
           editingQuestions: false,
           templateCode: '',
@@ -1064,7 +1064,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Template page — type-ahead search by template code
+  // Template page — type-ahead search, ghost CTA group filters, single-select checkboxes, and pagination
   const templatePage = document.getElementById('template-page');
   const templateSearch = templatePage ? templatePage.querySelector('.ons-js-template-search') : null;
 
@@ -1075,24 +1075,76 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructions = templateSearch.querySelector('.ons-js-autosuggest-instructions');
     const ariaStatus = templateSearch.querySelector('.ons-js-autosuggest-aria-status');
     const noResultsMessage = templatePage.querySelector('#template-no-results');
-    const toc = templatePage.querySelector('.ons-table-of-contents-container');
-    const sections = Array.from(templatePage.querySelectorAll('section[id]'));
+    const templateTable = templatePage.querySelector('#template-selection-table');
+    const templateTableContainer = templateTable
+      ? templateTable.closest('.ons-table-scrollable') || templateTable
+      : null;
+    const templatePagination = templatePage.querySelector('#template-selection-pagination');
+    const groupButtons = Array.from(templatePage.querySelectorAll('[data-template-group-btn]'));
+    const saveContinueButton = templatePage.querySelector('#template-save-continue-button');
     const maxSuggestions = 10;
+    const itemsPerPage = 10;
+    let currentTemplatePage = 1;
+    const selectedGroups = new Set();
 
-    const cards = Array.from(templatePage.querySelectorAll('[data-template-card]')).map((card) => {
-      const code = card.getAttribute('data-template-code') || '';
-      const name = card.getAttribute('data-template-name') || '';
+    const tbody = templateTable ? templateTable.querySelector('tbody') : null;
+
+    let items = Array.from(templatePage.querySelectorAll('[data-select-template-radio]')).map((radio) => {
+      const code = radio.getAttribute('data-template-code') || '';
+      const name = radio.getAttribute('data-template-name') || '';
+      const group = radio.getAttribute('data-template-group') || '';
+      const row = radio.closest('tr');
 
       return {
-        card,
-        section: card.closest('section[id]'),
+        row,
+        radio,
         code,
         name,
+        group,
         codeLower: code.toLowerCase(),
         nameLower: name.toLowerCase(),
-        selectLink: card.querySelector('[data-select-btn]')
+        groupLower: group.toLowerCase()
       };
     });
+
+    const syncTemplateRadioState = () => {
+      const checkedItem = items.find((item) => item.radio.checked);
+
+      if (checkedItem) {
+        const newTemplateCode = checkedItem.code.toUpperCase();
+        const existingRule = getCurrentValidationRule();
+        const isSameTemplate = (existingRule.templateCode || '').toUpperCase() === newTemplateCode;
+        setCurrentValidationRule({
+          templateCode: newTemplateCode,
+          parameters: isSameTemplate ? existingRule.parameters || {} : {}
+        });
+      }
+    };
+
+    const existingRuleForTemplate = getCurrentValidationRule();
+    if (existingRuleForTemplate.templateCode) {
+      const preselected = items.find(
+        (item) => item.code.toUpperCase() === existingRuleForTemplate.templateCode.toUpperCase()
+      );
+      if (preselected) {
+        preselected.radio.checked = true;
+        if (tbody && preselected.row) {
+          tbody.prepend(preselected.row);
+        }
+        items = [preselected, ...items.filter((item) => item !== preselected)];
+      }
+    }
+    syncTemplateRadioState();
+
+    items.forEach((item) => {
+      item.radio.addEventListener('change', syncTemplateRadioState);
+    });
+
+    if (saveContinueButton) {
+      saveContinueButton.addEventListener('click', () => {
+        syncTemplateRadioState();
+      });
+    }
 
     let matches = [];
     let highlightedIndex = null;
@@ -1132,7 +1184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return [];
       }
 
-      return cards
+      return items
+        .filter((item) => selectedGroups.size === 0 || selectedGroups.has(item.group))
         .map((item) => {
           const codeIndex = item.codeLower.indexOf(normalisedQuery);
           const nameIndex = item.nameLower.indexOf(normalisedQuery);
@@ -1154,34 +1207,96 @@ document.addEventListener('DOMContentLoaded', () => {
         .sort((a, b) => a.rank - b.rank || a.item.code.localeCompare(b.item.code));
     };
 
-    const applyFilter = (query) => {
-      const normalisedQuery = query.trim().toLowerCase();
-      let visibleCount = 0;
+    const renderTemplateTable = (resetPage = false) => {
+      const normalisedQuery = input.value.trim().toLowerCase();
 
-      cards.forEach((item) => {
-        const isVisible =
-          !normalisedQuery || item.codeLower.includes(normalisedQuery) || item.nameLower.includes(normalisedQuery);
+      const matchingItems = items.filter((item) => {
+        const matchesQuery =
+          !normalisedQuery ||
+          item.codeLower.includes(normalisedQuery) ||
+          item.nameLower.includes(normalisedQuery) ||
+          item.groupLower.includes(normalisedQuery);
+        const matchesGroup = selectedGroups.size === 0 || selectedGroups.has(item.group);
+        return matchesQuery && matchesGroup;
+      });
 
-        item.card.hidden = !isVisible;
+      const totalPages = Math.max(1, Math.ceil(matchingItems.length / itemsPerPage));
+      if (resetPage || currentTemplatePage > totalPages) {
+        currentTemplatePage = 1;
+      }
 
-        if (isVisible) {
-          visibleCount += 1;
+      const start = (currentTemplatePage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const visibleSet = new Set(matchingItems.slice(start, end));
+
+      items.forEach((item) => {
+        if (item.row) {
+          item.row.hidden = !visibleSet.has(item);
+          item.row.style.display = visibleSet.has(item) ? '' : 'none';
         }
       });
 
-      sections.forEach((section) => {
-        const hasVisibleCard = cards.some((item) => item.section === section && !item.card.hidden);
-        section.hidden = !hasVisibleCard;
-      });
-
-      if (toc) {
-        toc.hidden = normalisedQuery.length > 0;
+      if (templateTableContainer) {
+        templateTableContainer.hidden = matchingItems.length === 0;
       }
 
       if (noResultsMessage) {
-        noResultsMessage.hidden = !normalisedQuery || visibleCount > 0;
+        noResultsMessage.hidden = matchingItems.length > 0;
+      }
+
+      if (templatePagination) {
+        templatePagination.hidden = matchingItems.length === 0 || totalPages <= 1;
+
+        const positionEl = templatePagination.querySelector('.ons-pagination__position');
+        if (positionEl) {
+          positionEl.textContent = `Page ${currentTemplatePage} of ${totalPages}`;
+        }
+
+        const itemsList = templatePagination.querySelector('.ons-pagination__items');
+        if (itemsList) {
+          let itemsHtml = '';
+          if (currentTemplatePage > 1) {
+            itemsHtml += `<li class="ons-pagination__item ons-pagination__item--previous"><a href="#${currentTemplatePage - 1}" class="ons-pagination__link ons-pagination__link--no-underline" rel="prev" data-page="${currentTemplatePage - 1}"><span class="ons-pagination__link-text">Previous</span></a></li>`;
+          }
+          for (let p = 1; p <= totalPages; p += 1) {
+            const currentCls = p === currentTemplatePage ? ' ons-pagination__item--current' : '';
+            const ariaCurrent = p === currentTemplatePage ? ' aria-current="true"' : '';
+            itemsHtml += `<li class="ons-pagination__item${currentCls}"><a href="#${p}" class="ons-pagination__link"${ariaCurrent} data-page="${p}">${p}</a></li>`;
+          }
+          if (currentTemplatePage < totalPages) {
+            itemsHtml += `<li class="ons-pagination__item ons-pagination__item--next"><a href="#${currentTemplatePage + 1}" class="ons-pagination__link ons-pagination__link--no-underline" rel="next" data-page="${currentTemplatePage + 1}"><span class="ons-pagination__link-text">Next</span></a></li>`;
+          }
+          itemsList.innerHTML = itemsHtml;
+
+          itemsList.querySelectorAll('.ons-pagination__link').forEach((link) => {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              const targetPage = parseInt(link.getAttribute('data-page'), 10);
+              if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages) {
+                currentTemplatePage = targetPage;
+                renderTemplateTable(false);
+              }
+            });
+          });
+        }
       }
     };
+
+    groupButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const groupName = btn.getAttribute('data-template-group-btn') || '';
+        if (selectedGroups.has(groupName)) {
+          selectedGroups.delete(groupName);
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        } else {
+          selectedGroups.add(groupName);
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        renderTemplateTable(true);
+      });
+    });
 
     const highlightMatch = (element, text, query) => {
       const matchIndex = text.toLowerCase().indexOf(query.toLowerCase());
@@ -1222,23 +1337,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const selectMatch = (match) => {
       input.value = match.item.code;
-      applyFilter(match.item.code);
+      renderTemplateTable(true);
       closeListbox();
       setAriaStatus(`You have selected ${match.item.code}.`);
 
-      match.item.card.scrollIntoView({
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-        block: 'center'
-      });
-      match.item.card.classList.add('spp-template-card--selected');
-
-      if (match.item.selectLink) {
-        match.item.selectLink.focus({ preventScroll: true });
+      if (match.item.radio && !match.item.radio.disabled) {
+        match.item.radio.focus({ preventScroll: true });
       }
-
-      window.setTimeout(() => {
-        match.item.card.classList.remove('spp-template-card--selected');
-      }, 2000);
     };
 
     const renderSuggestions = (query) => {
@@ -1309,7 +1414,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     input.addEventListener('input', () => {
       const query = input.value;
-      applyFilter(query);
+      renderTemplateTable(true);
       renderSuggestions(query);
     });
 
@@ -1349,6 +1454,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeListbox();
       }
     });
+
+    renderTemplateTable(true);
   }
 
   // configure.html — multi-template parameter form (VDLPGTX, QVQ, VRWV, QEZCGZ, VGZAQTC)
@@ -1441,10 +1548,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return el && el.value !== undefined && el.value !== null ? el.value.trim() : '';
       };
 
-      const setValue = (id, value) => {
-        const el = document.getElementById(id);
-        if (el && value !== undefined && value !== null) {
-          el.value = value;
+      const setValue = (idOrName, value) => {
+        if (value === undefined || value === null) {
+          return;
+        }
+        const radioMatch = document.querySelector(
+          `input[type="radio"][name="${idOrName}"][value="${value}"]`
+        );
+        if (radioMatch) {
+          radioMatch.checked = true;
+          return;
+        }
+        const el = document.getElementById(idOrName);
+        if (el) {
+          if (el.type === 'radio') {
+            if (value === true || value === 'true' || el.value === value) {
+              el.checked = true;
+            }
+          } else {
+            el.value = value;
+          }
         }
       };
 
@@ -1466,16 +1589,56 @@ document.addEventListener('DOMContentLoaded', () => {
           setValue(qId, '');
         });
 
+        [
+          'vdlpgtx-question-type',
+          'vdlpgtx-comparison-type',
+          'qvq-question-type',
+          'qvq-comparison-type',
+          'vrwv-question-type',
+          'vrwv-q2-type',
+          'vrwv-q3-type',
+          'vrwv-q4-type',
+          'qezcgz-question-type',
+          'qezcgz-comparison-type',
+          'vgzaqtc-question-type',
+          'vgzaqtc-comparison-type'
+        ].forEach((radioGroupName) => {
+          setValue(radioGroupName, 'response');
+        });
+        setValue('vdlpgtx-comparison-offset', '1');
+        setValue('vdlpgtx-threshold-type', 'constant');
+        setValue('vdlpgtx-threshold-value', '');
+        setValue('vdlpgtx-percentage-value', '0');
+        [
+          'qvq-comparison-offset',
+          'vrwv-q2-offset',
+          'vrwv-q3-offset',
+          'vrwv-q4-offset',
+          'qezcgz-comparison-offset',
+          'vgzaqtc-comparison-offset',
+          'vgzaqtc-threshold'
+        ].forEach((offsetOrThresholdId) => {
+          setValue(offsetOrThresholdId, '0');
+        });
+
         document.querySelectorAll('[data-default-primary-qcode]').forEach((input) => {
           input.value = primaryQuestionCode;
         });
 
-        Object.entries(latestParams).forEach(([id, val]) => {
-          setValue(id, val);
+        Object.entries(latestParams).forEach(([key, val]) => {
+          if (
+            key.endsWith('-response') ||
+            key.endsWith('-adjustedresponse') ||
+            key.endsWith('-constant') ||
+            key.endsWith('-surveyconfig')
+          ) {
+            return;
+          }
+          setValue(key, val);
         });
 
-        if (errorMessageInput && latestRule.errorMessage) {
-          errorMessageInput.value = latestRule.errorMessage;
+        if (errorMessageInput) {
+          errorMessageInput.value = latestRule.errorMessage || '';
         }
 
         if (latestRule.severity) {
@@ -1498,7 +1661,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const params = {};
         if (activeSection) {
           activeSection.querySelectorAll('input[id], select[id]').forEach((el) => {
-            params[el.id] = el.value;
+            if (el.type === 'radio') {
+              if (el.checked && el.name) {
+                params[el.name] = el.value;
+              }
+            } else {
+              params[el.id] = el.value;
+            }
           });
         }
         return params;
@@ -1508,7 +1677,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setCurrentValidationRule({
           templateCode,
           severity: getSelectedSeverity(),
-          errorMessage: getValue('rule-error-message') || 'Error message',
+          errorMessage: getValue('rule-error-message'),
           parameters: collectParameters()
         });
       };
@@ -1517,6 +1686,20 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('input', persistDraftRuleState);
         form.addEventListener('change', persistDraftRuleState);
       }
+
+      const toggleFormulaModeButton = document.getElementById('toggle-formula-mode-button');
+      const toggleFormulaModeText = toggleFormulaModeButton
+        ? toggleFormulaModeButton.querySelector('.ons-btn__text')
+        : null;
+      let showingBaseFormula = false;
+
+      const updateToggleFormulaButtonText = () => {
+        if (toggleFormulaModeText) {
+          toggleFormulaModeText.textContent = showingBaseFormula
+            ? 'Show templated formula'
+            : 'Show base formula';
+        }
+      };
 
       const showInitialFormulaTemplate = () => {
         renderMultilineFormula(formulaContent, INITIAL_FORMULAS[templateCode] || '');
@@ -1528,13 +1711,15 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       const refreshFormula = () => {
+        showingBaseFormula = false;
+        updateToggleFormulaButtonText();
         computeUpdatedFormula();
         const parameters = collectParameters();
 
         setCurrentValidationRule({
           templateCode,
           severity: getSelectedSeverity(),
-          errorMessage: getValue('rule-error-message') || 'Validation check failed.',
+          errorMessage: getValue('rule-error-message'),
           parameters
         });
 
@@ -1550,11 +1735,24 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshFormulaButton.addEventListener('click', refreshFormula);
       }
 
-      if (Object.keys(savedParameters).length > 0) {
-        computeUpdatedFormula();
-      } else {
-        showInitialFormulaTemplate();
+      if (toggleFormulaModeButton) {
+        toggleFormulaModeButton.addEventListener('click', () => {
+          showingBaseFormula = !showingBaseFormula;
+          updateToggleFormulaButtonText();
+          if (showingBaseFormula) {
+            showInitialFormulaTemplate();
+          } else {
+            computeUpdatedFormula();
+          }
+        });
       }
+
+      computeUpdatedFormula();
+      window.setTimeout(() => {
+        if (!showingBaseFormula) {
+          computeUpdatedFormula();
+        }
+      }, 0);
 
       const proceedToRuleSummary = () => {
         window.DONT_SUBMIT = true;
